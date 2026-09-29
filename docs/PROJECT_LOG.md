@@ -140,3 +140,7 @@ setup repeats. The first workbench is called the "CDP env" from here on.
   deployments of the new build (`list_model_deployments`, up to 5 min) and
   waits on the one it finds; a 4xx still fails at once. Test with a fake API
   that reproduces the 500 (31 tests).
+- Chain re-run from cxr-00 with the fix (`0ced5a2`): all Success; 02 29 s,
+  03 5 s, 04 4 min 33 s. Build 2 deployed (deployment 37, 17:03); CAI stopped
+  build 1's deployment (36) at 17:01. `models/champion/` matches the endpoint
+  again.
