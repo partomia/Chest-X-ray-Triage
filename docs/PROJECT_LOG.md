@@ -144,3 +144,5 @@ setup repeats. The first workbench is called the "CDP env" from here on.
   03 5 s, 04 4 min 33 s. Build 2 deployed (deployment 37, 17:03); CAI stopped
   build 1's deployment (36) at 17:01. `models/champion/` matches the endpoint
   again.
+- Application on the Hardened runtime: worklist P1 15 / P2 11 / P3 14 (same as
+  the CDP env), heatmap on the lung fields, radiologist read saved.
