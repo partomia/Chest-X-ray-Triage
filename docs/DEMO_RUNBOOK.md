@@ -227,9 +227,13 @@ fields, not the film edges or markers. A pneumonia film at p = 0.95 lands in P2
    `CAI_PROJECT_ID` (printed by `create_cai_jobs.py`).
 3. Optional: Settings > Environments > `cai-demo` > required reviewers, for a
    four-eyes step before the chain starts.
-4. Private Cloud / no public ingress: register a self-hosted runner inside the
-   network and change `runs-on` to `[self-hosted, cai]` in `cai-mlops.yml`;
-   for a private CA set `CAI_CA_BUNDLE` in that step.
+4. The runner must reach `CAI_URL`. Check with `dig +short <workbench host>`: a
+   private address (10.x, 172.16-31.x, 192.168.x) is out of reach of
+   GitHub-hosted runners (the trigger stops with "Cannot reach ... from this
+   runner"). Then register a self-hosted runner inside the network (Settings >
+   Actions > Runners > New self-hosted runner, labels `self-hosted,cai`) and set
+   the repository variable `CAI_RUNS_ON` to `["self-hosted","cai"]`; no workflow
+   edit needed. For a private CA set `CAI_CA_BUNDLE` in that step.
 5. Push a harmless change (for example `training.C: 0.002` -> `0.003`) and watch
    the Actions log and the CAI job runs.
 

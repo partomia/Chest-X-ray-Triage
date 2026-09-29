@@ -146,3 +146,11 @@ setup repeats. The first workbench is called the "CDP env" from here on.
   again.
 - Application on the Hardened runtime: worklist P1 15 / P2 11 / P3 14 (same as
   the CDP env), heatmap on the lung fields, radiologist read saved.
+- GitHub secrets set for the AWC env; demo push `training.C: 0.002 -> 0.003`
+  (`f708d90`). cai-pipeline failed after 60 s: `ConnectTimeout` to the
+  workbench. The AWC host resolves to 10.80.180.97 (private; reachable from the
+  laptop on the corporate network, not from GitHub-hosted runners or a public
+  fetch). The CDP env resolves to a public address and answers from outside.
+  The trigger now names the self-hosted runner on a connection failure, and
+  `runs-on` reads the repository variable `CAI_RUNS_ON` (default
+  `ubuntu-latest`), so switching to a self-hosted runner needs no workflow edit.

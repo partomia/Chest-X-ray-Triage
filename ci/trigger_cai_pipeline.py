@@ -101,7 +101,13 @@ def main() -> int:
         return 0
     api = Api(url, os.environ["CAI_API_KEY"], os.environ["CAI_PROJECT_ID"],
               os.environ.get("CAI_CA_BUNDLE") or True)
-    ids = api.job_ids()
+    try:
+        ids = api.job_ids()
+    except (requests.ConnectionError, requests.Timeout) as e:
+        print(f"::error::Cannot reach {url} from this runner ({type(e).__name__}). A workbench on a private "
+              "network needs a self-hosted runner inside it: set the repository variable CAI_RUNS_ON "
+              "to [\"self-hosted\",\"cai\"].")
+        return 1
     sha = os.environ.get("GITHUB_SHA", "")
 
     # A job run ignores "arguments" (the job's own are used); the environment map is applied.

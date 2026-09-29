@@ -81,3 +81,15 @@ def test_skips_cleanly_without_secrets(monkeypatch, capsys):
     monkeypatch.delenv("CAI_URL", raising=False)
     assert trig.main() == 0
     assert "skipping the CAI pipeline" in capsys.readouterr().out
+
+
+def test_unreachable_workbench_names_the_self_hosted_runner(monkeypatch, capsys):
+    def refuse(*a, **k):
+        raise trig.requests.ConnectTimeout("connect timeout=60")
+
+    monkeypatch.setenv("CAI_URL", "https://private-bench.example")
+    monkeypatch.setenv("CAI_API_KEY", "k")
+    monkeypatch.setenv("CAI_PROJECT_ID", "p")
+    monkeypatch.setattr(trig.requests, "request", refuse)
+    assert trig.main() == 1
+    assert "self-hosted runner" in capsys.readouterr().out
