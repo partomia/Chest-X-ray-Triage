@@ -209,6 +209,16 @@ for f in $(ls data/incoming | head -3); do echo "== $f"; python serve/test_endpo
 
 Applications > New Application: name `CXR Triage Worklist`, subdomain
 `cxr-triage`, script `app/launch_app.py`, Python 3.11, 2 vCPU / 8 GB.
+It is running about a minute later.
+
+![Application running](images/runbook/15-app-running.png)
+
+After **Triage worklist** the 40 incoming films (25 pneumonia, 15 normal) band
+as P1 15 / P2 11 / P3 14. The occlusion heatmap of a P1 film lights up the lung
+fields, not the film edges or markers. A pneumonia film at p = 0.95 lands in P2
+(above the 0.581 threshold, below the 0.99 P1 cut-off).
+
+![Worklist after triage, heatmap of a P1 film, radiologist read](images/runbook/16-app-worklist-heatmap.png)
 
 ### 1.8 GitHub
 
