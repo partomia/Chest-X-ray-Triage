@@ -237,6 +237,50 @@ fields, not the film edges or markers. A pneumonia film at p = 0.95 lands in P2
 5. Push a harmless change (for example `training.C: 0.002` -> `0.003`) and watch
    the Actions log and the CAI job runs.
 
+Project environment variables are not GitHub secrets: the workflow runs on
+GitHub and reads only the repository's secrets. Keep `CAI_*` out of the
+workbench project (jobs authenticate with their own identity).
+
+### 1.9 GitHub from the command line (`gh`)
+
+Run on the laptop, logged in with `gh auth login`. `R` saves typing.
+
+```bash
+R=partomia/Chest-X-ray-Triage
+
+# Secrets: values from create_cai_jobs.py; the API key is prompted, not echoed
+gh secret set CAI_URL        -R $R -b "https://<workbench host>"
+gh secret set CAI_PROJECT_ID -R $R -b "<project id>"
+gh secret set CAI_API_KEY    -R $R          # paste the API v2 key at the prompt
+gh secret list -R $R                        # must list all three names
+
+# Can a GitHub-hosted runner reach the workbench? A 10.x / 172.16-31.x /
+# 192.168.x answer means no: use a self-hosted runner (item 4 above)
+dig +short <workbench host>
+curl -s -o /dev/null -w "%{http_code}\n" https://<workbench host>/api/v2/projects   # 401 = reachable
+
+# Self-hosted runner instead of ubuntu-latest (after registering it with label cai)
+gh variable set CAI_RUNS_ON -R $R -b '["self-hosted","cai"]'
+gh variable delete CAI_RUNS_ON -R $R        # back to GitHub-hosted runners
+
+# Follow a pipeline run
+gh run list -R $R -L 5
+gh run watch <run id> -R $R --exit-status
+gh run view <run id> -R $R --log | grep cai-pipeline | tail -40
+gh run rerun <run id> -R $R                 # e.g. after fixing a secret, no new push needed
+gh workflow run cxr-triage-mlops -R $R      # start the chain without a push
+
+# Pause / resume the GitHub -> CAI trigger (the offline CI workflow keeps running)
+gh workflow disable cxr-triage-mlops -R $R
+gh workflow enable  cxr-triage-mlops -R $R
+gh workflow list -R $R --all
+```
+
+Status on 2026-09-29: the secrets point at the AWC env, which is on a private
+network (10.80.180.97), so the trigger is **disabled** until either a
+self-hosted runner is registered there or the secrets are moved to the CDP env
+(public address).
+
 ## Part 2: seven-minute demo
 
 | Min | Beat | Show |
