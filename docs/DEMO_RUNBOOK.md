@@ -154,6 +154,13 @@ It creates `cxr-00-sync-code` -> `cxr-01-build-features` -> `cxr-02-train-valida
 and `cxr-05-nightly-worklist` (cron `0 2 * * *`), using the session's runtime
 unless `cai.runtime_identifier` is set, and prints the three GitHub secrets.
 
+Check the runtime in the first line of the dry run: it must be the session's
+(`echo $ML_RUNTIME_FULL_VERSION`). The first dry run here picked 2025.09.1-b5
+for a 2026.08.1-b5 session because the runtime list is paged; the lookup now
+reads every page and warns when there is no exact match.
+
+![create_cai_jobs --dry-run: the six jobs and the GitHub secrets](images/runbook/09-create-jobs-dry-run.png)
+
 Start `cxr-00-sync-code` from the Jobs page. The chain should end with a
 deployed model `cxr-triage` (Model Deployments). Record the run times in
 `docs/PROJECT_LOG.md`.

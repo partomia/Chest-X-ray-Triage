@@ -94,3 +94,9 @@ Phases 0-7 done locally. Phase 8 (live CAI project) in progress.
   sensitivity 0.95, specificity 0.70, Brier 0.12. C was picked by looking at
   TEST; the TEST numbers are slightly optimistic and the runbook says so.
   The CI overlay keeps C=0.5 / p1 0.85 for the stub.
+- Retrain with C=0.002: bands P1 200 (198) / P2 244 (188) / P3 180 (4), gate
+  PASSED (AUROC 0.9692, sens 0.9897, spec 0.7521, Brier 0.0854).
+- `create_cai_jobs.py --dry-run`: project `fsas-zz3o-mwmi-gg0g`, six jobs as
+  defined, but runtime 2025.09.1-b5 for a 2026.08.1-b5 session: `list_runtimes`
+  is paged and only the first page was read. `resolve_runtime` now pages and
+  warns without an exact match (test added).

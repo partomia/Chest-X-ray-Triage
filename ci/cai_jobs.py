@@ -40,10 +40,20 @@ def resolve_runtime(client, configured: str = "") -> str:
     if not all(wanted.values()):
         raise SystemExit("Set cai.runtime_identifier in config/pipeline.yaml (Project Settings > Runtime) "
                          "or run this from a CAI session/job so the runtime can be detected.")
-    found = client.list_runtimes(search_filter=json.dumps(wanted)).runtimes
+    found, token = [], None
+    while True:   # the API pages its results: the session's runtime can be past the first page
+        kw = {"page_token": token} if token else {}
+        resp = client.list_runtimes(search_filter=json.dumps(wanted), page_size=100, **kw)
+        found += list(resp.runtimes or [])
+        token = getattr(resp, "next_page_token", None)
+        if not token:
+            break
     full = os.environ.get("ML_RUNTIME_FULL_VERSION")
     exact = [r for r in found if full and getattr(r, "full_version", None) == full]
     pick = (exact or sorted(found, key=lambda r: getattr(r, "full_version", "") or ""))
     if not pick:
         raise SystemExit(f"No runtime matches {wanted}; set cai.runtime_identifier in config/pipeline.yaml.")
+    if not exact:
+        print(f"WARNING runtime {full} of this session not found among {len(found)} runtimes; "
+              f"using the newest match. Set cai.runtime_identifier to pin it.")
     return pick[-1].image_identifier

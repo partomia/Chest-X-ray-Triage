@@ -72,6 +72,27 @@ def test_workflow_watches_every_chain_script_and_config():
         assert s in paths or f"{top}/**" in paths, f"{s} not in the workflow's path filter"
 
 
+def test_resolve_runtime_pages_to_the_session_runtime(monkeypatch):
+    from types import SimpleNamespace as NS
+
+    from ci.cai_jobs import resolve_runtime
+
+    for k, v in {"KERNEL": "Python 3.11", "EDITION": "Standard", "EDITOR": "JupyterLab",
+                 "FULL_VERSION": "2026.08.1-b5"}.items():
+        monkeypatch.setenv(f"ML_RUNTIME_{k}", v)
+    pages = {None: NS(runtimes=[NS(full_version="2025.09.1-b5", image_identifier="img:2025.09")],
+                      next_page_token="p2"),
+             "p2": NS(runtimes=[NS(full_version="2026.08.1-b5", image_identifier="img:2026.08")],
+                      next_page_token="")}
+
+    class Client:
+        def list_runtimes(self, search_filter, page_size, page_token=None):
+            return pages[page_token]
+
+    assert resolve_runtime(Client()) == "img:2026.08"
+    assert resolve_runtime(Client(), "img:pinned") == "img:pinned"
+
+
 def test_requirements_leave_the_runtime_mlflow_alone():
     reqs = [ln.split("#")[0].strip().lower() for ln in (REPO / "requirements.txt").read_text().splitlines()]
     assert not any(r.startswith("mlflow") for r in reqs), "mlflow-cml-plugin needs the runtime's own mlflow"
