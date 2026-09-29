@@ -194,7 +194,16 @@ Paste the JSON into the model's Test tab. Expected shape:
 ```
 
 From a terminal: set `CXR_ENDPOINT_URL`, `CXR_ENDPOINT_ACCESS_KEY` and
-`CXR_ENDPOINT_API_KEY` (Model API key) and drop `--print-request`.
+`CXR_ENDPOINT_API_KEY` (Model API key) and drop `--print-request`. A film is
+several hundred KB of base64, so the terminal is easier than the Test tab.
+Project variables reach only sessions started after they were saved; in an
+older session, `export` them (`read -s` for the API key keeps it off screen).
+
+```bash
+for f in $(ls data/incoming | head -3); do echo "== $f"; python serve/test_endpoint.py data/incoming/$f; done
+```
+
+![Endpoint: three normal films scored P3, with lineage in every response](images/runbook/14-endpoint-test.png)
 
 ### 1.7 Application
 
