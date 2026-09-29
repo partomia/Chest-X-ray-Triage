@@ -85,6 +85,18 @@ def wait(fn, ok: set, what: str, timeout=1800):
     raise RuntimeError(f"{what} timed out after {timeout} s")
 
 
+def find_deployment(client, pid, model_id, build_id, timeout=300, poll=15):
+    t0 = time.time()
+    while True:
+        deps = client.list_model_deployments(pid, model_id, build_id).model_deployments or []
+        if deps:
+            print(f"  found deployment {deps[0].id} of build {build_id}", flush=True)
+            return deps[0]
+        if time.time() - t0 >= timeout:
+            raise RuntimeError(f"no deployment of build {build_id} appeared within {timeout} s")
+        time.sleep(poll)
+
+
 def deploy(cfg, meta):
     import cmlapi
 
@@ -109,9 +121,17 @@ def deploy(cfg, meta):
         comment=f"fv{meta['feature_version']} git {meta['git_sha'][:7]} auroc {meta['metrics']['test']['auroc']:.3f}",
     ), pid, model.id)
     wait(lambda: client.get_model_build(pid, model.id, build.id), {"built", "succeeded"}, "build")
-    dep = client.create_model_deployment(cmlapi.CreateModelDeploymentRequest(
-        project_id=pid, model_id=model.id, build_id=build.id,
-        cpu=cfg["cai"]["model_cpu"], memory=cfg["cai"]["model_memory_gb"]), pid, model.id, build.id)
+    try:
+        dep = client.create_model_deployment(cmlapi.CreateModelDeploymentRequest(
+            project_id=pid, model_id=model.id, build_id=build.id,
+            cpu=cfg["cai"]["model_cpu"], memory=cfg["cai"]["model_memory_gb"]), pid, model.id, build.id)
+    except Exception as e:
+        # The API gateway gives up after 30 s and returns 500 while the workbench goes on
+        # creating the deployment: look for it before calling the deploy a failure.
+        if (getattr(e, "status", None) or 500) < 500:
+            raise
+        print(f"  create_model_deployment: {str(e).splitlines()[0]} - looking for the deployment", flush=True)
+        dep = find_deployment(client, pid, model.id, build.id)
     wait(lambda: client.get_model_deployment(pid, model.id, build.id, dep.id), {"deployed"}, "deployment")
     print(f"champion deployed: model {model.id} build {build.id} deployment {dep.id}")
 

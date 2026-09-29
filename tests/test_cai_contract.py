@@ -93,6 +93,65 @@ def test_resolve_runtime_pages_to_the_session_runtime(monkeypatch):
     assert resolve_runtime(Client(), "img:pinned") == "img:pinned"
 
 
+def test_deploy_survives_the_gateway_timeout_on_create_deployment(monkeypatch):
+    """Live on a workbench: create_model_deployment returned 500 after the gateway's
+    30 s deadline, yet the deployment was created and reached Deployed."""
+    import sys
+    import types
+    from types import SimpleNamespace as NS
+
+    import serve.deploy_champion as dc
+
+    class ApiException(Exception):
+        def __init__(self, status):
+            super().__init__(f"({status})\nReason: Internal Server Error")
+            self.status = status
+
+    class Client:
+        def __init__(self):
+            self.listed = 0
+
+        def list_models(self, pid, search_filter):
+            return NS(models=[NS(name="cxr-triage", id="m1")])
+
+        def create_model_build(self, req, pid, mid):
+            return NS(id="b1")
+
+        def get_model_build(self, pid, mid, bid):
+            return NS(status="built")
+
+        def create_model_deployment(self, req, pid, mid, bid):
+            raise ApiException(500)
+
+        def list_model_deployments(self, pid, mid, bid):
+            self.listed += 1
+            return NS(model_deployments=[NS(id="d1")] if self.listed > 1 else [])
+
+        def get_model_deployment(self, pid, mid, bid, did):
+            assert did == "d1"
+            return NS(status="deployed")
+
+    client = Client()
+    fake = types.ModuleType("cmlapi")
+    fake.default_client = lambda: client
+    fake.CreateModelBuildRequest = fake.CreateModelDeploymentRequest = fake.CreateModelRequest = dict
+    monkeypatch.setitem(sys.modules, "cmlapi", fake)
+    monkeypatch.setenv("CDSW_PROJECT_ID", "p1")
+    monkeypatch.setattr(dc.time, "sleep", lambda s: None)
+    cfg = {"serving": {"model_name": "cxr-triage"},
+           "cai": {"runtime_identifier": "img", "model_cpu": 2, "model_memory_gb": 4}}
+    meta = {"feature_version": "1.0.0", "git_sha": "abcdef0", "metrics": {"test": {"auroc": 0.97}}}
+    dc.deploy(cfg, meta)
+    assert client.listed == 2
+
+    client.create_model_deployment = lambda *a: (_ for _ in ()).throw(ApiException(400))
+    try:
+        dc.deploy(cfg, meta)
+        raise AssertionError("a 4xx must not be treated as a gateway timeout")
+    except ApiException as e:
+        assert e.status == 400
+
+
 def test_requirements_leave_the_runtime_mlflow_alone():
     reqs = [ln.split("#")[0].strip().lower() for ln in (REPO / "requirements.txt").read_text().splitlines()]
     assert not any(r.startswith("mlflow") for r in reqs), "mlflow-cml-plugin needs the runtime's own mlflow"

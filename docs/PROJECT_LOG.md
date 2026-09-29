@@ -127,4 +127,16 @@ setup repeats. The first workbench is called the "CDP env" from here on.
 - `create_cai_jobs.py`: project `pj6i-d0t2-yr2h-2xfg`, runtime detected as
   `...python3.11-hardened:2026.04.2-b16` (exact match), six jobs created.
 - GitHub secrets can point at one workbench only; the other runs cxr-00 by
-  hand (it still syncs to `origin/main`).
+  hand (it still syncs to `origin/main`). Ravi chose the AWC env for GitHub.
+- First chain run: 00 2 s, 01 1 s (skip), 02 37 s, 03 4 s, 04 **Failure** after
+  3 min 14 s. The build reached `built`; `create_model_deployment` then
+  returned 500 `failed to forward request to web service ... deploy-model:
+  context deadline exceeded` with `x-envoy-upstream-service-time: 30017`: the
+  API gateway's 30 s deadline, not a deploy error. The workbench went on and
+  the deployment (build 1, id 36) reached Deployed at 16:39, but job 04 had
+  already rolled back, so `models/champion/` was empty while the endpoint
+  served the model.
+- Fix: on a 5xx or timeout from `create_model_deployment`, job 04 looks up the
+  deployments of the new build (`list_model_deployments`, up to 5 min) and
+  waits on the one it finds; a 4xx still fails at once. Test with a fake API
+  that reproduces the 500 (31 tests).

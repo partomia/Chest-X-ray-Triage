@@ -295,4 +295,5 @@ in job kernels, `sys.exit(0)` reported as a failure, the Streamlit launcher.
 | `AutoImageProcessor requires the Torchvision library` | `pip3 install -r requirements.txt` (torchvision is listed) |
 | Chain stops at 00: `Expected commit ... newer push?` | a newer push is queued; its own chain runs next |
 | GitHub: `CAI jobs not found` | run `python ci/create_cai_jobs.py`; names must match `ci/cai_jobs.py` |
+| Job 04: `deploy failed: (500) ... deploy-model: context deadline exceeded` | the API gateway gave up after 30 s while the workbench kept deploying; job 04 now finds that deployment and waits for it. With an older copy of the code, check Model Deployments (it usually reaches Deployed) and re-run the chain from cxr-00 so `models/champion/` matches the endpoint |
 | Job run `timedout` | raise the job's timeout (`ci/cai_jobs.py`, then edit the job) or check GPU / node availability |
