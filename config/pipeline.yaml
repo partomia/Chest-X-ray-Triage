@@ -30,7 +30,7 @@ features:
 
 training:
   estimator: logistic_regression
-  C: 0.003                            # strong L2 on 768 dims: C=0.5 saturated p at ~1.0 (scripts/band_check.py)
+  C: 0.002                            # strong L2 on 768 dims: C=0.5 saturated p at ~1.0 (scripts/band_check.py)
   class_weight: balanced
   max_iter: 3000
 

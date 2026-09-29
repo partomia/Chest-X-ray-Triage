@@ -154,3 +154,8 @@ setup repeats. The first workbench is called the "CDP env" from here on.
   The trigger now names the self-hosted runner on a connection failure, and
   `runs-on` reads the repository variable `CAI_RUNS_ON` (default
   `ubuntu-latest`), so switching to a self-hosted runner needs no workflow edit.
+- Paused on Ravi's request: workflow `cxr-triage-mlops` disabled
+  (`gh workflow disable`), `training.C` back to 0.002 so a manual cxr-00 run
+  rebuilds the deployed baseline. Secrets still point at the AWC env. Open
+  choice: self-hosted runner for AWC, or the secrets moved to the CDP env.
+  Re-enable with `gh workflow enable cxr-triage-mlops`.
