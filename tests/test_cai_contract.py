@@ -72,6 +72,11 @@ def test_workflow_watches_every_chain_script_and_config():
         assert s in paths or f"{top}/**" in paths, f"{s} not in the workflow's path filter"
 
 
+def test_requirements_leave_the_runtime_mlflow_alone():
+    reqs = [ln.split("#")[0].strip().lower() for ln in (REPO / "requirements.txt").read_text().splitlines()]
+    assert not any(r.startswith("mlflow") for r in reqs), "mlflow-cml-plugin needs the runtime's own mlflow"
+
+
 def test_gitignore_keeps_data_out_but_champion_in():
     ignored = [ln.strip() for ln in (REPO / ".gitignore").read_text().splitlines()
                if ln.strip() and not ln.startswith("#")]

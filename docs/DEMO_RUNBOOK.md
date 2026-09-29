@@ -46,18 +46,28 @@ demo. Part 3 is the failure-path rehearsal, the VERIFY list and troubleshooting.
 
 ### 1.3 Data
 
+Kaggle now issues API tokens (`KGAT_...`) instead of a `kaggle.json` download;
+the Kaggle CLI 1.8+ reads them from `KAGGLE_API_TOKEN`. Revoke the token once
+the download is done.
+
 ```bash
-pip3 install kaggle            # then place kaggle.json in ~/.kaggle/ (chmod 600)
+pip3 install -U kaggle         # 2.x; needs >= 1.8 for KGAT_ tokens
+export KAGGLE_API_TOKEN=<token from kaggle.com > Settings > API>
 kaggle datasets download -d paultimothymooney/chest-xray-pneumonia -p data/raw
-cd data/raw && unzip -q chest-xray-pneumonia.zip && cd -
-ls data/raw/chest_xray          # must be train  val  test (delete a nested chest_xray/ or __MACOSX/ copy)
+cd data/raw && unzip -q chest-xray-pneumonia.zip && rm chest-xray-pneumonia.zip && cd /home/cdsw
+rm -rf data/raw/chest_xray/chest_xray data/raw/chest_xray/__MACOSX data/raw/__MACOSX   # nested copy in the zip
+ls data/raw/chest_xray          # must be train  val  test
 mkdir -p data/incoming
 ls data/raw/chest_xray/test/PNEUMONIA/*.jpeg | head -25 | xargs -I{} cp {} data/incoming/
 ls data/raw/chest_xray/test/NORMAL/*.jpeg    | head -15 | xargs -I{} cp {} data/incoming/
+for s in train val test; do echo "$s: $(find data/raw/chest_xray/$s -name '*.jpeg' | wc -l)"; done
+unset KAGGLE_API_TOKEN
 ```
 
-Expect 5,216 train, 16 val and 624 test films (5,856 in total). Check the licence
-on the listing (CC BY 4.0) before showing it to a customer.
+The zip is 2.29 GB (it holds a second, nested copy); after the clean-up
+`data/raw` is 1.2 GB. Expect 5,216 train, 16 val and 624 test films (5,856 in
+total) and 40 in `data/incoming`. Kaggle lists the licence as "other": check the
+attribution (Mendeley release, CC BY 4.0) before showing it to a customer.
 
 ### 1.4 Smoke test, then baseline
 
@@ -65,6 +75,20 @@ on the listing (CC BY 4.0) before showing it to a customer.
 python features/build_feature_table.py --limit 20     # ~1 min incl. the ViT download
 python train/train_validate.py
 python gate/kpi_gate.py                               # FAILS by design: trained on a --limit table
+```
+
+The smoke table has 120 rows (20 films per class per split) and all data checks
+pass. The ViT load report lists `pooler.*` as MISSING and `classifier.*` as
+UNEXPECTED: harmless, the embedding is the CLS token of `last_hidden_state` and
+never uses the pooler. On 40 TEST films the gate fails on
+`Trained on the full feature table` (and on specificity and Brier, which are
+noise at this size): the expected result.
+
+![Smoke test: data checks, training, and the gate rejecting a --limit model](images/runbook/04-smoke-test-gate-fails.png)
+
+Then the full baseline:
+
+```bash
 python features/build_feature_table.py                # full build (rebuilds the smoke table), ~10-20 min on CPU
 python train/train_validate.py
 python gate/kpi_gate.py
@@ -183,6 +207,7 @@ in job kernels, `sys.exit(0)` reported as a failure, the Streamlit launcher.
 | Job 01: critical data check failed | patient leakage or an empty split/class; check `data/raw` (nested copy from the zip?) |
 | Job 02: `feature table hash != code hash` | same as above; rebuild under a new version |
 | Endpoint fails to start: `different feature definition` | champion trained on other features; run the chain again |
+| Train: `mlflow logging failed ... unexpected keyword argument 'run_uuid'` | a newer mlflow was pip-installed over the runtime's one, which breaks `mlflow-cml-plugin`. `requirements.txt` no longer lists mlflow; remove the user copy: `pip3 uninstall -y mlflow mlflow-skinny mlflow-tracing` (only `~/.local` is touched), then check `python -c "import mlflow; print(mlflow.__file__)"` points at `/usr/local` |
 | `AutoImageProcessor requires the Torchvision library` | `pip3 install -r requirements.txt` (torchvision is listed) |
 | Chain stops at 00: `Expected commit ... newer push?` | a newer push is queued; its own chain runs next |
 | GitHub: `CAI jobs not found` | run `python ci/create_cai_jobs.py`; names must match `ci/cai_jobs.py` |

@@ -10,7 +10,8 @@ pillow
 scikit-learn>=1.3
 joblib
 pyyaml
-mlflow
+# mlflow is pre-installed in Cloudera AI with mlflow-cml-plugin: do not add it here.
+# A newer mlflow breaks the plugin (RunInfo ... unexpected keyword argument 'run_uuid').
 streamlit>=1.32
 matplotlib
 requests
