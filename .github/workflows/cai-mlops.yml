@@ -1,0 +1,42 @@
+# GitHub Push -> Train & Validate -> KPI Gate -> Cloudera AI API
+# The runner only starts and follows CAI jobs; images and training stay in the workbench.
+# Until the CAI_URL secret is set, the cai-pipeline job prints a notice and succeeds.
+name: cxr-triage-mlops
+
+on:
+  push:
+    branches: [main]
+    paths: ["features/**", "train/**", "evaluate/**", "gate/**", "serve/**", "ci/**", "config/pipeline.yaml",
+            "common.py", "requirements.txt", "cdsw-build.sh"]
+  workflow_dispatch: {}
+
+concurrency:            # never run two pipelines against the same CAI project at once
+  group: cxr-triage-cai
+  cancel-in-progress: false
+
+jobs:
+  unit-tests:           # fast checks on the runner: no data, no GPU, no torch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements-ci.txt
+      - run: pytest -q --ignore=tests/test_offline_pipeline.py
+
+  cai-pipeline:         # heavy work runs INSIDE Cloudera AI Workbench
+    needs: unit-tests
+    runs-on: ubuntu-latest   # Private Cloud / no public ingress: use [self-hosted, cai] instead
+    environment: cai-demo    # optional: add required reviewers here for a manual approval step
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install requests
+      - name: Trigger CAI job chain and wait for the KPI gate
+        run: python ci/trigger_cai_pipeline.py
+        env:
+          CAI_URL: ${{ secrets.CAI_URL }}
+          CAI_API_KEY: ${{ secrets.CAI_API_KEY }}
+          CAI_PROJECT_ID: ${{ secrets.CAI_PROJECT_ID }}

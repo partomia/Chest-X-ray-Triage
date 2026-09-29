@@ -1,0 +1,43 @@
+name: CI
+
+# Every push, every pull request, or manually. No CAI access needed: the whole
+# chain runs on synthetic films with the stub embedder (config/ci.yaml).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Unit tests + offline pipeline with the KPI gate
+    runs-on: ubuntu-latest
+    env:
+      CXR_CONFIG_OVERLAY: config/ci.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt
+
+      - name: Unit, contract and end-to-end tests
+        run: CXR_CONFIG_OVERLAY= pytest -q
+
+      - name: Synthetic films (Kermany layout)
+        run: python scripts/make_synthetic_cxr.py --scale 0.5
+
+      - name: Feature engineering -> Model training -> Model evaluation
+        run: |
+          python features/build_feature_table.py
+          python features/build_feature_table.py   # second run must skip (idempotent)
+          python train/train_validate.py
+
+      - name: KPI gate passes
+        run: python gate/kpi_gate.py
+
+      - name: KPI gate fails on cue
+        run: "! CXR_CONFIG_OVERLAY=config/ci.yaml,config/ci-gate-fail.yaml python gate/kpi_gate.py"
