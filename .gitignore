@@ -1,0 +1,30 @@
+# Data, features and run outputs live only in the CAI project, never in Git.
+# In Cloudera AI, .gitignore also keeps files out of model builds, so large
+# folders must be listed here. models/champion/ is deliberately NOT ignored: it
+# is small (a few KB) and the model build needs it. Do not commit it.
+data/
+feature_store/
+models/archive/
+outputs/
+mlruns/
+.hf_cache/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+.cursor/
+*.swp
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Secrets & local config
+.env
+.env.*
+!.env.example

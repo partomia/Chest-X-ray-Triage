@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------------
+# cxr-triage: single source of configuration for every stage and job.
+# Everything that changes model behaviour lives here so it is versioned in Git.
+# CXR_CONFIG_OVERLAY (comma-separated YAML files) is merged on top, e.g.
+# config/ci.yaml for the offline CI run.
+# ---------------------------------------------------------------------------
+project:
+  name: cxr-triage
+  mlflow_experiment: cxr-triage
+
+data:
+  raw_dir: data/raw/chest_xray        # Kermany layout: {train,val,test}/{NORMAL,PNEUMONIA}/*.jpeg
+  incoming_dir: data/incoming         # new, unlabelled films for batch scoring / demo worklist
+  positive_label: PNEUMONIA
+  val_fraction: 0.15                  # carved out of original train+val, grouped by patient
+  split_seed: 42
+
+features:
+  version: "1.0.0"                    # BUMP when anything below (or feature_logic.py) changes
+  store_dir: feature_store/cxr_features   # versioned tables land in <store_dir>/v<version>/
+  backbone: google/vit-base-patch16-224   # HF model id, a local folder (air-gapped), or stub:<name> (CI only)
+  backbone_revision: 3f49326eb077187dfe1c2a2bb15fbd74e6ab91e3   # pinned HF commit
+  image_size: 224
+  batch_size: 32
+  embedding_pooling: cls              # cls | mean
+  # Which feature groups the classifier sees. Quality features are stored for
+  # data validation and drift monitoring, but kept OUT of the model by default so
+  # it cannot learn scanner/contrast shortcuts.
+  model_inputs: [embedding]
+
+training:
+  estimator: logistic_regression
+  C: 0.5
+  class_weight: balanced
+  max_iter: 3000
+
+evaluation:
+  target_sensitivity: 0.95            # operating threshold is chosen on VAL to hit this
+  p1_probability: 0.85                # >= this -> P1 (read first)
+
+gate:                                 # absolute KPIs, measured on the held-out TEST split
+  min_auroc: 0.93
+  min_sensitivity: 0.92
+  min_specificity: 0.60
+  max_brier: 0.12
+  max_auroc_regression: 0.01          # vs current champion (non-regression rule)
+  require_feature_hash_match: true
+
+serving:
+  model_name: cxr-triage
+  champion_dir: models/champion
+  archive_dir: models/archive
+  candidate_dir: outputs/candidate
+
+cai:
+  runtime_identifier: ""              # empty = the runtime of the session/job that runs ci/create_cai_jobs.py or deploy
+  model_cpu: 2
+  model_memory_gb: 4
+  register_in_model_registry: false   # true only if the AI Registry is enabled for this workbench
+  git_branch: main
+
+monitoring:
+  psi_warn: 0.10
+  psi_alert: 0.25
+  min_films_for_drift: 30             # fewer incoming films -> drift_level TOO_FEW (PSI is noise)

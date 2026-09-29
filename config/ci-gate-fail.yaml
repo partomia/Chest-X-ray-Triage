@@ -1,0 +1,4 @@
+# Overlay used by CI to prove the KPI gate rejects on cue (stacked after config/ci.yaml).
+# An unreachable floor, because synthetic films are easy enough to max out the real KPIs.
+gate:
+  min_auroc: 1.01

@@ -1,0 +1,16 @@
+# Overlay for the offline CI run (and local smoke tests): synthetic films and a
+# deterministic stub embedder, so no torch, no dataset download and no GPU.
+# Usage: CXR_CONFIG_OVERLAY=config/ci.yaml python features/build_feature_table.py
+data:
+  raw_dir: data/synthetic/chest_xray
+  incoming_dir: data/synthetic/incoming
+
+features:
+  store_dir: feature_store/ci_features
+  backbone: stub:pooled-pixels
+  backbone_revision: v1
+
+serving:
+  champion_dir: outputs/ci/champion
+  archive_dir: outputs/ci/archive
+  candidate_dir: outputs/ci/candidate

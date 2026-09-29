@@ -1,0 +1,13 @@
+# GitHub Actions and local tests: no torch, no transformers, no mlflow. The CI
+# run uses synthetic films and the stub embedder (config/ci.yaml).
+numpy
+pandas
+pyarrow
+pillow
+scikit-learn>=1.3
+joblib
+pyyaml
+streamlit>=1.32
+matplotlib
+requests
+pytest
