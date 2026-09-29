@@ -39,10 +39,11 @@ evaluation:
   p1_probability: 0.85                # >= this -> P1 (read first)
 
 gate:                                 # absolute KPIs, measured on the held-out TEST split
-  min_auroc: 0.93
-  min_sensitivity: 0.92
-  min_specificity: 0.60
-  max_brier: 0.12
+                                      # set from the CAI baseline 2026-09-29 (fv1.0.0, 5,856 films):
+  min_auroc: 0.94                     # baseline 0.954
+  min_sensitivity: 0.95               # baseline 0.992
+  min_specificity: 0.70               # baseline 0.744
+  max_brier: 0.16                     # baseline 0.147 (VAL 0.026: the published test split is harder)
   max_auroc_regression: 0.01          # vs current champion (non-regression rule)
   require_feature_hash_match: true
 

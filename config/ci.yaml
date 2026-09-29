@@ -10,6 +10,9 @@ features:
   backbone: stub:pooled-pixels
   backbone_revision: v1
 
+gate:                     # CI proves the gate mechanics; the stub on synthetic films says nothing about quality
+  min_sensitivity: 0.90   # small synthetic VAL: stub TEST sensitivity ~0.93
+
 serving:
   champion_dir: outputs/ci/champion
   archive_dir: outputs/ci/archive

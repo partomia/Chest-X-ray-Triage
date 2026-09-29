@@ -89,10 +89,28 @@ noise at this size): the expected result.
 Then the full baseline:
 
 ```bash
-python features/build_feature_table.py                # full build (rebuilds the smoke table), ~10-20 min on CPU
+python features/build_feature_table.py                # full build (rebuilds the smoke table), ~10 min on CPU
 python train/train_validate.py
 python gate/kpi_gate.py
 ```
+
+The full build embeds 5,856 films in about 10 minutes on a 4 vCPU session
+(split by patient: train 4,453, val 779, test 624); all four data checks pass.
+
+![Full feature build: 5,856 films, data checks pass](images/runbook/05-full-feature-build.png)
+
+Baseline on this workbench (fv1.0.0, operating threshold 0.916 chosen on VAL):
+
+| Split | AUROC | Sensitivity | Specificity | Brier | FN / FP |
+|---|---|---|---|---|---|
+| VAL (779) | 0.992 | 0.950 | 0.963 | 0.026 | 28 / 8 |
+| TEST (624) | 0.954 | 0.992 | 0.744 | 0.147 | 3 / 60 |
+
+With the placeholder gate (`max_brier: 0.12`) the gate fails on Brier only;
+the gate is then set from this baseline (`config/pipeline.yaml`, `gate.*`).
+The VAL/TEST gap is the known harder published test split: expect it, and say so.
+
+![Baseline metrics and the first gate run](images/runbook/06-baseline-metrics-gate.png)
 
 Open Experiments > `cxr-triage`, read the TEST metrics of the last run and set
 each gate threshold a little below the baseline in `config/pipeline.yaml`

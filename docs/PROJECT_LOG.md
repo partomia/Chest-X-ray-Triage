@@ -52,5 +52,35 @@ fields checked against Cloudera's API v2 notebook (`cpu`, `memory`,
 
 ### Status
 
-Phases 0-7 done locally. Phase 8 (live CAI project) not started: needs the CAI
-project, Kaggle credentials in the session and the GitHub secrets.
+Phases 0-7 done locally. Phase 8 (live CAI project) in progress.
+
+## 2026-09-29: Phase 8, live CAI project
+
+- CAI project `rsingh-chest-x-ray-triage` created from Git by Ravi; runtime
+  JupyterLab / Python 3.11 / Standard 2026.08.1-b5 (`ML_RUNTIME_*` set, so job
+  creation can detect it). `HF_HOME` and `HF_TOKEN` as project variables.
+- `pip3 install -r requirements.txt`: torch 2.14.0+cpu, transformers 5.17.0,
+  mlflow 3.16.1. Training then warned `mlflow logging failed ... unexpected
+  keyword argument 'run_uuid'`: the newer mlflow breaks `mlflow-cml-plugin`
+  (the sibling projects keep mlflow out of requirements for this reason).
+  mlflow removed from `requirements.txt` (contract test added); after
+  `pip3 uninstall mlflow mlflow-skinny mlflow-tracing` the runtime's mlflow
+  2.19.0 (`/opt/cmladdons`) logs runs.
+- Kaggle now issues `KGAT_` API tokens, no `kaggle.json`: Kaggle CLI 2.2.4 with
+  `KAGGLE_API_TOKEN`. The zip is 2.29 GB (nested copy); 1.2 GB after clean-up;
+  5,216 / 16 / 624 films. Kaggle lists the licence as "other".
+- Smoke test `--limit 20`: 120 rows, data checks pass, gate FAILS on the limit
+  check as designed.
+- Full build: 5,856 films in ~10 min (4 vCPU), train 4,453 / val 779 / test 624,
+  data checks pass. Baseline: threshold 0.916; VAL AUROC 0.992, sens 0.950,
+  spec 0.963, Brier 0.026; TEST AUROC 0.954, sens 0.992, spec 0.744, Brier
+  0.147 (FN 3, FP 60). Gate with placeholders failed on Brier (0.12) only.
+- Gate set from the baseline: AUROC 0.94, sensitivity 0.95, specificity 0.70,
+  Brier 0.16. The CI overlay keeps its own sensitivity floor (0.90): the stub on
+  synthetic films reaches ~0.93 and says nothing about model quality.
+- The operating threshold (0.916) landed above `p1_probability` (0.85): films
+  at 0.85-0.916 would have been P1 while counted negative. `priority_band` now
+  starts P1 at max(p1_probability, threshold); training prints the TEST bands
+  and probability quantiles to set `p1_probability` from.
+- Gate MLflow tag failed (`Missing the required parameter experiment_id`): the
+  plugin needs `set_experiment` before reopening a run; fixed.

@@ -82,6 +82,7 @@ def main() -> int:
     if candidate.get("mlflow_run_id"):
         try:
             import mlflow
+            mlflow.set_experiment(cfg["project"]["mlflow_experiment"])   # mlflow-cml-plugin needs it to reopen a run
             with mlflow.start_run(run_id=candidate["mlflow_run_id"]):
                 mlflow.log_metric("kpi_gate_passed", 1.0 if passed else 0.0)
                 mlflow.set_tag("kpi_gate", "PASSED" if passed else "FAILED")

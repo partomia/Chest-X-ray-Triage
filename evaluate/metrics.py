@@ -40,8 +40,11 @@ def compute_metrics(y_true, prob, threshold: float) -> dict:
 
 
 def priority_band(prob: float, threshold: float, p1: float) -> str:
-    """P1 = read first, P2 = likely abnormal, P3 = routine."""
-    if prob >= p1:
+    """P1 = read first, P2 = likely abnormal, P3 = routine.
+
+    P1 never starts below the operating threshold: a film the model calls negative
+    is never "read first", even when the threshold lands above p1_probability."""
+    if prob >= max(p1, threshold):
         return "P1"
     if prob >= threshold:
         return "P2"

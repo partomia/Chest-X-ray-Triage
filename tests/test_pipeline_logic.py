@@ -58,6 +58,8 @@ def test_threshold_meets_target_sensitivity():
 def test_priority_bands():
     assert priority_band(0.9, 0.4, 0.85) == "P1"
     assert priority_band(0.5, 0.4, 0.85) == "P2"
+    assert priority_band(0.88, 0.92, 0.85) == "P3"   # threshold above p1: below it is never P1
+    assert priority_band(0.93, 0.92, 0.85) == "P1"
     assert priority_band(0.1, 0.4, 0.85) == "P3"
 
 
@@ -120,5 +122,5 @@ def test_config_overlay_merges(monkeypatch):
     cfg = load_config()
     assert cfg["features"]["backbone"].startswith("stub:")
     assert cfg["features"]["image_size"] == base["features"]["image_size"]   # untouched keys kept
-    assert cfg["gate"]["min_auroc"] > 1 and cfg["gate"]["min_sensitivity"] == base["gate"]["min_sensitivity"]
+    assert cfg["gate"]["min_auroc"] > 1 and cfg["gate"]["max_brier"] == base["gate"]["max_brier"]
     assert base["features"]["backbone"] == "google/vit-base-patch16-224"

@@ -35,7 +35,7 @@ from sklearn.pipeline import make_pipeline  # noqa: E402
 from sklearn.preprocessing import StandardScaler  # noqa: E402
 
 from common import ROOT, finish, git_sha, load_config, load_feature_table, parse_args  # noqa: E402
-from evaluate.metrics import choose_threshold, compute_metrics  # noqa: E402
+from evaluate.metrics import choose_threshold, compute_metrics, priority_band  # noqa: E402
 from features.feature_logic import QUALITY_FEATURES, feature_hash, model_matrix  # noqa: E402
 
 
@@ -131,6 +131,13 @@ def main() -> int:
     log_to_mlflow(cfg, meta, model, meta_path)
 
     print(json.dumps({"threshold": thr, "val": m_val, "test": m_test}, indent=2))
+    bands = [priority_band(float(p), thr, ecfg["p1_probability"]) for p in p_te]
+    print(f"TEST bands (P1 from p >= {max(ecfg['p1_probability'], thr):.3f}):")
+    for b in ("P1", "P2", "P3"):
+        idx = [i for i, x in enumerate(bands) if x == b]
+        print(f"  {b}: {len(idx):4d} films, {sum(int(y_te[i]) for i in idx):4d} pneumonia")
+    print("TEST pneumonia-probability quantiles:",
+          {q: round(float(np.quantile(p_te, q)), 3) for q in (0.1, 0.25, 0.5, 0.75, 0.9)})
     return 0
 
 
