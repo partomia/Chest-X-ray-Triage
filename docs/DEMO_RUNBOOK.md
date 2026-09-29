@@ -20,18 +20,29 @@ demo. Part 3 is the failure-path rehearsal, the VERIFY list and troubleshooting.
 1. Projects > New Project > Git: `https://github.com/partomia/Chest-X-ray-Triage`
    (SSH URL for a private repo, after adding the CAI user's SSH key as a
    read-only deploy key). Runtime: JupyterLab, Python 3.11, Standard.
+
+   ![Project created from Git: the repository folders are on the Overview page](images/runbook/01-project-from-git.png)
+
 2. Project Settings > Advanced > Environment variables:
 
    | Variable | Value |
    |---|---|
    | `HF_HOME` | `/home/cdsw/.hf_cache` |
+   | `HF_TOKEN` | optional: a Hugging Face read token, avoids rate limits on the ViT download |
    | `HF_ENDPOINT` | only for an internal Hugging Face mirror |
+
+   ![Project environment variables](images/runbook/02-project-env-vars.png)
 
 3. Open a session (4 vCPU / 16 GB) and install:
 
    ```bash
    pip3 install -r requirements.txt
    ```
+
+   torch and torchvision come from the CPU wheel index (`download.pytorch.org/whl/cpu`).
+   A yellow "dependency resolver" warning at the end is harmless; only an `ERROR:` line matters.
+
+   ![Session terminal: git pull, then pip install from the CPU wheel index](images/runbook/03-session-pip-install.png)
 
 ### 1.3 Data
 
