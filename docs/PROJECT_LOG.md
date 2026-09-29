@@ -100,3 +100,25 @@ Phases 0-7 done locally. Phase 8 (live CAI project) in progress.
   defined, but runtime 2025.09.1-b5 for a 2026.08.1-b5 session: `list_runtimes`
   is paged and only the first page was read. `resolve_runtime` now pages and
   warns without an exact match (test added).
+- Dry run again: runtime 2026.08.1-b5 (exact match). `create_cai_jobs.py`
+  created the six jobs (cxr-00 `yqiw-rv2e-21o8-6rgi` ... cxr-05
+  `b84v-7uhs-8k9j-x40h`); cxr-00 run from the UI succeeded in 2 s and the
+  chain started.
+
+## 2026-09-29: second workbench ("AWC env")
+
+Same repo, deployed to a second workbench (`goes-awc-bench`) to prove the
+setup repeats. The first workbench is called the "CDP env" from here on.
+
+- Runtime JupyterLab / Python 3.11 / **Hardened** 2026.04.2-b16 (CDP env:
+  Standard 2026.08.1-b5). torch 2.14.0+cpu, transformers 5.17.0; mlflow 2.19.0
+  from `/opt/cmladdons` straight away (requirements no longer install mlflow).
+- Data 5,216 / 16 / 624, 40 incoming. Smoke test: gate FAILS on the limit
+  check as designed.
+- Full build 5,856 films, data checks pass. TEST AUROC 0.9692, sens 0.9897,
+  spec 0.7521, Brier 0.0854; bands P1 200 (198) / P2 244 (188) / P3 180 (4):
+  identical to the CDP env on a different runtime. Gate PASSED.
+- `create_cai_jobs.py`: project `pj6i-d0t2-yr2h-2xfg`, runtime detected as
+  `...python3.11-hardened:2026.04.2-b16` (exact match), six jobs created.
+- GitHub secrets can point at one workbench only; the other runs cxr-00 by
+  hand (it still syncs to `origin/main`).
