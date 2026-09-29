@@ -112,6 +112,11 @@ The VAL/TEST gap is the known harder published test split: expect it, and say so
 
 ![Baseline metrics and the first gate run](images/runbook/06-baseline-metrics-gate.png)
 
+With the gate set from the baseline, the second run skips the feature build
+(same hash) and the gate passes:
+
+![Feature build skipped, gate PASSED on the baseline thresholds](images/runbook/07-gate-passed.png)
+
 Open Experiments > `cxr-triage`, read the TEST metrics of the last run and set
 each gate threshold a little below the baseline in `config/pipeline.yaml`
 (`gate.*`). Commit and push from your laptop, not from the CAI project (job 00
