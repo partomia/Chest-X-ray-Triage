@@ -165,6 +165,21 @@ Start `cxr-00-sync-code` from the Jobs page. The chain should end with a
 deployed model `cxr-triage` (Model Deployments). Record the run times in
 `docs/PROJECT_LOG.md`.
 
+![Chain started from cxr-00: jobs being scheduled](images/runbook/10-jobs-chain-running.png)
+
+First run on the CDP env: 00 sync 2 s, 01 features 2 s (skipped, same hash),
+02 train 1 min 35 s, 03 gate 15 s, 04 deploy 3 min 46 s, about 8 minutes in
+total including container start-up.
+
+![All five chain jobs succeeded](images/runbook/11-jobs-chain-success.png)
+
+The model `cxr-triage` is deployed as build 1 (2 vCPU / 4 GB, one replica). The
+build comment carries the lineage: feature version, git commit and TEST AUROC.
+
+![Model deployment: build 1 deployed](images/runbook/12-model-deployed.png)
+
+![Model overview: sample request, access key and the lineage comment](images/runbook/13-model-overview.png)
+
 ### 1.6 Test the endpoint
 
 ```bash
@@ -237,7 +252,7 @@ champion, promotes the old one and rebuilds the endpoint.
 
 | Item | Where | What to confirm |
 |---|---|---|
-| Model build / deployment status strings | `serve/deploy_champion.py` `wait()` | build reaches `built` (or `succeeded`), deployment `deployed` |
+| Model build / deployment status strings | `serve/deploy_champion.py` `wait()` | confirmed on the CDP env 2026-09-29: job 04 built and deployed the model |
 | Runtime detection | `ci/cai_jobs.py` `resolve_runtime()` | `ML_RUNTIME_KERNEL/EDITION/EDITOR` exist in the session, else set `cai.runtime_identifier` |
 | Build-time install | `cdsw-build.sh` | model builds run it on this runtime |
 | Job-run list | `ci/trigger_cai_pipeline.py` | `sort=-created_at`, `page_size`, `job_runs` key (documented; confirm once) |

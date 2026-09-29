@@ -105,6 +105,12 @@ Phases 0-7 done locally. Phase 8 (live CAI project) in progress.
   `b84v-7uhs-8k9j-x40h`); cxr-00 run from the UI succeeded in 2 s and the
   chain started.
 
+- First chain run on the CDP env, all Success: 00 2 s, 01 2 s (skip), 02 1 min
+  35 s, 03 15 s, 04 3 min 46 s. Model `cxr-triage` id 3058, build 1, deployment
+  5341, Python 3.11 (Standard), 2 vCPU / 4 GB, comment `fv1.0.0 git 7fd3fd0
+  auroc 0.969`. The build/deploy status strings in `wait()` are confirmed
+  (VERIFY item closed).
+
 ## 2026-09-29: second workbench ("AWC env")
 
 Same repo, deployed to a second workbench (`goes-awc-bench`) to prove the
