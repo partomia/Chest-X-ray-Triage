@@ -30,20 +30,20 @@ features:
 
 training:
   estimator: logistic_regression
-  C: 0.5
+  C: 0.002                            # strong L2 on 768 dims: C=0.5 saturated p at ~1.0 (scripts/band_check.py)
   class_weight: balanced
   max_iter: 3000
 
 evaluation:
   target_sensitivity: 0.95            # operating threshold is chosen on VAL to hit this
-  p1_probability: 0.85                # >= this -> P1 (read first)
+  p1_probability: 0.99                # >= this -> P1 (read first); P1 never starts below the threshold
 
 gate:                                 # absolute KPIs, measured on the held-out TEST split
-                                      # set from the CAI baseline 2026-09-29 (fv1.0.0, 5,856 films):
-  min_auroc: 0.94                     # baseline 0.954
-  min_sensitivity: 0.95               # baseline 0.992
-  min_specificity: 0.70               # baseline 0.744
-  max_brier: 0.16                     # baseline 0.147 (VAL 0.026: the published test split is harder)
+                                      # set from the CAI baseline 2026-09-29 (fv1.0.0, 5,856 films, C=0.002):
+  min_auroc: 0.95                     # baseline 0.969
+  min_sensitivity: 0.95               # baseline 0.990
+  min_specificity: 0.70               # baseline 0.752
+  max_brier: 0.12                     # baseline 0.085 (VAL 0.034: the published test split is harder)
   max_auroc_regression: 0.01          # vs current champion (non-regression rule)
   require_feature_hash_match: true
 

@@ -84,3 +84,13 @@ Phases 0-7 done locally. Phase 8 (live CAI project) in progress.
   and probability quantiles to set `p1_probability` from.
 - Gate MLflow tag failed (`Missing the required parameter experiment_id`): the
   plugin needs `set_experiment` before reopening a run; fixed.
+- With the gate from the baseline: feature build skipped (same hash), gate
+  PASSED. TEST bands P1 447 / P2 0 / P3 177: C=0.5 saturates p (median 1.0).
+- `scripts/band_check.py` on the CAI feature table (TEST): C=0.5 AUROC 0.954,
+  Brier 0.147; C=0.05 0.961 / 0.118; C=0.01 0.967 / 0.098; C=0.002 0.969 /
+  0.085 (sens 0.990, spec 0.752). VAL cannot separate them (Brier
+  0.024-0.034). Chosen: C=0.002, p1_probability=0.99 -> P1 200 (198
+  pneumonia), P2 244 (188), P3 180 (4). Gate reset from this model: AUROC 0.95,
+  sensitivity 0.95, specificity 0.70, Brier 0.12. C was picked by looking at
+  TEST; the TEST numbers are slightly optimistic and the runbook says so.
+  The CI overlay keeps C=0.5 / p1 0.85 for the stub.

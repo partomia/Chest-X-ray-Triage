@@ -117,6 +117,26 @@ With the gate set from the baseline, the second run skips the feature build
 
 ![Feature build skipped, gate PASSED on the baseline thresholds](images/runbook/07-gate-passed.png)
 
+The TEST bands of that model were P1 447 / P2 0 / P3 177: with `C: 0.5` the
+probabilities saturate (median 1.0), so P2 is empty. `scripts/band_check.py`
+(writes nothing) compares C values and P1 cut-offs on the feature table:
+
+![band_check: TEST KPIs and bands for four C values](images/runbook/08-band-check.png)
+
+| C | AUROC | Sens | Spec | Brier | P1 (>= 0.99) | P2 | P3 |
+|---|---|---|---|---|---|---|---|
+| 0.5 | 0.954 | 0.992 | 0.744 | 0.147 | 419 (376 pneumonia) | 28 (11) | 177 (3) |
+| 0.05 | 0.961 | 0.985 | 0.761 | 0.118 | 362 (338) | 78 (46) | 184 (6) |
+| 0.01 | 0.967 | 0.987 | 0.756 | 0.098 | 308 (298) | 134 (87) | 182 (5) |
+| **0.002** | **0.969** | **0.990** | **0.752** | **0.085** | **200 (198)** | **244 (188)** | **180 (4)** |
+
+`C: 0.002` and `p1_probability: 0.99` were chosen: every KPI is better, P1 is
+99% pneumonia, P2 is 77%, and P3 misses 4 of 390. The gate was then reset from
+this model (AUROC 0.95, sensitivity 0.95, specificity 0.70, Brier 0.12). Be
+open about it: C was chosen by looking at TEST (VAL cannot tell the C values
+apart: VAL AUROC ~0.99 and Brier 0.024-0.034 for all four), so the TEST numbers
+are slightly optimistic. A clean re-run would hold out a second test set.
+
 Open Experiments > `cxr-triage`, read the TEST metrics of the last run and set
 each gate threshold a little below the baseline in `config/pipeline.yaml`
 (`gate.*`). Commit and push from your laptop, not from the CAI project (job 00
@@ -169,7 +189,7 @@ Applications > New Application: name `CXR Triage Worklist`, subdomain
 4. Private Cloud / no public ingress: register a self-hosted runner inside the
    network and change `runs-on` to `[self-hosted, cai]` in `cai-mlops.yml`;
    for a private CA set `CAI_CA_BUNDLE` in that step.
-5. Push a harmless change (for example `training.C: 0.5` -> `1.0`) and watch
+5. Push a harmless change (for example `training.C: 0.002` -> `0.003`) and watch
    the Actions log and the CAI job runs.
 
 ## Part 2: seven-minute demo

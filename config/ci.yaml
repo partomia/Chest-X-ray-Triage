@@ -10,6 +10,12 @@ features:
   backbone: stub:pooled-pixels
   backbone_revision: v1
 
+training:
+  C: 0.5                  # the stub's 256 pixel features need little regularisation
+
+evaluation:
+  p1_probability: 0.85
+
 gate:                     # CI proves the gate mechanics; the stub on synthetic films says nothing about quality
   min_sensitivity: 0.90   # small synthetic VAL: stub TEST sensitivity ~0.93
 
