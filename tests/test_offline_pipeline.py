@@ -1,7 +1,8 @@
 """End to end on synthetic films with the stub embedder, in a throwaway project root.
 
-build-features -> (idempotent re-run) -> train-validate -> kpi-gate (pass, then
-fail on cue) -> promote / rollback -> nightly worklist -> endpoint -> app.
+build-features (every model) -> (idempotent re-run) -> train-validate -> kpi-gate (pass,
+then fail on cue) -> promote / rollback -> film_qc champion and pneumothorax silent trial
+-> nightly worklist -> endpoint (film check; the trial never served) -> app.
 Each stage runs as a subprocess, the way a CAI job runs it.
 """
 import base64
@@ -26,8 +27,11 @@ def root(tmp_path_factory):
     return r
 
 
-def sh(root, script, *args, overlay="config/ci.yaml", code=None):
+def sh(root, script, *args, overlay="config/ci.yaml", code=None, model=None):
     env = {**os.environ, "CXR_ROOT": str(root), "CXR_CONFIG_OVERLAY": overlay}
+    env.pop("CXR_MODEL", None)
+    if model:
+        env["CXR_MODEL"] = model
     cmd = [sys.executable, str(REPO / script), *args] if script.endswith(".py") else [sys.executable, "-c", script]
     p = subprocess.run(cmd, env=env, cwd=REPO, capture_output=True, text=True, timeout=600)
     return p if code is None else (p.returncode, p.stdout + p.stderr)
@@ -36,9 +40,11 @@ def sh(root, script, *args, overlay="config/ci.yaml", code=None):
 def test_chain(root):
     p = sh(root, "features/build_feature_table.py", "-f", "/tmp/kernel.json")   # the CAI kernel's extra argument
     assert p.returncode == 0, p.stdout + p.stderr
-    manifest = json.loads(next((root / "feature_store/ci_features").glob("v*/manifest.json")).read_text())
-    assert all(c["passed"] for c in manifest["data_checks"])
-    assert set(manifest["rows_by_split"]) == {"train", "val", "test"}
+    for store, model in (("ci_features", "pneumonia"), ("ci_nih_features", "pneumothorax"),
+                         ("ci_qc_features", "film_qc")):   # every model's table, without CXR_MODEL
+        manifest = json.loads(next((root / "feature_store" / store).glob("v*/manifest.json")).read_text())
+        assert manifest["model"] == model and all(c["passed"] for c in manifest["data_checks"]), model
+        assert set(manifest["rows_by_split"]) == {"train", "val", "test"}
 
     p = sh(root, "features/build_feature_table.py")
     assert p.returncode == 0 and "skipping" in p.stdout
@@ -75,6 +81,20 @@ def test_promote_refuses_failed_gate_then_promotes_and_rolls_back(root):
     assert (champ / "serving.marker").exists() and (champ / "model_meta.json").exists()
 
 
+def test_film_qc_champion_and_pneumothorax_silent_trial(root):
+    install = ("from serve.deploy_champion import promote; from common import load_config; "
+               "cfg = load_config(); promote(cfg, cfg['model']['stage_on_pass']); print('INSTALLED', cfg['model'])")
+    for model, stage_dir in (("film_qc", "models/film_qc/champion"), ("pneumothorax", "models/pneumothorax/silent_trial")):
+        p = sh(root, "train/train_validate.py", model=model)
+        assert p.returncode == 0, p.stdout + p.stderr
+        p = sh(root, "gate/kpi_gate.py", model=model)
+        assert p.returncode == 0 and "KPI GATE: PASSED" in p.stdout, p.stdout + p.stderr
+        rc, out = sh(root, install, code=True, model=model)
+        assert rc == 0 and "INSTALLED" in out, out
+        meta = json.loads((root / stage_dir / "model_meta.json").read_text())
+        assert meta["model"] == model
+
+
 def test_nightly_worklist_endpoint_and_app(root):
     p = sh(root, "monitor/batch_score.py")
     assert p.returncode == 0, p.stdout + p.stderr
@@ -87,8 +107,19 @@ def test_nightly_worklist_endpoint_and_app(root):
                        "; print(json.dumps(predict({})))", code=True)
     assert rc == 0, out
     ok, bad = [json.loads(line) for line in out.strip().splitlines()[-2:]]
-    assert ok["priority"] in {"P1", "P2", "P3"} and 0 <= ok["probability_pneumonia"] <= 1
+    assert ok["priority"] in {"P1", "P2", "P3", "NA"} and 0 <= ok["probability_pneumonia"] <= 1
+    assert ok["film_qc"]["model_version"].startswith("film_qc-") and "silent_trial" not in ok   # never served
     assert "error" in bad
+
+    film_path = str(film)
+    rc, out = sh(root, "import json; from PIL import Image; from serve.predict import score_images; "
+                       f"r = score_images([Image.open({film_path!r})], [60], include_trial=True)[0]; "
+                       "print(json.dumps({k: r[k] for k in ('priority', 'triage_model', 'silent_trial', 'findings')}))",
+                 code=True)
+    assert rc == 0, out
+    adult = json.loads(out.strip().splitlines()[-1])
+    assert adult["priority"] == "NA" and adult["triage_model"] is None          # no live adult model yet
+    assert adult["silent_trial"]["pneumothorax"]["in_scope"] and not adult["findings"]["pneumonia"]["in_scope"]
 
     app = f"""
 import os
@@ -102,7 +133,7 @@ assert not at.exception, at.exception
 assert any('Arrival order' in s.value for s in at.subheader)
 at.button[0].click().run()
 assert not at.exception, at.exception
-assert len(at.metric) == 3
+assert len(at.metric) == 4
 at.checkbox[0].check().run()
 assert not at.exception, at.exception
 at.button[-1].click().run()

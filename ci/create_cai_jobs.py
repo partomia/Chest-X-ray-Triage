@@ -1,7 +1,7 @@
 """
-One-time setup, run from a CAI session terminal: creates the six CAI jobs of
-ci/cai_jobs.py with their dependencies, resource profiles, timeouts and the
-nightly schedule, then prints the IDs. Jobs that already exist (by name) are
+One-time setup, run from a CAI session terminal: creates the CAI jobs of
+ci/cai_jobs.py with their dependencies, resource profiles, timeouts, environment
+(CXR_MODEL) and the nightly schedule, then prints the IDs. Jobs that already exist (by name) are
 left as they are, so it is safe to re-run.
 
   python ci/create_cai_jobs.py            # create what is missing
@@ -48,7 +48,7 @@ def main() -> int:
             continue
         body = cmlapi.CreateJobRequest(
             project_id=pid, name=j["name"], script=j["script"], runtime_identifier=runtime,
-            cpu=j["cpu"], memory=j["memory"], timeout=j["timeout"],
+            cpu=j["cpu"], memory=j["memory"], timeout=j["timeout"], environment=j.get("env") or {},
         )
         if j["parent"]:
             body.parent_job_id = ids[j["parent"]] if not args.dry_run else "<parent>"

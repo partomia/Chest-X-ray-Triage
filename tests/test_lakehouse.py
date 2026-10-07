@@ -27,12 +27,33 @@ def test_films_are_the_kermany_test_split():
     assert sum(f["label"] == "PNEUMONIA" for f in films) == 390
 
 
+def test_adult_films_are_nih_patients_the_pneumothorax_model_never_saw():
+    import csv
+
+    adults = C.adult_films(CFG)
+    assert len(adults) == 300 and sum(f["label"] == "PNEUMOTHORAX" for f in adults) == 60
+    assert all(18 <= int(f["age"]) <= 95 and f["image_file"].endswith(".jpg") for f in adults)
+    with open(ROOT / "data_refs" / "nih_cxr14_subset.csv") as f:
+        model_patients = {r["patient_id"] for r in csv.DictReader(f) if r["split"] != "lakehouse"}
+    assert not {f["patient_id"] for f in adults} & model_patients
+
+
 def test_the_hospital_day_is_deterministic_and_never_repeats_a_film():
-    pool = C.films(CFG)
-    a, b = C.studies_of_day(CFG, D, pool), C.studies_of_day(CFG, D, pool)
+    pools = C.pools(CFG)
+    a, b = C.studies_of_day(CFG, D, pools), C.studies_of_day(CFG, D, pools)
     assert a == b and len(a) == CFG["studies_per_day"]
-    seen = [s["image_file"] for d in CFG["demo_dates"] for s in C.studies_of_day(CFG, date.fromisoformat(d), pool)]
+    assert sum(s["population"] == "adult" for s in a) == CFG["adult_per_day"]
+    assert all(s["age"] >= 18 for s in a if s["population"] == "adult")
+    seen = [s["image_file"] for d in CFG["demo_dates"] for s in C.studies_of_day(CFG, date.fromisoformat(d), pools)]
     assert len(seen) == len(set(seen))
+
+
+def test_planted_films_are_unfit_copies_of_real_ones():
+    d, slots = next(iter(CFG["planted_films"].items()))
+    studies = C.studies_of_day(CFG, date.fromisoformat(d), C.pools(CFG))
+    planted = [s for s in studies if s["planted"]]
+    assert sorted(s["planted"] for s in planted) == sorted(p["kind"] for p in slots)
+    assert all(s["image_file"].startswith(f"QC-{s['planted'].upper()}-") for s in planted)
 
 
 def test_read_queue_fifo_and_triage():
@@ -46,9 +67,16 @@ def test_read_queue_fifo_and_triage():
     assert tri["A1"][1] == t0.replace(minute=10)
 
 
+def test_triage_rank_reads_na_with_p3_in_arrival_order():
+    t0 = datetime(2026, 9, 28, 8)
+    items = [{"accession_no": f"A{i}", "study_ts": t0.replace(hour=7, minute=i), "priority": p, "probability": q}
+             for i, (p, q) in enumerate([("P3", 0.1), ("NA", None), ("P2", 0.6), ("P3", 0.2), (None, None)])]
+    tri = C.read_queue(items, C.triage_rank, 1, t0, 10)   # all waiting when the shift starts
+    assert sorted(tri, key=lambda a: tri[a][0]) == ["A2", "A0", "A1", "A3", "A4"]
+
+
 def test_triage_shortens_pneumonia_waits_with_a_perfect_ranking():
-    pool = C.films(CFG)
-    studies = C.studies_of_day(CFG, D, pool)
+    studies = C.studies_of_day(CFG, D, C.pools(CFG))
     for s in studies:
         s["priority"] = "P1" if s["label"] == "PNEUMONIA" else "P3"
     fifo, tri = C.reading(CFG, D, studies), C.reading(CFG, D, studies, C.triage_rank)
@@ -126,8 +154,8 @@ def test_score_studies_records_missing_films_and_fails():
     meta = {"feature_version": "1.0.0", "git_sha": "abcdef0123", "threshold": 0.5}
     studies = [{"business_date": D, "accession_no": f"A{i}", "image_file": f"f{i}.jpeg"} for i in range(3)]
     store = MemoryStore(studies)
-    scorer = (lambda paths: ([{"probability_pneumonia": 0.9, "priority": "P2", "threshold": 0.5,
-                               "quality_flags": []} for _ in paths], []), meta)
+    scorer = (lambda paths, ages: ([{"probability_pneumonia": 0.9, "priority": "P2", "threshold": 0.5,
+                                     "quality_flags": []} for _ in paths], []), meta)
     films = {"f0.jpeg": Path("f0.jpeg"), "f1.jpeg": Path("f1.jpeg")}
     run = score_date(store, D, "test", scorer=scorer, drift_fn=lambda q: ({}, "UNAVAILABLE"), films=films)
     assert run["status"] == "PARTIAL" and run["missing_films"] == 1 and run["scored"] == 2
@@ -136,6 +164,47 @@ def test_score_studies_records_missing_films_and_fails():
     films["f2.jpeg"] = Path("f2.jpeg")
     assert score_date(store, D, "test", scorer=scorer, drift_fn=lambda q: ({}, "OK"), films=films)["status"] == "SUCCEEDED"
     assert len(store.tables["gold.triage_score"]) == 3        # the date was replaced, not appended
+
+
+def _head(p, stage, scope=True, thr=0.5, ver="v1"):
+    band = "P1" if p >= 0.9 else "P2" if p >= thr else "P3"
+    return {"probability": p, "threshold": thr, "positive": p >= thr, "priority": band if scope else None,
+            "stage": stage, "in_scope": scope, "model_version": ver}
+
+
+def test_score_studies_writes_every_head_and_the_shadow_worklist():
+    from lakehouse.score_studies import score_date
+
+    meta = {"feature_version": "1.0.0", "git_sha": "abcdef0123", "threshold": 0.5}
+    studies = [{"business_date": D, "accession_no": f"A{i}", "image_file": f"f{i}.jpg", "age_years": a}
+               for i, a in enumerate([4, 60, 70])]
+    qc = lambda bad: {"probability": 0.99 if bad else 0.01, "unsuitable": bad, "model_version": "qc1"}  # noqa: E731
+    results = [   # child: pneumonia live; adult: no live adult model yet, pneumothorax in trial; adult unfit film
+        {"priority": "P2", "triage_model": "pneumonia", "probability_pneumonia": 0.6, "threshold": 0.5,
+         "film_qc": qc(False), "quality_flags": [],
+         "findings": {"pneumonia": _head(0.6, "champion")},
+         "silent_trial": {"pneumothorax": _head(0.0, "silent_trial", scope=False)}},
+        {"priority": "NA", "triage_model": None, "probability_pneumonia": 0.2, "threshold": 0.5,
+         "film_qc": qc(False), "quality_flags": [],
+         "findings": {"pneumonia": _head(0.2, "champion", scope=False)},
+         "silent_trial": {"pneumothorax": _head(0.95, "silent_trial")}},
+        {"priority": "NA", "triage_model": None, "probability_pneumonia": 0.1, "threshold": 0.5,
+         "film_qc": qc(True), "quality_flags": ["dark"],
+         "findings": {"pneumonia": _head(0.1, "champion", scope=False)},
+         "silent_trial": {"pneumothorax": _head(0.99, "silent_trial")}}]
+    store = MemoryStore(studies)
+    films = {s["image_file"]: Path(s["image_file"]) for s in studies}
+    run = score_date(store, D, "test", scorer=(lambda paths, ages: (results, []), meta),
+                     drift_fn=lambda q: ({}, "TOO_FEW"), films=films)
+    rows = {r["accession_no"]: r for r in store.tables["gold.triage_score"]}
+    assert [rows[a]["priority"] for a in ("A0", "A1", "A2")] == ["P2", "NA", "NA"]
+    assert [rows[a]["shadow_priority"] for a in ("A0", "A1", "A2")] == ["P2", "P1", "NA"]   # unfit film stays NA
+    assert rows["A1"]["shadow_model"] == "pneumothorax" and rows["A2"]["film_qc"] == "UNSUITABLE"
+    heads = store.tables["gold.model_score"]
+    assert len(heads) == 9 and {h["model"] for h in heads} == {"pneumonia", "pneumothorax", "film_qc"}
+    assert run["not_triaged"] == 2 and run["film_unsuitable"] == 1
+    assert json.loads(run["heads_json"]) == {"film_qc": {"champion": "qc1"}, "pneumonia": {"champion": "v1"},
+                                             "pneumothorax": {"silent_trial": "v1"}}
 
 
 def test_publish_is_a_no_op_without_impala_credentials(monkeypatch):

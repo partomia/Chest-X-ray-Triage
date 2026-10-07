@@ -305,6 +305,18 @@ diagnosis; the heatmap is indicative (48-pixel patches), not lesion localisation
 | 10-11 | Trust in the data | *CXR Model, Drift & Data Quality* / Data quality: 2026-10-01's quarantined order and PACS header, the two re-sent headers EXPLAINED, zero mismatches |
 | 11-12 | Trust in the model | Same dashboard / Model: gate decision and deployment rows written by jobs 03 / 04, PSI per scored day |
 
+### Second model in silent trial, and the Registry (+4 minutes)
+
+| Min | Beat | Show |
+|---|---|---|
+| 12-13 | Adults arrive | *CXR Models & Silent Trial* / Every model: 16 adult films a day get band NA (no live adult model) and 2026-10-01's two unfit films are rejected by the film check |
+| 13-14 | The trial | Same dashboard / Silent trial: pneumothorax median wait FIFO vs today's worklist (worse: flagged children jump ahead) vs *if live*; trial days, positives, sensitivity, specificity |
+| 14-15 | Governance | CAI **Model Registry**: `cxr-pneumothorax` version (stage silent_trial, population adult, TEST KPIs as tags); `cxr-pneumonia` and `cxr-film-qc` champions |
+| 15-16 | Go live | Run `cxr-07-promote-champion` with `CXR_MODEL=pneumothorax`, `CXR_APPROVED_BY=<name>`: criteria printed PASS/FAIL; on PASS a new registry version (stage champion, approver, trial evidence) and `PROMOTED` in *Gate decisions* |
+
+Say it plainly: the pneumothorax head is a frozen ImageNet backbone at 224 px (AUROC ~0.75):
+the point is the governance - it earns its place on live films, or it stays silent.
+
 Setup and re-run commands: README, section *Lakehouse*. Trigger one date by hand:
 `cde job run --name rsingh-cxr-orchestration --config-json '{"business_date": "2026-10-06"}'`.
 The DAG is paused on creation; `cde job update --name rsingh-cxr-orchestration --schedule-enabled=true`

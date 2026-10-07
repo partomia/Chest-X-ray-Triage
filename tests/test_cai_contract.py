@@ -10,10 +10,12 @@ from pathlib import Path
 
 import yaml
 
-from ci.cai_jobs import CHAIN, GATE_JOB, JOBS
+from ci.cai_jobs import CHAIN, CHAINS, GATE_JOB, GATE_JOBS, JOBS
+from common import load_config, model_names
 
 REPO = Path(__file__).resolve().parents[1]
 JOB_SCRIPTS = [j["script"] for j in JOBS] + ["ci/create_cai_jobs.py"]
+IN_CHAINS = {n for c in CHAINS.values() for n in c}
 
 
 def test_job_scripts_exist_and_names_are_unique():
@@ -22,21 +24,53 @@ def test_job_scripts_exist_and_names_are_unique():
         assert (REPO / s).is_file(), s
 
 
-def test_chain_is_linked_by_parents_in_order():
+def test_every_chain_is_linked_by_parents_in_order():
     by_name = {j["name"]: j for j in JOBS}
-    assert CHAIN[0] == "cxr-00-sync-code" and by_name[CHAIN[0]]["parent"] is None
-    for parent, child in zip(CHAIN, CHAIN[1:]):
-        assert by_name[child]["parent"] == parent
-        assert by_name[child]["schedule"] is None   # CAI: parent_job_id and schedule are exclusive
-    assert GATE_JOB in CHAIN and CHAIN.index(GATE_JOB) == len(CHAIN) - 2   # deploy is the only job after it
+    assert sorted(CHAINS) == sorted(model_names(load_config()))     # one chain per model
+    assert CHAIN == CHAINS["pneumonia"] and CHAIN[0] == "cxr-00-sync-code" and GATE_JOB in GATE_JOBS
+    for model, chain in CHAINS.items():
+        assert by_name[chain[0]]["parent"] is None
+        for parent, child in zip(chain, chain[1:]):
+            assert by_name[child]["parent"] == parent
+            assert by_name[child]["schedule"] is None   # CAI: parent_job_id and schedule are exclusive
+        gate = [n for n in chain if n in GATE_JOBS]
+        assert len(gate) == 1 and chain.index(gate[0]) == len(chain) - 2   # deploy is the only job after it
+        assert [by_name[n]["script"] for n in chain[-4:]] == [
+            "features/build_feature_table.py", "train/train_validate.py", "gate/kpi_gate.py",
+            "serve/deploy_champion.py"]
+        for n in chain[-4:]:
+            assert by_name[n]["env"] == {"CXR_MODEL": model}, n
 
 
-def test_jobs_outside_the_chain_have_no_parent():
-    outside = [j for j in JOBS if j["name"] not in CHAIN]
+def test_jobs_outside_the_chains_have_no_parent():
+    outside = [j for j in JOBS if j["name"] not in IN_CHAINS]
     assert all(j["parent"] is None for j in outside)
     assert [j["name"] for j in outside if j["schedule"]] == ["cxr-05-nightly-worklist"]
     names = [j["name"] for j in JOBS]
     assert all(names.index(j["parent"]) < names.index(j["name"]) for j in JOBS if j["parent"])   # parents first
+    assert {"cxr-setup-nih", "cxr-07-promote-champion"} <= set(names)
+
+
+def test_trigger_runs_every_chain_and_a_rejection_stops_only_its_own(monkeypatch):
+    import ci.trigger_cai_pipeline as tp
+
+    started, ids = [], {n: n for n in IN_CHAINS}
+
+    class Api:
+        def __call__(self, method, path, **kw):
+            started.append(path.split("/")[2])
+            return {"id": "r", "created_at": "2026-10-07T00:00:00Z"}
+
+    def follow(api, name, job_id, since, run_id=None):
+        return "failed" if name == "ptx-03-kpi-gate" else "succeeded"
+
+    monkeypatch.setattr(tp, "follow", follow)
+    rows = []
+    for model, chain in CHAINS.items():
+        rows += tp.run_chain(Api(), ids, model, chain, {})
+    assert started == [c[0] for c in CHAINS.values()]
+    assert ("pneumothorax", "ptx-04-deploy", "not run") in rows
+    assert all(s == "succeeded" for m, _, s in rows if m != "pneumothorax")
 
 
 def test_sync_installs_requirements_once(tmp_path):
@@ -83,7 +117,8 @@ def test_workflow_watches_every_chain_script_and_config():
     wf = yaml.safe_load((REPO / ".github/workflows/cai-mlops.yml").read_text())
     on = wf.get("on") or wf.get(True)   # PyYAML reads the bare key `on` as True
     paths = on["push"]["paths"]
-    for s in [j["script"] for j in JOBS if j["name"] in CHAIN] + ["config/pipeline.yaml", "common.py"]:
+    for s in [j["script"] for j in JOBS if j["name"] in IN_CHAINS] + ["config/pipeline.yaml", "common.py",
+                                                                       "data_refs/nih_cxr14_subset.csv"]:
         top = s.split("/")[0]
         assert s in paths or f"{top}/**" in paths, f"{s} not in the workflow's path filter"
 

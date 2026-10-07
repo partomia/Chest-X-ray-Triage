@@ -6,8 +6,8 @@ name first and only creates what is missing.
   1. Project CAI_PROJECT_NAME from this GitHub repo, if absent; waits for the clone.
   2. Project environment variables: HF_HOME, and CXR_IMPALA_USER / CXR_IMPALA_PASSWORD
      (the workload user, for the lakehouse jobs; from the caller's environment, never printed).
-  3. The jobs of ci/cai_jobs.py with their parents, schedule, timeout and size; an
-     existing job is resized to match.
+  3. The jobs of ci/cai_jobs.py with their parents, schedule, timeout, size and environment
+     (CXR_MODEL of each model's chain); an existing job is resized / given its environment.
   4. --app: the application CXR Triage Worklist (needs a champion, i.e. a first chain run).
 
 Prints the IDs for the GitHub secrets and the Airflow Variables.
@@ -103,28 +103,39 @@ def job_ids(wb: Workbench, pid: str) -> dict:
     return {j["name"]: j for j in wb("GET", f"/projects/{pid}/jobs", params={"page_size": 200}).get("jobs", [])}
 
 
+def job_env(job: dict) -> dict:
+    """A job's environment as the API returns it: a JSON string or an object."""
+    env = job.get("environment") or {}
+    return json.loads(env) if isinstance(env, str) else dict(env)
+
+
 def ensure_jobs(wb: Workbench, project: dict, dry_run: bool) -> dict:
     pid = project["id"]
     existing = job_ids(wb, pid)
     ids = {n: j["id"] for n, j in existing.items()}
     for job in JOBS:     # parents come first in JOBS
         size = {"cpu": job["cpu"], "memory": job["memory"]}
+        env = job.get("env", {})
         if job["name"] in existing:
             have = existing[job["name"]]
-            if {k: have.get(k) for k in size} == size:
+            have_env = job_env(have)
+            patch = {**({} if {k: have.get(k) for k in size} == size else size),
+                     **({} if all(have_env.get(k) == v for k, v in env.items()) else
+                        {"environment": {**have_env, **env}})}
+            if not patch:
                 print(f"job {job['name']}: exists ({have['id']})")
             elif dry_run:
-                print(f"job {job['name']}: would resize to {job['cpu']} vCPU / {job['memory']} GB")
+                print(f"job {job['name']}: would update {sorted(patch)}")
             else:
-                wb("PATCH", f"/projects/{pid}/jobs/{have['id']}", body=size)
-                print(f"job {job['name']}: resized to {job['cpu']} vCPU / {job['memory']} GB")
+                wb("PATCH", f"/projects/{pid}/jobs/{have['id']}", body=patch)
+                print(f"job {job['name']}: updated {sorted(patch)}")
             continue
         if dry_run:
             print(f"job {job['name']}: would create ({job['script']}, parent {job['parent']}, "
-                  f"schedule {job['schedule']}, {job['cpu']} vCPU / {job['memory']} GB)")
+                  f"schedule {job['schedule']}, {job['cpu']} vCPU / {job['memory']} GB, env {env})")
             continue
         body = {"name": job["name"], "script": job["script"], **size, "runtime_identifier": RUNTIME,
-                "timeout": job["timeout"], "kill_on_timeout": True, "arguments": ""}
+                "timeout": job["timeout"], "kill_on_timeout": True, "arguments": "", "environment": env}
         if job["parent"]:
             body["parent_job_id"] = ids[job["parent"]]
         if job["schedule"]:

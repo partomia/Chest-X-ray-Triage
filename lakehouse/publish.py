@@ -1,9 +1,10 @@
 """
 Model lineage into the lakehouse, written by the CAI pipeline jobs:
 
-  ref.training_set   per feature version and split: films, pneumonia, patients (cxr-01)
-  ref.model_event    GATE_PASSED / GATE_FAILED (cxr-03), DEPLOYED / ROLLED_BACK (cxr-04),
-                     with the candidate's metrics, threshold and gate checks
+  ref.training_set   per model, feature version and split: films, positives, patients (cxr-01)
+  ref.model_event    per model: GATE_PASSED / GATE_FAILED (job 03), DEPLOYED / SILENT_TRIAL /
+                     ROLLED_BACK (job 04), PROMOTED / PROMOTION_REFUSED (cxr-07), with the
+                     candidate's metrics, threshold, gate checks, stage and registry version
 
 Only inside a CAI job (CDSW_PROJECT_ID), so a laptop or CI run of the same scripts never writes
 to the platform's tables. Best-effort: without CXR_IMPALA_USER or when CDW is unreachable it prints why
@@ -45,20 +46,26 @@ def _safe(what: str, fn, store=None) -> bool:
 def training_set_rows(manifest: dict) -> list[dict]:
     created = datetime.fromisoformat(manifest["created_at"]).replace(tzinfo=None)
     pos = manifest.get("positives_by_split", {})
+    model = manifest.get("model", "pneumonia")
     splits = sorted(manifest["rows_by_split"].items()) + [("all", manifest["rows"])]
-    return [{"feature_version": manifest["feature_version"], "feature_hash": manifest["feature_hash"],
-             "data_split": split, "films": n,
-             "pneumonia": sum(pos.values()) if split == "all" and pos else pos.get(split),
-             "patients": manifest.get("patients") if split == "all" else None,
-             "backbone": manifest["backbone"], "git_sha": manifest["git_sha"][:7], "created_at": created}
-            for split, n in splits]
+    rows = []
+    for split, n in splits:
+        positives = sum(pos.values()) if split == "all" and pos else pos.get(split)
+        rows.append({"feature_version": manifest["feature_version"], "feature_hash": manifest["feature_hash"],
+                     "data_split": split, "films": n, "pneumonia": positives if model == "pneumonia" else None,
+                     "patients": manifest.get("patients") if split == "all" else None,
+                     "backbone": manifest["backbone"], "git_sha": manifest["git_sha"][:7], "created_at": created,
+                     "model": model, "positives": positives})
+    return rows
 
 
-def model_event_row(event: str, meta: dict, gate: dict | None = None, detail: str = "") -> dict:
+def model_event_row(event: str, meta: dict, gate: dict | None = None, detail: str = "", stage: str | None = None,
+                    registry_version: int | None = None) -> dict:
     from lakehouse.store import model_version
 
     m = meta.get("metrics", {})
-    return {"event_id": uuid.uuid4().hex[:16], "event": event, "recorded_at": datetime.now(),
+    return {"model": meta.get("model", "pneumonia"), "stage": stage, "registry_version": registry_version,
+            "event_id": uuid.uuid4().hex[:16], "event": event, "recorded_at": datetime.now(),
             "git_sha": meta["git_sha"][:7], "model_version": model_version(meta),
             "feature_version": meta["feature_version"], "feature_hash": meta["feature_hash"],
             "threshold": meta.get("threshold"), "val_auroc": m.get("val", {}).get("auroc"),
@@ -74,15 +81,20 @@ def publish_training_set(manifest: dict, store=None) -> bool:
         print("[lakehouse] feature table built with --limit - not a training set, not published")
         return False
 
+    model = manifest.get("model", "pneumonia")
+
     def write(s):
         rows = training_set_rows(manifest)
         s.ensure("ref.training_set")
-        s.execute(f"DELETE FROM {s.t('ref.training_set')} WHERE feature_version = '{manifest['feature_version']}'")
+        mine = "(model IS NULL OR model = 'pneumonia')" if model == "pneumonia" else f"model = '{model}'"
+        s.execute(f"DELETE FROM {s.t('ref.training_set')} WHERE feature_version = '{manifest['feature_version']}' "
+                  f"AND {mine}")
         s.append("ref.training_set", rows)
 
-    return _safe(f"training set fv{manifest['feature_version']}", write, store)
+    return _safe(f"training set {model} fv{manifest['feature_version']}", write, store)
 
 
-def publish_model_event(event: str, meta: dict, gate: dict | None = None, detail: str = "", store=None) -> bool:
-    return _safe(f"model event {event}",
-                 lambda s: s.append("ref.model_event", [model_event_row(event, meta, gate, detail)]), store)
+def publish_model_event(event: str, meta: dict, gate: dict | None = None, detail: str = "", store=None,
+                        stage: str | None = None, registry_version: int | None = None) -> bool:
+    row = model_event_row(event, meta, gate, detail, stage, registry_version)
+    return _safe(f"model event {row['model']} {event}", lambda s: s.append("ref.model_event", [row]), store)

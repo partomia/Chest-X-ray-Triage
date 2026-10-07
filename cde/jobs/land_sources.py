@@ -10,13 +10,15 @@ Stage 0 - the hospital's source systems drop one business date's extracts on the
   emr/<date>/patients_<yyyymmdd>.csv     patients seen for the first time that date
   <source>/<date>/_manifest.json         what the source says it sent: file and record count
 
-Everything is deterministic in (seed, date): the films are the 624 Kermany TEST films
-(cde/reference/test_films.csv, never used for training or threshold choice), 48 a day, and
+Everything is deterministic in (seed, date): 48 films a day, 32 children from the 624 Kermany
+TEST films (cde/reference/test_films.csv) and 16 adults from the 300 NIH films kept for the
+hospital (cde/reference/adult_films.csv), none ever used for training or threshold choice;
 the radiologist reads them first in, first out (cxr_common.read_queue), which is today's
 practice the triage is measured against.
 
 On config defects_on (2026-10-01) the sources carry planted faults: two PACS headers sent
-twice, one PACS header without AccessionNumber, one RIS order with an impossible order time.
+twice, one PACS header without AccessionNumber, one RIS order with an impossible order time;
+and (planted_films) two films unfit for AI triage, one blurred and one rotated.
 
 Usage:
   spark-submit land_sources.py --business-date 2026-09-28 [--landing s3a://...]
@@ -52,18 +54,18 @@ def ris_line(s: dict) -> dict:
             "indication": s["indication"], "procedure_code": "XR-CHEST-1V"}
 
 
-def first_seen(cfg: dict, d: date, pool: list[dict]) -> dict:
-    """patient key -> first business date with a study, for every date up to d."""
+def first_seen(cfg: dict, d: date, pool: dict) -> dict:
+    """patient key -> (first business date with a study, that study), for every date up to d."""
     seen: dict = {}
     day = date.fromisoformat(cfg["first_date"])
     while day <= d:
         for s in C.studies_of_day(cfg, day, pool):
-            seen.setdefault(s["patient_key"], day)
+            seen.setdefault(s["patient_key"], (day, s))
         day += timedelta(days=1)
     return seen
 
 
-def signed_reports(cfg: dict, d: date, pool: list[dict]) -> list[dict]:
+def signed_reports(cfg: dict, d: date, pool: dict) -> list[dict]:
     rng = random.Random(f"{cfg['seed']}-reports-{d.isoformat()}")
     out = []
     first = date.fromisoformat(cfg["first_date"])
@@ -79,7 +81,7 @@ def signed_reports(cfg: dict, d: date, pool: list[dict]) -> list[dict]:
 
 def build_day(cfg: dict, d: date) -> dict:
     """source -> (file name, text, records) for the business date."""
-    pool = C.films(cfg)
+    pool = C.pools(cfg)
     studies = C.studies_of_day(cfg, d, pool)
     ris = [ris_line(s) for s in sorted(studies, key=lambda s: s["order_ts"])]
     pacs = [pacs_header(s) for s in studies]
@@ -88,8 +90,8 @@ def build_day(cfg: dict, d: date) -> dict:
         pacs[25]["AccessionNumber"] = ""                     # technologist skipped the worklist
         ris[9]["order_ts"] = f"{d.isoformat()} 25:61:00"     # RIS clock fault
     seen = first_seen(cfg, d, pool)
-    new_keys = sorted({s["patient_key"] for s in studies if seen[s["patient_key"]] == d})
-    emr = [C.patient_of(cfg, k, d) for k in new_keys]
+    new_keys = sorted({s["patient_key"] for s in studies if seen[s["patient_key"]][0] == d})
+    emr = [C.patient_of(cfg, k, d, seen[k][1]["age"], seen[k][1]["sex"]) for k in new_keys]
     reports = signed_reports(cfg, d, pool)
 
     def psv(rows):

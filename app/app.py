@@ -2,8 +2,10 @@
 CAI Application - Radiology worklist demo (Streamlit).
 
   - shows films in data/incoming/ in arrival order (FIFO), then ranks them (and
-    any uploads) by pneumonia probability
-  - shows an occlusion heatmap for the selected film
+    any uploads): P1, P2 by the deciding champion's probability, then P3 and NA (no AI
+    triage: the film check rejected the film, or no champion covers the patient) in
+    arrival order
+  - shows an occlusion heatmap for the selected film, for the model that ranked it
   - captures the radiologist's agree/override as feedback for the next retrain
 """
 import csv
@@ -21,8 +23,9 @@ from features.feature_logic import load_image, preprocess  # noqa: E402
 
 st.set_page_config(page_title="CXR Triage - Cloudera AI", layout="wide")
 cfg = load_config()
-BAND_COLOR = {"P1": "#FF550C", "P2": "#FE8756", "P3": "#A8AFB9"}
-BAND_TEXT = {"P1": "read first", "P2": "likely abnormal", "P3": "routine"}
+BAND_COLOR = {"P1": "#FF550C", "P2": "#FE8756", "P3": "#A8AFB9", "NA": "#5B6B7F"}
+BAND_TEXT = {"P1": "read first", "P2": "likely abnormal", "P3": "routine", "NA": "no AI triage"}
+FLAGGED = ("P1", "P2")
 SUFFIXES = {".jpeg", ".jpg", ".png"}
 MAX_FILMS = 40
 
@@ -41,11 +44,28 @@ except RuntimeError as e:
     st.stop()
 meta = eng._META
 
+
+def deciding(r: dict) -> tuple[str, float]:
+    """The model that set the band and its probability (pneumonia when none did)."""
+    name = r.get("triage_model") or "pneumonia"
+    return name, r["findings"][name]["probability"] if name in r.get("findings", {}) else r["probability_pneumonia"]
+
+
+def worklist_order(rows: list[dict]) -> list[dict]:
+    """P1 then P2, higher probability first; then P3 and NA in arrival order."""
+    def key(ir):
+        i, r = ir
+        flagged = r["priority"] in FLAGGED
+        return (FLAGGED.index(r["priority"]) if flagged else len(FLAGGED), -deciding(r)[1] if flagged else i)
+    return [r for _, r in sorted(enumerate(rows), key=key)]
+
+
 st.title("Chest X-ray triage worklist")
 st.caption(f"Decision support only - every film is still read by a radiologist.  "
            f"Model git {meta['git_sha'][:7]} - features v{meta['feature_version']} - "
            f"test AUROC {meta['metrics']['test']['auroc']:.3f} - "
-           f"sensitivity {meta['metrics']['test']['sensitivity']:.3f} at threshold {meta['threshold']:.3f}")
+           f"sensitivity {meta['metrics']['test']['sensitivity']:.3f} at threshold {meta['threshold']:.3f}.  "
+           f"Champions: {', '.join(sorted(eng._CHAMPIONS))}")
 
 incoming_dir = ROOT / cfg["data"]["incoming_dir"]
 incoming = sorted(p for p in incoming_dir.rglob("*") if p.suffix.lower() in SUFFIXES)[:MAX_FILMS]
@@ -56,9 +76,8 @@ with left:
     if st.button("Triage worklist", type="primary"):
         items = [(p.name, load_image(p)) for p in incoming] + [(u.name, load_image(u.getvalue())) for u in uploads or []]
         scores = eng.score_images([im for _, im in items]) if items else []
-        st.session_state.worklist = sorted(
-            [{"film": n, "image": im, **s} for (n, im), s in zip(items, scores)],
-            key=lambda r: -r["probability_pneumonia"])
+        st.session_state.worklist = worklist_order(
+            [{"film": n, "image": im, **s} for (n, im), s in zip(items, scores)])
         st.session_state.sel = 0
 
     wl = st.session_state.get("worklist", [])
@@ -70,12 +89,16 @@ with left:
             st.text(f"{i:>2}. {p.name}")
     else:
         counts = {b: sum(r["priority"] == b for r in wl) for b in BAND_COLOR}
-        cols = st.columns(3)
+        cols = st.columns(len(BAND_COLOR))
         for c, (b, n) in zip(cols, counts.items()):
             c.metric(f"{b} ({BAND_TEXT[b]})", n)
         for i, r in enumerate(wl):
-            label = f"{r['priority']}  {r['probability_pneumonia']:.2f}  {r['film']}"
-            if r["quality_flags"]:
+            name, prob = deciding(r)
+            label = f"{r['priority']}  {name} {prob:.2f}  {r['film']}" if r["triage_model"] else \
+                f"{r['priority']}  {r['film']}"
+            if (r.get("film_qc") or {}).get("unsuitable"):
+                label += "  (film unfit for AI triage)"
+            elif r["quality_flags"]:
                 label += "  (check quality)"
             if st.button(label, key=f"row{i}"):
                 st.session_state.sel = i
@@ -91,8 +114,10 @@ with right:
 
             from serve.explain import occlusion_map
 
+            model = deciding(r)[0]
+
             def score_fn(imgs):
-                return np.array([s["probability_pneumonia"] for s in eng.score_images(imgs)])
+                return np.array([s["findings"][model]["probability"] for s in eng.score_images(imgs)])
 
             with st.spinner("Occluding patches..."):
                 heat, _ = occlusion_map(r["image"], score_fn, cfg["features"]["image_size"])
@@ -102,8 +127,9 @@ with right:
                      caption="Indicative only: regions whose occlusion lowers the score most")
         else:
             st.image(r["image"], width=448)
-        st.json({k: r[k] for k in ("probability_pneumonia", "priority", "threshold", "quality_flags")})
-        verdict = st.radio("Radiologist read", ["Agree", "Override: NORMAL", "Override: PNEUMONIA"],
+        st.json({k: r[k] for k in ("priority", "triage_model", "film_qc", "findings", "quality_flags")})
+        verdict = st.radio("Radiologist read", ["Agree", "Override: NORMAL", "Override: PNEUMONIA",
+                                                "Override: PNEUMOTHORAX"],
                            horizontal=True, key=f"read-{r['film']}")
         if st.button("Save read"):
             fb = ROOT / "outputs" / "feedback" / "feedback.csv"
@@ -113,7 +139,7 @@ with right:
                 w = csv.writer(f)
                 if new:
                     w.writerow(["ts_utc", "film", "model_prob", "model_priority", "radiologist_read",
-                                "model_git_sha", "feature_version"])
-                w.writerow([datetime.now(timezone.utc).isoformat(), r["film"], r["probability_pneumonia"],
-                            r["priority"], verdict, meta["git_sha"][:7], meta["feature_version"]])
+                                "model_git_sha", "feature_version", "triage_model"])
+                w.writerow([datetime.now(timezone.utc).isoformat(), r["film"], deciding(r)[1],
+                            r["priority"], verdict, meta["git_sha"][:7], meta["feature_version"], r["triage_model"]])
             st.success("Saved - feeds the next labelled batch")

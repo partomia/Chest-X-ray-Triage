@@ -1,9 +1,13 @@
 """
 Runs on the GitHub Actions runner. Talks ONLY to the Cloudera AI API v2 (REST):
-  1. finds the chain's CAI jobs by name (ci/cai_jobs.py)
-  2. starts job 0 (sync-code) with the commit SHA; CAI job dependencies start the rest
-  3. follows each job's run until it succeeds or fails, and names the KPI gate
-     when that is what stopped the chain
+  1. finds every model chain's CAI jobs by name (ci/cai_jobs.py, CHAINS)
+  2. starts cxr-00 (sync-code) with the commit SHA; CAI job dependencies start the rest of
+     the pneumonia chain
+  3. then starts the film_qc chain, then the pneumothorax chain (one 2 vCPU workload at a
+     time fits the quota), each from its build-features job
+  4. follows each job's run until it succeeds or fails, and names the KPI gate when that
+     is what stopped a chain. A rejected candidate stops its own chain only; the run fails
+     if any chain did. Nothing runs after a failed code sync.
 Patient images and model training never leave the Cloudera AI Workbench.
 
 Env: CAI_URL, CAI_API_KEY, CAI_PROJECT_ID, GITHUB_SHA (set by Actions),
@@ -21,7 +25,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from ci.cai_jobs import CHAIN, GATE_JOB, JOBS  # noqa: E402
+from ci.cai_jobs import CHAINS, GATE_JOBS, JOBS  # noqa: E402
 
 # Job-run status as the API returns it, lower-cased with "engine_" removed
 # (ENGINE_SUCCEEDED -> succeeded), as seen on the live workbench.
@@ -59,10 +63,11 @@ class Api:
     def job_ids(self) -> dict:
         jobs = self("GET", "/jobs", params={"page_size": 200}).get("jobs", [])
         ids = {j["name"]: j["id"] for j in jobs}
-        missing = [n for n in CHAIN if n not in ids]
+        wanted = [n for chain in CHAINS.values() for n in chain]
+        missing = [n for n in wanted if n not in ids]
         if missing:
-            sys.exit(f"::error::CAI jobs not found: {missing}. Run ci/create_cai_jobs.py in a CAI session.")
-        return {n: ids[n] for n in CHAIN}
+            sys.exit(f"::error::CAI jobs not found: {missing}. Run ci/setup_cai.py (or ci/create_cai_jobs.py).")
+        return {n: ids[n] for n in wanted}
 
     def latest_run(self, job_id: str) -> dict | None:
         runs = self("GET", f"/jobs/{job_id}/runs", params={"sort": "-created_at", "page_size": 1}).get("job_runs", [])
@@ -87,11 +92,30 @@ def follow(api: Api, name: str, job_id: str, since: datetime, run_id: str | None
     return "timedout"
 
 
-def summary(rows: list[tuple[str, str]]) -> None:
+def summary(rows: list[tuple[str, str, str]]) -> None:
     path = os.environ.get("GITHUB_STEP_SUMMARY")
     if path:
         with open(path, "a") as f:
-            f.write("| CAI job | Result |\n|---|---|\n" + "".join(f"| `{n}` | {s} |\n" for n, s in rows))
+            f.write("| Model | CAI job | Result |\n|---|---|---|\n"
+                    + "".join(f"| {m} | `{n}` | {s} |\n" for m, n, s in rows))
+
+
+def run_chain(api: Api, ids: dict, model: str, chain: list[str], env: dict) -> list[tuple[str, str, str]]:
+    """Start the chain's first job; CAI starts the others as each parent succeeds."""
+    run = api("POST", f"/jobs/{ids[chain[0]]}/runs", json={"environment": env})
+    since = (parse_ts(run.get("created_at")) or datetime.now(timezone.utc)) - timedelta(seconds=5)
+    print(f"{model}: started {chain[0]} run {run.get('id')}", flush=True)
+    rows = []
+    for i, name in enumerate(chain):
+        st = follow(api, name, ids[name], since, run.get("id") if i == 0 else None)
+        rows.append((model, name, st))
+        if st not in OK:
+            stage = "KPI GATE REJECTED the candidate" if name in GATE_JOBS else f"{name} {st}"
+            print(f"::error::{model}: {stage}. Its current champion / silent trial keeps its place. "
+                  "See the job log in Cloudera AI Workbench.")
+            return rows + [(model, n, "not run") for n in chain[i + 1:]]
+    print(f"{model}: chain succeeded", flush=True)
+    return rows
 
 
 def main() -> int:
@@ -110,22 +134,23 @@ def main() -> int:
         return 1
     sha = os.environ.get("GITHUB_SHA", "")
 
-    # A job run ignores "arguments" (the job's own are used); the environment map is applied.
-    run = api("POST", f"/jobs/{ids[CHAIN[0]]}/runs", json={"environment": {"EXPECTED_GIT_SHA": sha[:12]}})
-    since = (parse_ts(run.get("created_at")) or datetime.now(timezone.utc)) - timedelta(seconds=5)
-    print(f"started {CHAIN[0]} run {run.get('id')} for commit {sha[:7]}")
-
+    # A job run ignores "arguments" (the job's own are used); the environment map is applied,
+    # over the job's own environment (CXR_MODEL).
+    print(f"commit {sha[:7]}")
     rows = []
-    for i, name in enumerate(CHAIN):
-        st = follow(api, name, ids[name], since, run.get("id") if i == 0 else None)
-        rows.append((name, st))
-        if st not in OK:
-            summary(rows + [(n, "not run") for n in CHAIN[i + 1:]])
-            stage = "KPI GATE REJECTED the candidate" if name == GATE_JOB else f"{name} {st}"
-            print(f"::error::{stage}. The current champion keeps serving. See the job log in Cloudera AI Workbench.")
-            return 1
+    for model, chain in CHAINS.items():
+        env = {"EXPECTED_GIT_SHA": sha[:12]} if chain[0] == "cxr-00-sync-code" else {}
+        got = run_chain(api, ids, model, chain, env)
+        rows += got
+        if got[0][2] not in OK and chain[0] == "cxr-00-sync-code":
+            rows += [(m, n, "not run") for m, c in CHAINS.items() if m != model for n in c]
+            break
     summary(rows)
-    print("pipeline succeeded: new champion is serving")
+    failed = sorted({m for m, _, s in rows if s not in OK})
+    if failed:
+        print(f"::error::chains not completed: {failed}")
+        return 1
+    print("pipeline succeeded: pneumonia and film_qc champions serving, pneumothorax in silent trial")
     return 0
 
 

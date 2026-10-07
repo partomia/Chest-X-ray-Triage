@@ -29,24 +29,35 @@ TABLES = {
         ("business_date", "DATE"), ("accession_no", "STRING"), ("image_file", "STRING"),
         ("probability", "DOUBLE"), ("priority", "STRING"), ("threshold", "DOUBLE"),
         ("quality_flags", "STRING"), ("model_version", "STRING"), ("model_git_sha", "STRING"),
-        ("feature_version", "STRING"), ("run_id", "STRING"), ("scored_at", "TIMESTAMP")], "business_date"),
+        ("feature_version", "STRING"), ("run_id", "STRING"), ("scored_at", "TIMESTAMP"),
+        ("triage_model", "STRING"), ("film_qc", "STRING"), ("age_years", "INT"),
+        ("shadow_priority", "STRING"), ("shadow_probability", "DOUBLE"), ("shadow_model", "STRING")],
+        "business_date"),
+    # every head's score for every study: champions, silent trials and the film check
+    "gold.model_score": ([
+        ("business_date", "DATE"), ("accession_no", "STRING"), ("model", "STRING"), ("stage", "STRING"),
+        ("model_version", "STRING"), ("in_scope", "BOOLEAN"), ("probability", "DOUBLE"), ("threshold", "DOUBLE"),
+        ("positive", "BOOLEAN"), ("priority", "STRING"), ("run_id", "STRING"), ("scored_at", "TIMESTAMP")],
+        "business_date"),
     "ref.triage_run": ([
         ("run_id", "STRING"), ("business_date", "DATE"), ("triggered_by", "STRING"),
         ("source_snapshot_id", "BIGINT"), ("studies", "INT"), ("scored", "INT"), ("missing_films", "INT"),
         ("p1", "INT"), ("p2", "INT"), ("p3", "INT"), ("model_version", "STRING"), ("threshold", "DOUBLE"),
         ("psi_max", "DOUBLE"), ("drift_level", "STRING"), ("psi_json", "STRING"), ("status", "STRING"),
-        ("message", "STRING"), ("started_at", "TIMESTAMP"), ("ended_at", "TIMESTAMP")], None),
+        ("message", "STRING"), ("started_at", "TIMESTAMP"), ("ended_at", "TIMESTAMP"),
+        ("not_triaged", "INT"), ("film_unsuitable", "INT"), ("heads_json", "STRING")], None),
     "ref.model_event": ([
         ("event_id", "STRING"), ("event", "STRING"), ("recorded_at", "TIMESTAMP"), ("git_sha", "STRING"),
         ("model_version", "STRING"), ("feature_version", "STRING"), ("feature_hash", "STRING"),
         ("threshold", "DOUBLE"), ("val_auroc", "DOUBLE"), ("test_auroc", "DOUBLE"),
         ("test_sensitivity", "DOUBLE"), ("test_specificity", "DOUBLE"), ("test_brier", "DOUBLE"),
         ("train_rows", "INT"), ("gate_passed", "BOOLEAN"), ("gate_checks", "STRING"),
-        ("mlflow_run_id", "STRING"), ("detail", "STRING")], None),
+        ("mlflow_run_id", "STRING"), ("detail", "STRING"),
+        ("model", "STRING"), ("stage", "STRING"), ("registry_version", "INT")], None),
     "ref.training_set": ([
         ("feature_version", "STRING"), ("feature_hash", "STRING"), ("data_split", "STRING"), ("films", "INT"),
         ("pneumonia", "INT"), ("patients", "INT"), ("backbone", "STRING"), ("git_sha", "STRING"),
-        ("created_at", "TIMESTAMP")], None),
+        ("created_at", "TIMESTAMP"), ("model", "STRING"), ("positives", "INT")], None),
 }
 
 
@@ -55,7 +66,10 @@ def lake_config() -> dict:
 
 
 def model_version(meta: dict) -> str:
-    return f"fv{meta['feature_version']}-{meta['git_sha'][:7]}"
+    """fv1.0.0-abc1234 for pneumonia (as before there were other models), <model>-fv...-sha otherwise."""
+    base = f"fv{meta['feature_version']}-{meta['git_sha'][:7]}"
+    model = meta.get("model") or "pneumonia"
+    return base if model == "pneumonia" else f"{model}-{base}"
 
 
 def _literal(value, typ: str) -> str:
@@ -86,12 +100,32 @@ class _Store:
         return f"{self.prefix}_{layer}.{name}"
 
     def ensure(self, key: str) -> None:
+        """Create the table if absent; add the columns TABLES has gained since it was created."""
         if key in self._ensured:
             return
         cols, part = TABLES[key]
         self.execute(f"CREATE DATABASE IF NOT EXISTS {self.t(key).split('.')[0]}")
         self.execute(self.create_sql(self.t(key), cols, part))
+        have = self.columns(key)
+        missing = [(c, t) for c, t in cols if c.lower() not in have]
+        if missing:
+            self.execute(self.add_columns_sql(self.t(key), missing))
+            print(f"[lakehouse] {self.t(key)}: added columns {[c for c, _ in missing]}")
         self._ensured.add(key)
+
+    def columns(self, key: str) -> set[str]:
+        rows = self.query(f"DESCRIBE {self.t(key)}")
+        names = set()
+        for r in rows:
+            name = str(r.get("name") or r.get("col_name") or "").strip()
+            if not name or name.startswith("#"):   # Spark lists the partitioning after a '# ...' header
+                break
+            names.add(name.lower())
+        return names
+
+    @staticmethod
+    def add_columns_sql(table: str, cols) -> str:
+        return f"ALTER TABLE {table} ADD COLUMNS ({', '.join(f'`{c}` {t}' for c, t in cols)})"
 
     def replace_date(self, key: str, rows: list[dict], d: date, column: str = "business_date") -> None:
         self.ensure(key)
@@ -205,6 +239,11 @@ class SparkStore(_Store):
 
     def source(self, key: str, snapshot: int | None) -> str:
         return f"{self.t(key)} VERSION AS OF {int(snapshot)}" if snapshot else self.t(key)
+
+    @staticmethod
+    def add_columns_sql(table: str, cols) -> str:
+        body = ", ".join(f"`{c}` {'TIMESTAMP_NTZ' if t == 'TIMESTAMP' else t}" for c, t in cols)
+        return f"ALTER TABLE {table} ADD COLUMNS ({body})"
 
     @staticmethod
     def create_sql(table: str, cols, part) -> str:

@@ -20,14 +20,46 @@ def _merge(base: dict, over: dict) -> dict:
     return out
 
 
-def load_config(path: str | Path = "config/pipeline.yaml") -> dict:
-    """config/pipeline.yaml, then each file in CXR_CONFIG_OVERLAY (comma-separated) merged on top."""
+DEFAULT_MODEL = "pneumonia"
+POPULATIONS = {"pediatric": (0, 17), "adult": (18, 200), "all": (0, 200)}
+
+
+def model_name(name: str | None = None) -> str:
+    """The model a job works on: the argument, else CXR_MODEL (set on the CAI job), else pneumonia."""
+    return name or os.environ.get("CXR_MODEL") or DEFAULT_MODEL
+
+
+def load_config(path: str | Path = "config/pipeline.yaml", model: str | None = None) -> dict:
+    """config/pipeline.yaml, then each file in CXR_CONFIG_OVERLAY (comma-separated) merged on top,
+    then the chosen model's overrides (models.<name>.overrides). cfg["model"] describes the model."""
     with open(ROOT / path) as f:
         cfg = yaml.safe_load(f)
     for overlay in filter(None, (s.strip() for s in os.environ.get("CXR_CONFIG_OVERLAY", "").split(","))):
         with open(ROOT / overlay) as f:
             cfg = _merge(cfg, yaml.safe_load(f) or {})
-    return cfg
+    return for_model(cfg, model_name(model))
+
+
+def for_model(cfg: dict, name: str) -> dict:
+    models = cfg.get("models") or {}
+    if name not in models:
+        raise SystemExit(f"unknown model {name!r}: config/pipeline.yaml defines {sorted(models)}")
+    spec = models[name]
+    out = _merge(cfg, spec.get("overrides") or {})
+    out["model"] = {"name": name, **{k: v for k, v in spec.items() if k != "overrides"}}
+    return out
+
+
+def model_names(cfg: dict) -> list[str]:
+    return list(cfg.get("models") or {})
+
+
+def in_scope(population: str, age_years) -> bool:
+    """Intended use: a model scores only the age band it was validated on. Unknown age: in scope."""
+    if age_years is None:
+        return True
+    lo, hi = POPULATIONS[population]
+    return lo <= int(age_years) <= hi
 
 
 def feature_table_dir(cfg: dict, version: str | None = None) -> Path:

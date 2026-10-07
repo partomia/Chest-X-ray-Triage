@@ -23,3 +23,27 @@ serving:
   champion_dir: outputs/ci/champion
   archive_dir: outputs/ci/archive
   candidate_dir: outputs/ci/candidate
+
+models:                   # the other models on the same synthetic films (make_synthetic_cxr.py)
+  pneumothorax:
+    overrides:
+      data:
+        manifest: data/synthetic/nih_cxr14_subset.csv
+        raw_dir: data/synthetic/nih_cxr14
+      features:
+        store_dir: feature_store/ci_nih_features
+      training:
+        C: 0.5
+      gate:
+        min_sensitivity: 0.80
+  film_qc:
+    overrides:
+      features:
+        store_dir: feature_store/ci_qc_features
+      training:
+        C: 0.5
+      gate:               # the stub's 16x16 pixels miss a mild blur; CI proves mechanics only
+        min_auroc: 0.80
+        min_sensitivity: 0.70
+        min_specificity: 0.70
+        max_brier: 0.20

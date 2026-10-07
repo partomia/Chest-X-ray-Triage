@@ -212,3 +212,7 @@ CAI <-> CDW / CDE / Airflow / GitHub integration from Spend-Analytics.
   imported on `federal-impala-1`; all 28 visuals verified through the Data API.
 - GitHub: secrets moved to federal (public address, reachable from GitHub runners),
   `cxr-triage-mlops` re-enabled; CI has a lakehouse job on local Spark + Iceberg.
+  Its first dispatch failed: with the application running, `cxr-00` sat in scheduling
+  for its whole 1 h timeout (the quota again). Re-run with the application stopped:
+  chain 00 -> 04 green in 9 min, new champion from `5a107e2` serving; application
+  restarted afterwards.

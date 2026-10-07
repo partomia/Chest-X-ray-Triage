@@ -12,9 +12,10 @@ only the Spark session and the store differ.
   python scripts/run_local.py sql "SELECT * FROM rsingh_cxr_gold.daily_triage_summary"
 
 Stages run per date in pipeline order (a date completes before the next starts), as the DAG
-does. The default scorer is a STUB that derives a noisy probability from the reference label
-(model_version stub-local): it exercises the tables and the dashboards, not the model.
---scorer champion uses serve.predict with models/champion/ and the films in data/raw/.
+does. The default scorer is a STUB that derives noisy probabilities from the reference labels
+for every head (pneumonia champion, pneumothorax silent trial, film_qc; model_version
+*-stub-local): it exercises the tables and the dashboards, not the models.
+--scorer champion uses serve.predict with the installed models and the films in data/raw/.
 Arguments after `--` go to every CDE job.
 """
 from __future__ import annotations
@@ -82,21 +83,44 @@ def load_job(filename: str):
 
 
 def stub_scorer():
-    """Deterministic per film; pneumonia films mostly score high, normal films mostly low."""
+    """Deterministic per film, in serve.predict's result shape: pneumonia (champion, children),
+    pneumothorax (silent trial, adults) and film_qc (champion: planted films are unfit). A
+    film whose finding a head detects mostly scores high on that head, every other film low."""
+    from common import in_scope
     from evaluate.metrics import priority_band
 
-    def score(paths):
+    heads = {"pneumonia": ("PNEUMONIA", "pediatric", "champion"),
+             "pneumothorax": ("PNEUMOTHORAX", "adult", "silent_trial")}
+
+    def head(name, label, age, key):
+        finding, population, stage = heads[name]
+        rng = random.Random(f"stub-{name}-{key}")
+        prob = min(0.999, max(0.001, rng.betavariate(6, 1.2) if label == finding else rng.betavariate(1.3, 5)))
+        scope = in_scope(population, age)
+        return {"probability": round(prob, 4), "threshold": STUB_META["threshold"], "positive": prob >= 0.5,
+                "priority": priority_band(prob, STUB_META["threshold"], STUB_META["p1_probability"]) if scope else None,
+                "in_scope": scope, "stage": stage, "model_version": f"{name}-stub-local"}
+
+    def score(paths, ages):
         out = []
-        for p in paths:
-            rng = random.Random(f"stub-{p.name}")
-            pos = p.parent.name == "PNEUMONIA"
-            prob = min(0.999, max(0.001, rng.betavariate(6, 1.2) if pos else rng.betavariate(1.3, 5)))
-            out.append({"probability_pneumonia": round(prob, 4),
-                        "priority": priority_band(prob, STUB_META["threshold"], STUB_META["p1_probability"]),
-                        "threshold": STUB_META["threshold"], "quality_flags": []})
+        for p, age in zip(paths, ages):
+            unfit = p.parent.name == "UNSUITABLE"
+            findings = {"pneumonia": head("pneumonia", p.parent.name, age, p.name)}
+            trial = {"pneumothorax": head("pneumothorax", p.parent.name, age, p.name)}
+            live = findings["pneumonia"]
+            band, by = ("NA", None) if unfit or not live["in_scope"] else (live["priority"], "pneumonia")
+            out.append({"priority": band, "triage_model": by, "probability_pneumonia": live["probability"],
+                        "threshold": STUB_META["threshold"], "quality_flags": [], "findings": findings,
+                        "silent_trial": trial, "film_qc": {"probability": 0.98 if unfit else 0.02,
+                                                           "unsuitable": unfit, "model_version": "film_qc-stub-local"}})
         return out, []
 
-    films = {f["image_file"]: Path("stub") / f["label"] / f["image_file"] for f in C.films(CFG)}
+    pools = C.pools(CFG)
+    films = {f["image_file"]: Path("stub") / f["label"] / f["image_file"] for pool in pools.values() for f in pool}
+    for d in CFG.get("planted_films", {}):
+        for s in C.studies_of_day(CFG, date.fromisoformat(d), pools):
+            if s["planted"]:
+                films[s["image_file"]] = Path("stub") / "UNSUITABLE" / s["image_file"]
     return (score, STUB_META), films
 
 

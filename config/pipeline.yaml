@@ -9,6 +9,7 @@ project:
   mlflow_experiment: cxr-triage
 
 data:
+  layout: kermany                     # kermany | manifest | film_qc (features/build_feature_table.py)
   raw_dir: data/raw/chest_xray        # Kermany layout: {train,val,test}/{NORMAL,PNEUMONIA}/*.jpeg
   incoming_dir: data/incoming         # new, unlabelled films for batch scoring / demo worklist
   positive_label: PNEUMONIA
@@ -48,8 +49,9 @@ gate:                                 # absolute KPIs, measured on the held-out 
   require_feature_hash_match: true
 
 serving:
-  model_name: cxr-triage
+  model_name: cxr-triage              # the CAI Model (endpoint): serves every champion head
   champion_dir: models/champion
+  trial_dir: models/silent_trial
   archive_dir: models/archive
   candidate_dir: outputs/candidate
 
@@ -57,8 +59,98 @@ cai:
   runtime_identifier: ""              # empty = the runtime of the session/job that runs ci/create_cai_jobs.py or deploy
   model_cpu: 2
   model_memory_gb: 4
-  register_in_model_registry: false   # true only if the AI Registry is enabled for this workbench
   git_branch: main
+
+registry:                             # Cloudera AI Registry: a version per silent trial and per champion
+  enabled: true
+
+# ---------------------------------------------------------------------------
+# The finding models. Every job works on ONE model, CXR_MODEL (default pneumonia),
+# set on the CAI job; load_config() merges models.<name>.overrides onto the sections
+# above, so pneumonia runs exactly on them. All models share the ViT features (one
+# feature hash): the endpoint embeds a film once and every head scores it.
+#   stage_on_pass  champion     = served, ranks the worklist (job 04 rebuilds the endpoint)
+#                  silent_trial = scored on every live study, shown to nobody, until
+#                                 cxr-07-promote-champion finds go_live met and an approver
+#   population     intended use (age band, from the EMR): out of scope = not scored for it
+# ---------------------------------------------------------------------------
+models:
+  pneumonia:
+    finding: PNEUMONIA
+    population: pediatric             # Kermany et al.: children aged 1-5, one hospital in Guangzhou
+    stage_on_pass: champion
+    registry_name: cxr-pneumonia
+    description: "Pneumonia on paediatric chest films (Kermany 2018): ViT-B/16 features, logistic regression"
+
+  pneumothorax:
+    finding: PNEUMOTHORAX
+    population: adult                 # NIH ChestX-ray14, ages 18-95
+    stage_on_pass: silent_trial
+    registry_name: cxr-pneumothorax
+    description: "Pneumothorax on adult chest films (NIH ChestX-ray14): ViT-B/16 features, logistic regression"
+    go_live:                          # silent-trial evidence cxr-07-promote-champion requires (lakehouse)
+      min_days: 7
+      min_positives: 20
+      min_sensitivity: 0.80           # the gate's bar, now on live films and signed reports
+      min_specificity: 0.35
+    overrides:
+      data:
+        layout: manifest              # films listed in data_refs/nih_cxr14_subset.csv (scripts/select_nih_subset.py)
+        manifest: data_refs/nih_cxr14_subset.csv
+        raw_dir: data/raw/nih_cxr14   # <split>/<image file>, fetched by cxr-setup-nih
+        positive_label: PNEUMOTHORAX
+      features:
+        store_dir: feature_store/nih_features
+      training:
+        C: 0.002
+      evaluation:
+        target_sensitivity: 0.85
+        p1_probability: 0.95
+      # Frozen ImageNet ViT features at 224 px see a large pneumothorax, not a thin apical rim:
+      # a laptop trial on 465 NIH films gave test AUROC 0.72 (sensitivity 0.85 at specificity
+      # 0.42), gaining ~0.016 per doubling of training films. The bar is "worth a silent
+      # trial", not "fit to rank adults": that is the trial's question.
+      gate:
+        min_auroc: 0.72
+        min_sensitivity: 0.80
+        min_specificity: 0.35
+        max_brier: 0.25
+      serving:
+        champion_dir: models/pneumothorax/champion
+        trial_dir: models/pneumothorax/silent_trial
+        archive_dir: models/archive/pneumothorax
+        candidate_dir: outputs/pneumothorax/candidate
+
+  film_qc:
+    finding: UNSUITABLE               # positive = the film is not fit for AI triage
+    population: all
+    stage_on_pass: champion
+    registry_name: cxr-film-qc
+    description: "Film suitability: blurred, badly exposed, noisy, cropped, rotated or inverted films (ViT features + image statistics)"
+    overrides:
+      data:
+        layout: film_qc               # real films of both datasets, each with one degraded copy (features/degrade.py)
+        sources: [pneumonia, pneumothorax]
+        films_per_split: {train: 1200, val: 200, test: 400}
+        positive_label: UNSUITABLE
+      features:
+        store_dir: feature_store/qc_features
+        model_inputs: [embedding, quality]   # image statistics are the point here
+      training:
+        C: 0.01
+      evaluation:
+        target_sensitivity: 0.95
+        p1_probability: 1.01          # no P1 band for QC
+      gate:
+        min_auroc: 0.97
+        min_sensitivity: 0.93
+        min_specificity: 0.95         # a real film wrongly rejected loses its AI triage
+        max_brier: 0.08
+      serving:
+        champion_dir: models/film_qc/champion
+        trial_dir: models/film_qc/silent_trial
+        archive_dir: models/archive/film_qc
+        candidate_dir: outputs/film_qc/candidate
 
 monitoring:
   psi_warn: 0.10

@@ -25,7 +25,7 @@ RESOURCES=(--driver-cores "${DRIVER_CORES:-1}" --driver-memory "${DRIVER_MEMORY:
            --min-executors 1 --initial-executors 1 --max-executors "${MAX_EXECUTORS:-2}"
            --conf spark.sql.shuffle.partitions=4
            --conf spark.sql.adaptive.enabled=true)
-FILES=(config/lakehouse.json cde/reference/test_films.csv cde/dags/cxr_dag.py
+FILES=(config/lakehouse.json cde/reference/test_films.csv cde/reference/adult_films.csv cde/dags/cxr_dag.py
        cde/jobs/cxr_common.py cde/jobs/land_sources.py cde/jobs/ingest_bronze.py cde/jobs/build_silver.py
        cde/jobs/build_gold.py cde/jobs/build_outcomes.py)
 

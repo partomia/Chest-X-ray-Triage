@@ -1,9 +1,18 @@
 """
 Job 1 - build-features
 
-Builds the versioned feature table:
-    feature_store/cxr_features/v<version>/features.parquet
-    feature_store/cxr_features/v<version>/manifest.json
+Builds the versioned feature table of every model (models in config/pipeline.yaml), or of
+CXR_MODEL only when it is set:
+    <features.store_dir>/v<version>/features.parquet
+    <features.store_dir>/v<version>/manifest.json
+
+The films come from data.layout:
+  kermany    {train,val,test}/{NORMAL,PNEUMONIA}/*.jpeg; val re-split from train by patient
+  manifest   the films listed in data.manifest with their split and label (NIH ChestX-ray14,
+             chosen by scripts/select_nih_subset.py, fetched by cxr-setup-nih)
+  film_qc    a sample of the real films of data.sources, each also as one degraded copy
+             (features/degrade.py): label 1 = unfit for AI triage. Same splits and patients
+             as the source models, so no film is in train here and test there.
 
 Idempotent: if the version already exists with the same feature hash it exits
 successfully without recomputing, so the CI chain can call it on every push.
@@ -36,7 +45,8 @@ sys.path.insert(0, str(_repo_root()))
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from common import ROOT, feature_table_dir, finish, git_sha, load_config, parse_args  # noqa: E402
+from common import ROOT, feature_table_dir, finish, git_sha, load_config, model_names, parse_args  # noqa: E402
+from features.degrade import degrade, kind_for  # noqa: E402
 from features.feature_logic import (  # noqa: E402
     QUALITY_FEATURES, compute_features, feature_hash, file_sha1, load_image, make_embedder,
 )
@@ -91,6 +101,48 @@ def assign_splits(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     return df
 
 
+def kermany_films(cfg: dict) -> pd.DataFrame:
+    return assign_splits(discover(cfg), cfg).assign(degradation="none")
+
+
+def manifest_films(cfg: dict) -> pd.DataFrame:
+    """The films of data.manifest in train/val/test (its lakehouse films are for the hospital, not the model)."""
+    ref = pd.read_csv(ROOT / cfg["data"]["manifest"])
+    ref = ref[ref["split"].isin(["train", "val", "test"])]
+    raw = Path(cfg["data"]["raw_dir"])
+    pos = cfg["data"]["positive_label"]
+    return pd.DataFrame({
+        "rel_path": [str(raw / s / f) for s, f in zip(ref["split"], ref["image_file"])],
+        "source_split": ref["source_split"], "split": ref["split"],
+        "label_name": np.where(ref["pneumothorax"] == 1, pos, f"NO_{pos}"),
+        "label": ref["pneumothorax"].astype(int),
+        "patient_id": [f"nih:{p}" for p in ref["patient_id"]], "degradation": "none"}).reset_index(drop=True)
+
+
+def qc_films(cfg: dict) -> pd.DataFrame:
+    """films_per_split real films per split, half from each source model, plus a degraded copy of each."""
+    seed = cfg["data"]["split_seed"]
+    sources = cfg["data"]["sources"]
+    parts = []
+    for src in sources:
+        films = LAYOUTS[load_config(model=src)["data"]["layout"]](load_config(model=src))
+        for split, n in cfg["data"]["films_per_split"].items():
+            pool = films[films["split"] == split]
+            parts.append(pool.sample(min(len(pool), n // len(sources)), random_state=seed)
+                         .assign(patient_id=lambda d, s=src: s + ":" + d["patient_id"]))
+    real = pd.concat(parts, ignore_index=True).assign(degradation="none", label=0, label_name="SUITABLE")
+    bad = real.assign(degradation=[kind_for(p, seed) for p in real["rel_path"]], label=1, label_name="UNSUITABLE")
+    return pd.concat([real, bad], ignore_index=True)
+
+
+LAYOUTS = {"kermany": kermany_films, "manifest": manifest_films, "film_qc": qc_films}
+
+
+def film_image(rel_path: str, degradation: str, seed: int):
+    img = load_image(ROOT / rel_path)
+    return img if degradation == "none" else degrade(img, degradation, seed, key=rel_path)
+
+
 def data_checks(df: pd.DataFrame, unreadable: list[str]) -> list[dict]:
     """Checks on the assembled table. severity critical = stop the build."""
     def check(name, severity, passed, observed):
@@ -115,8 +167,16 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="rebuild even if this version exists")
     ap.add_argument("--limit", type=int, default=0, help="debug: only use N images per split and class")
     args = parse_args(ap)
+    names = [os.environ["CXR_MODEL"]] if os.environ.get("CXR_MODEL") else model_names(load_config())
+    for name in names:
+        print(f"[build-features] model {name}", flush=True)
+        rc = build(load_config(model=name), args)
+        if rc:
+            return rc
+    return 0
 
-    cfg = load_config()
+
+def build(cfg: dict, args) -> int:
     fcfg = cfg["features"]
     fhash = feature_hash(fcfg)
     out = feature_table_dir(cfg)
@@ -127,27 +187,28 @@ def main() -> int:
         if existing.get("limit") and not args.limit:
             print(f"[build-features] v{fcfg['version']} was a --limit {existing['limit']} smoke build - rebuilding.")
         elif existing["feature_hash"] == fhash:
-            print(f"[build-features] v{fcfg['version']} already built (hash {fhash}) - skipping.")
+            print(f"[build-features] {out.relative_to(ROOT)} already built (hash {fhash}) - skipping.")
             return 0
         else:
             print(f"[build-features] v{fcfg['version']} exists with hash {existing['feature_hash']} but "
                   f"current feature logic hashes to {fhash}. Bump features.version in config/pipeline.yaml.")
             return 1
 
-    df = assign_splits(discover(cfg), cfg)
+    df = LAYOUTS[cfg["data"]["layout"]](cfg)
     if args.limit:
         df = df.groupby(["split", "label"], group_keys=False).head(args.limit).reset_index(drop=True)
     print(df.groupby(["split", "label_name"]).size().unstack(fill_value=0))
 
+    seed = cfg["data"]["split_seed"]
     embedder = make_embedder(fcfg)
     embs, quals, keep, unreadable = [], [], [], []
     chunk = 256
     for i in range(0, len(df), chunk):
         part = df.iloc[i:i + chunk]
         imgs, idx = [], []
-        for j, p in zip(part.index, part["rel_path"]):
+        for j, p, kind in zip(part.index, part["rel_path"], part["degradation"]):
             try:
-                imgs.append(load_image(ROOT / p))
+                imgs.append(film_image(p, kind, seed))
                 idx.append(j)
             except Exception as e:  # corrupt / truncated JPEG: recorded, not fatal
                 unreadable.append(p)
@@ -182,6 +243,8 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     df.to_parquet(out / "features.parquet", index=False)
     manifest = {
+        "model": cfg["model"]["name"],
+        "layout": cfg["data"]["layout"],
         "feature_version": fcfg["version"],
         "feature_hash": fhash,
         "backbone": fcfg["backbone"],

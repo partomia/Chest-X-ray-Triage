@@ -1,12 +1,17 @@
 """
-Job 4 - deploy-champion (runs only if kpi-gate succeeded)
+Job 4 - deploy (runs only if the model's kpi-gate succeeded), for CXR_MODEL
 
-  1. Archive the current champion, promote the candidate to models/champion/
-  2. (optional) register the MLflow run in the Cloudera AI Registry
-  3. Use the Cloudera AI API v2 (cmlapi) to build + deploy serve/predict.py
-     (the build snapshots the project files, including models/champion/)
-  4. If the build or deployment fails, put the previous champion back, so
-     models/champion/ always matches what the endpoint serves
+models.<name>.stage_on_pass decides where a passing candidate goes:
+  champion      1. archive the current champion, promote the candidate to serving.champion_dir
+                2. use the Cloudera AI API v2 (cmlapi) to build + deploy serve/predict.py, which
+                   serves every model's champion (the build snapshots the project files)
+                3. if the build or deployment fails, put the previous champion back, so the
+                   champion directories always match what the endpoint serves
+  silent_trial  the candidate replaces the model in serving.trial_dir: cxr-06 scores every live
+                study with it, nobody sees it, the endpoint is not touched. It goes live only
+                through cxr-07-promote-champion.
+Either way the version is registered in the Cloudera AI Registry (serve/registry.py) and
+recorded in ref.model_event.
 
 Inside a CAI job, cmlapi.default_client() authenticates with the job's own
 credentials - no API key is stored in the project.
@@ -35,39 +40,40 @@ sys.path.insert(0, str(_repo_root()))
 from common import ROOT, finish, load_config, parse_args  # noqa: E402
 
 
-def promote(cfg) -> tuple[dict, Path | None]:
-    s = cfg["serving"]
-    cand, champ = ROOT / s["candidate_dir"], ROOT / s["champion_dir"]
+def stage_dir(cfg, stage: str) -> Path:
+    return ROOT / cfg["serving"]["champion_dir" if stage == "champion" else "trial_dir"]
+
+
+def install(cfg, source: Path, stage: str) -> tuple[dict, Path | None]:
+    """Copy a model package into the stage's directory; the one it replaces goes to the archive."""
+    target = stage_dir(cfg, stage)
+    archived = None
+    if target.exists():
+        archived = ROOT / cfg["serving"]["archive_dir"] / datetime.now(timezone.utc).strftime(f"%Y%m%dT%H%M%SZ-{stage}")
+        archived.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(target), str(archived))
+        print(f"archived previous {stage} -> {archived}")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source, target)
+    return json.loads((target / "model_meta.json").read_text()), archived
+
+
+def promote(cfg, stage: str = "champion") -> tuple[dict, Path | None]:
+    cand = ROOT / cfg["serving"]["candidate_dir"]
     gate_path = cand / "gate_result.json"
     gate = json.loads(gate_path.read_text()) if gate_path.exists() else {"passed": False}
     meta = json.loads((cand / "model_meta.json").read_text())
     if not gate["passed"] or gate.get("candidate_git_sha") != meta["git_sha"]:
         raise SystemExit("Candidate has no passing gate result - refusing to deploy.")
-    archived = None
-    if champ.exists():
-        archived = ROOT / s["archive_dir"] / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        archived.parent.mkdir(parents=True, exist_ok=True)
-        shutil.move(str(champ), str(archived))
-        print(f"archived previous champion -> {archived}")
-    champ.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(cand, champ)
-    return json.loads((champ / "model_meta.json").read_text()), archived
+    return install(cfg, cand, stage)
 
 
-def rollback(cfg, archived: Path | None) -> None:
-    champ = ROOT / cfg["serving"]["champion_dir"]
-    shutil.rmtree(champ, ignore_errors=True)
+def rollback(cfg, archived: Path | None, stage: str = "champion") -> None:
+    target = stage_dir(cfg, stage)
+    shutil.rmtree(target, ignore_errors=True)
     if archived and archived.exists():
-        shutil.move(str(archived), str(champ))
-        print(f"rolled back: previous champion restored from {archived}")
-
-
-def register(cfg, meta):
-    if not cfg["cai"]["register_in_model_registry"] or not meta.get("mlflow_run_id"):
-        return
-    import mlflow
-    mv = mlflow.register_model(f"runs:/{meta['mlflow_run_id']}/model", cfg["serving"]["model_name"])
-    print(f"registered {mv.name} version {mv.version}")
+        shutil.move(str(archived), str(target))
+        print(f"rolled back: previous {stage} restored from {archived}")
 
 
 def wait(fn, ok: set, what: str, timeout=1800):
@@ -136,22 +142,34 @@ def deploy(cfg, meta):
     print(f"champion deployed: model {model.id} build {build.id} deployment {dep.id}")
 
 
+def go_live(cfg, meta, archived: Path | None, stage: str, extra_tags: dict | None = None,
+            event: str | None = None) -> int:
+    """Rebuild the endpoint for a new champion (rolling back on failure), register, record."""
+    from lakehouse.publish import publish_model_event
+    from serve.registry import registrar
+
+    if stage == "champion":
+        try:
+            deploy(cfg, meta)
+        except Exception as e:
+            print(f"deploy failed: {e}")
+            rollback(cfg, archived, stage)
+            publish_model_event("ROLLED_BACK", meta, detail=str(e), stage=stage)
+            return 1
+    reg = registrar(cfg, meta, stage, extra_tags)
+    detail = f"registry {cfg['model']['registry_name']} v{reg['number']}" if reg else "not registered"
+    publish_model_event(event or ("DEPLOYED" if stage == "champion" else "SILENT_TRIAL"), meta, detail=detail,
+                        stage=stage, registry_version=reg["number"] if reg else None)
+    return 0
+
+
 def main() -> int:
     parse_args(argparse.ArgumentParser())
     cfg = load_config()
-    meta, archived = promote(cfg)
-    register(cfg, meta)
-    from lakehouse.publish import publish_model_event
-
-    try:
-        deploy(cfg, meta)
-    except Exception as e:
-        print(f"deploy failed: {e}")
-        rollback(cfg, archived)
-        publish_model_event("ROLLED_BACK", meta, detail=str(e))
-        return 1
-    publish_model_event("DEPLOYED", meta)
-    return 0
+    stage = cfg["model"]["stage_on_pass"]
+    print(f"model {cfg['model']['name']}: passing candidate -> {stage}")
+    meta, archived = promote(cfg, stage)
+    return go_live(cfg, meta, archived, stage)
 
 
 if __name__ == "__main__":

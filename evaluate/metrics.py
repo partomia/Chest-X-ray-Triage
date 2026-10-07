@@ -39,6 +39,9 @@ def compute_metrics(y_true, prob, threshold: float) -> dict:
     }
 
 
+BAND_RANK = {"P1": 0, "P2": 1, "P3": 2}   # NA (no AI triage) is read in arrival order with P3
+
+
 def priority_band(prob: float, threshold: float, p1: float) -> str:
     """P1 = read first, P2 = likely abnormal, P3 = routine.
 

@@ -4,9 +4,10 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 import ci.trigger_cai_pipeline as trig
-from ci.cai_jobs import CHAIN, GATE_JOB
+from ci.cai_jobs import CHAINS, GATE_JOB
 
 T0 = datetime(2026, 9, 29, 8, 0, tzinfo=timezone.utc)
+ALL = [n for c in CHAINS.values() for n in c]
 
 
 class FakeApi:
@@ -14,17 +15,17 @@ class FakeApi:
 
     def __init__(self, outcome: dict):
         self.outcome = outcome
-        self.posted = None
+        self.posted = []
 
     def __call__(self, method, path, **kw):
-        if method == "POST":
-            self.posted = kw["json"]
-            return {"id": "run-0", "status": "ENGINE_SCHEDULING", "created_at": T0.isoformat().replace("+00:00", "Z")}
         job = path.split("/")[2]
+        if method == "POST":
+            self.posted.append((job, kw["json"]))
+            return {"id": "run-0", "status": "ENGINE_SCHEDULING", "created_at": T0.isoformat().replace("+00:00", "Z")}
         return {"id": f"{job}-run", "status": self.outcome.get(job, "ENGINE_SUCCEEDED"), "created_at": T0.isoformat()}
 
     def job_ids(self):
-        return {n: n for n in CHAIN}
+        return {n: n for n in ALL}
 
     def latest_run(self, job_id):
         if self.outcome.get(job_id) == "NEVER":
@@ -55,24 +56,33 @@ def test_status_normalisation():
     assert trig.status_of({}) == ""
 
 
-def test_whole_chain_succeeds_and_passes_the_commit(run):
+def test_every_chain_runs_in_turn_and_sync_gets_the_commit(run):
     rc, out, fake = run({})
-    assert rc == 0 and "new champion is serving" in out
-    assert fake.posted == {"environment": {"EXPECTED_GIT_SHA": "0123456789ab"}}
+    assert rc == 0 and "pipeline succeeded" in out
+    assert fake.posted == [("cxr-00-sync-code", {"environment": {"EXPECTED_GIT_SHA": "0123456789ab"}}),
+                           ("qc-01-build-features", {"environment": {}}),
+                           ("ptx-01-build-features", {"environment": {}})]
 
 
-def test_gate_failure_is_named(run):
-    rc, out, _ = run({GATE_JOB: "ENGINE_FAILED"})
-    assert rc == 1 and "KPI GATE REJECTED the candidate" in out
+def test_gate_failure_is_named_and_the_other_chains_still_run(run):
+    rc, out, fake = run({GATE_JOB: "ENGINE_FAILED"})
+    assert rc == 1 and "pneumonia: KPI GATE REJECTED the candidate" in out
+    assert [j for j, _ in fake.posted] == [c[0] for c in CHAINS.values()]
+    assert "chains not completed: ['pneumonia']" in out
+
+
+def test_a_failed_code_sync_stops_everything(run):
+    rc, out, fake = run({"cxr-00-sync-code": "ENGINE_FAILED"})
+    assert rc == 1 and [j for j, _ in fake.posted] == ["cxr-00-sync-code"]
 
 
 def test_other_failures_name_the_job(run):
-    rc, out, _ = run({"cxr-01-build-features": "ENGINE_TIMEDOUT"})
-    assert rc == 1 and "cxr-01-build-features timedout" in out
+    rc, out, _ = run({"ptx-01-build-features": "ENGINE_TIMEDOUT"})
+    assert rc == 1 and "ptx-01-build-features timedout" in out
 
 
 def test_runs_older_than_the_trigger_are_ignored(run, monkeypatch):
-    monkeypatch.setattr(trig, "TIMEOUTS", {n: 0.05 for n in CHAIN})
+    monkeypatch.setattr(trig, "TIMEOUTS", {n: 0.05 for n in ALL})
     rc, out, _ = run({"cxr-02-train-validate": "NEVER"})
     assert rc == 1 and "no result" in out
 

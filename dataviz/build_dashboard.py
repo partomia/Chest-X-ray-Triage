@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-The two chest X-ray triage dashboards in Cloudera Data Visualization, as code:
+The three chest X-ray triage dashboards in Cloudera Data Visualization, as code:
 
   CXR Triage Operations          the reading room: today's worklist in triage order, films per
                                  band and unit, pneumonia waits under FIFO vs triage, the trend
-  CXR Model, Drift & Data Quality  the model behind the worklist (gate decisions, deployments,
+  CXR Model, Drift & Data Quality  the models behind the worklist (gate decisions, deployments,
                                  scoring runs, PSI drift) and the pipeline's reconciliation checks
                                  and quarantined source records
+  CXR Models & Silent Trial      the pneumothorax model in silent trial: its evidence against the
+                                 go-live criteria, adult pneumothorax waits today vs if it were
+                                 live; films unfit for AI triage; every model head per day
 
 Datasets, visuals and sheets are declared below; this script turns them into one Data
 Visualization export file (dataviz/cxr_dashboards.json) with fixed UUIDs and primary keys
@@ -56,9 +59,13 @@ DATASETS = {                          # key: (name, view, integer columns that a
     "scoring": ("CXR - Scoring runs", "v_scoring_run", {"is_latest", "is_final", "source_snapshot_id"}),
     "dq": ("CXR - Data quality checks", "v_data_quality", {"is_latest"}),
     "quarantine": ("CXR - Quarantined source records", "v_quarantine", {"line_no"}),
+    "mdaily": ("CXR - Model heads per day", "v_model_daily", {"is_latest"}),
+    "trial": ("CXR - Silent trial evidence", "v_silent_trial", set()),
 }
 
 LATEST = "[is_latest] = 1"
+PNEUMONIA_DEPLOYED = ["[model] = 'pneumonia'", "[model_event] IN ('DEPLOYED', 'PROMOTED')"]
+PTX = "[model] = 'pneumothorax'"
 pct = lambda e: f"round(100 * {e}, 1)"  # noqa: E731
 
 OPS_SHEETS = [
@@ -118,11 +125,11 @@ OPS_SHEETS = [
 
 MODEL_SHEETS = [
     ("Model and drift", [
-        dict(type="kpi", ds="model", title="Deployed model: test AUROC",
-             measures=[("max([test_auroc])", "AUROC")], filters=["[model_event] = 'DEPLOYED'", LATEST],
+        dict(type="kpi", ds="model", title="Pneumonia champion: test AUROC",
+             measures=[("max([test_auroc])", "AUROC")], filters=[*PNEUMONIA_DEPLOYED, LATEST],
              may_be_empty=True, pos=(1, 1, 16, 10)),
-        dict(type="kpi", ds="model", title="Deployed model: test sensitivity",
-             measures=[("max([test_sensitivity])", "Sensitivity")], filters=["[model_event] = 'DEPLOYED'", LATEST],
+        dict(type="kpi", ds="model", title="Pneumonia champion: test sensitivity",
+             measures=[("max([test_sensitivity])", "Sensitivity")], filters=[*PNEUMONIA_DEPLOYED, LATEST],
              may_be_empty=True, pos=(17, 1, 16, 10)),
         dict(type="kpi", ds="scoring", title="Films scored (latest day)", measures=[("sum([scored])", "Scored")],
              filters=[LATEST, "[is_final] = 1"], pos=(33, 1, 16, 10)),
@@ -135,8 +142,9 @@ MODEL_SHEETS = [
              x=[("business_date", "Business date")],
              measures=[("sum([p1])", "P1"), ("sum([p2])", "P2"), ("sum([p3])", "P3")],
              filters=["[is_final] = 1"], pos=(33, 11, 32, 22)),
-        dict(type="table", ds="model", title="Gate decisions and deployments",
-             dims=[("recorded_at", "When"), ("model_event", "Event"), ("model_version", "Model")],
+        dict(type="table", ds="model", title="Gate decisions, silent trials, deployments and promotions",
+             dims=[("recorded_at", "When"), ("model", "Model"), ("stage", "Stage"), ("model_event", "Event"),
+                   ("model_version", "Version")],
              measures=[("max([test_auroc])", "Test AUROC"), ("max([test_sensitivity])", "Test sens"),
                        ("max([test_specificity])", "Test spec"), ("max([threshold])", "Threshold"),
                        ("max([train_rows])", "Train films")],
@@ -175,11 +183,63 @@ MODEL_SHEETS = [
     ]),
 ]
 
+TRIAL_SHEETS = [
+    ("Silent trial", [
+        dict(type="kpi", ds="trial", title="Pneumothorax: days in silent trial", measures=[("max([trial_days])", "Days")],
+             filters=[PTX], may_be_empty=True, pos=(1, 1, 13, 10)),
+        dict(type="kpi", ds="trial", title="Reported pneumothorax (live films)", measures=[("sum([positives])", "Positives")],
+             filters=[PTX], may_be_empty=True, pos=(14, 1, 13, 10)),
+        dict(type="kpi", ds="trial", title="Trial sensitivity %", measures=[(pct("max([sensitivity])"), "Sensitivity %")],
+             filters=[PTX], may_be_empty=True, pos=(27, 1, 13, 10)),
+        dict(type="kpi", ds="trial", title="Trial specificity %", measures=[(pct("max([specificity])"), "Specificity %")],
+             filters=[PTX], may_be_empty=True, pos=(40, 1, 13, 10)),
+        dict(type="kpi", ds="kpi", title="Pneumothorax: median wait if live (min)",
+             measures=[("max([pneumothorax_shadow_median_min])", "If live")], filters=[LATEST], pos=(53, 1, 12, 10)),
+        dict(type="trellis-lines", ds="kpi", title="Pneumothorax median wait (min): FIFO, today's worklist, if the trial were live",
+             x=[("business_date", "Business date")],
+             measures=[("max([pneumothorax_fifo_median_min])", "FIFO"),
+                       ("max([pneumothorax_triage_median_min])", "Worklist today"),
+                       ("max([pneumothorax_shadow_median_min])", "If live")], pos=(1, 11, 32, 22)),
+        dict(type="trellis-lines", ds="mdaily", title="Pneumothorax trial: sensitivity and specificity % per day",
+             x=[("business_date", "Business date")],
+             measures=[(pct("max([sensitivity])"), "Sensitivity %"), (pct("max([specificity])"), "Specificity %")],
+             filters=[PTX, "[stage] = 'silent_trial'"], may_be_empty=True, pos=(33, 11, 32, 22)),
+        dict(type="table", ds="trial", title="Silent-trial evidence per model version (go-live: cxr-07-promote-champion)",
+             dims=[("model", "Model"), ("model_version", "Version"), ("first_day", "From"), ("last_day", "To")],
+             measures=[("max([trial_days])", "Days"), ("sum([in_scope])", "In scope"), ("sum([positives])", "Positives"),
+                       ("sum([tp])", "TP"), ("sum([fn])", "FN"), ("sum([fp])", "FP"), ("sum([tn])", "TN"),
+                       (pct("max([sensitivity])"), "Sens %"), (pct("max([specificity])"), "Spec %")],
+             may_be_empty=True, sort_dim="model", pos=(1, 33, 64, 16)),
+    ]),
+    ("Every model", [
+        dict(type="kpi", ds="kpi", title="Adult films (latest day)", measures=[("sum([adults])", "Adults")],
+             filters=[LATEST], pos=(1, 1, 16, 10)),
+        dict(type="kpi", ds="kpi", title="No AI triage - NA (latest day)", measures=[("sum([not_triaged])", "NA")],
+             filters=[LATEST], pos=(17, 1, 16, 10)),
+        dict(type="kpi", ds="kpi", title="Films unfit for AI triage (latest day)",
+             measures=[("sum([film_unsuitable])", "Unfit")], filters=[LATEST], pos=(33, 1, 16, 10)),
+        dict(type="kpi", ds="kpi", title="Pneumothorax films (latest day)", measures=[("sum([pneumothorax])", "Pneumothorax")],
+             filters=[LATEST], pos=(49, 1, 16, 10)),
+        dict(type="trellis-bars", ds="mdaily", title="In-scope films per model head per day",
+             x=[("business_date", "Business date")], measures=[("sum([in_scope])", "In scope")],
+             color=[("model", "Model")], pos=(1, 11, 64, 20)),
+        dict(type="table", ds="mdaily", title="Every model head on the latest day, at its own threshold",
+             dims=[("model", "Model"), ("stage", "Stage"), ("model_version", "Version")],
+             measures=[("sum([scored])", "Scored"), ("sum([in_scope])", "In scope"), ("sum([reported])", "Reported"),
+                       ("sum([positives])", "Positives"), ("sum([tp])", "TP"), ("sum([fn])", "FN"),
+                       (pct("max([sensitivity])"), "Sens %"), (pct("max([specificity])"), "Spec %")],
+             filters=[LATEST], sort_dim="model", pos=(1, 31, 64, 16)),
+    ]),
+]
+
 DASHBOARDS = [
     dict(title="CXR Triage Operations", pk=DASHBOARD_PK0, key="operations", sheets=OPS_SHEETS, main_ds="kpi",
          subtitle="Chest X-ray worklist in triage order, and how long pneumonia films wait under FIFO vs triage"),
     dict(title="CXR Model, Drift & Data Quality", pk=DASHBOARD_PK0 + 1, key="model-quality", sheets=MODEL_SHEETS,
          main_ds="scoring", subtitle="Gate decisions, deployments, scoring runs and PSI drift; pipeline reconciliation"),
+    dict(title="CXR Models & Silent Trial", pk=DASHBOARD_PK0 + 2, key="models-trial", sheets=TRIAL_SHEETS,
+         main_ds="trial", subtitle="Pneumothorax in silent trial: its evidence, and what going live would change; "
+                                   "the film check and every model head"),
 ]
 
 SHELVES = {

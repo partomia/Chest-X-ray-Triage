@@ -3,6 +3,8 @@ Synthetic chest films in the Kermany layout, for CI and offline smoke runs only.
 
     data/synthetic/chest_xray/{train,val,test}/{NORMAL,PNEUMONIA}/*.jpeg
     data/synthetic/incoming/*.jpeg
+    data/synthetic/nih_cxr14/{train,val,test}/*.jpg + data/synthetic/nih_cxr14_subset.csv
+        other films in the NIH manifest layout, for the pneumothorax model's CI run
 
 A "film" is a dark field with two lung fields, a bright mediastinum, faint ribs
 and noise; PNEUMONIA films add one or two soft opacities inside a lung, some of
@@ -94,7 +96,34 @@ def main():
     inc.mkdir(parents=True, exist_ok=True)
     for i in range(args.incoming):
         film(rng, bool(i % 3 == 0)).save(inc / f"incoming_{i:03d}.jpeg", quality=90)
-    print(f"wrote {total} labelled films + {args.incoming} incoming films under {out}")
+    n_nih = nih_like(out, rng, args.scale)
+    print(f"wrote {total} labelled films + {args.incoming} incoming films under {out}; "
+          f"{n_nih} more in the NIH manifest layout")
+
+
+def nih_like(out: Path, rng: np.random.Generator, scale: float) -> int:
+    """Other films as a manifest-layout dataset (the pneumothorax model's, config/ci.yaml):
+    nih_cxr14/<split>/<patient>_<k>.jpg and nih_cxr14_subset.csv. The opacity stands in for
+    a pneumothorax, so the code path runs, not the clinical task."""
+    import csv
+
+    rows, patient = [], 50000
+    for split, classes in LAYOUT.items():
+        (out / "nih_cxr14" / split).mkdir(parents=True, exist_ok=True)
+        for label, patients in classes.items():
+            for _ in range(max(4, int(patients * scale * 0.5)) if split != "val" else patients):
+                patient += 1
+                for k in range(int(rng.integers(1, FILMS_PER_PATIENT + 1))):
+                    name = f"{patient:08d}_{k:03d}.jpg"
+                    film(rng, label == "PNEUMONIA").save(out / "nih_cxr14" / split / name, quality=90)
+                    rows.append({"image_id": name[:-4], "image_file": name, "split": split,
+                                 "pneumothorax": int(label == "PNEUMONIA"), "patient_id": patient,
+                                 "source_split": "test" if split == "test" else "train"})
+    with open(out / "nih_cxr14_subset.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    return len(rows)
 
 
 if __name__ == "__main__":

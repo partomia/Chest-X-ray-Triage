@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths: ["features/**", "train/**", "evaluate/**", "gate/**", "serve/**", "ci/**", "lakehouse/**", "config/pipeline.yaml",
-            "common.py", "requirements.txt", "cdsw-build.sh"]
+            "data_refs/**", "common.py", "requirements.txt", "cdsw-build.sh"]
   workflow_dispatch: {}
 
 concurrency:            # never run two pipelines against the same CAI project at once
@@ -29,13 +29,13 @@ jobs:
     # A workbench on a private network: repository variable CAI_RUNS_ON = ["self-hosted","cai"]
     runs-on: ${{ fromJSON(vars.CAI_RUNS_ON || '"ubuntu-latest"') }}
     environment: cai-demo    # optional: add required reviewers here for a manual approval step
-    timeout-minutes: 240
+    timeout-minutes: 350   # three model chains; a first run builds every feature table
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - run: pip install requests
-      - name: Trigger CAI job chain and wait for the KPI gate
+      - name: Trigger the CAI job chains (pneumonia, film_qc, pneumothorax) and wait for each KPI gate
         run: python ci/trigger_cai_pipeline.py
         env:
           CAI_URL: ${{ secrets.CAI_URL }}

@@ -7,8 +7,9 @@ Stage 3 - Gold: the de-identified facts the triage model and the dashboards use.
                      fifo_seq = the position in today's first-in-first-out reading list.
                      A study whose order failed the contract keeps ordering_unit UNKNOWN.
                      This is the table CAI job cxr-06-score-studies scores.
-  gold.fact_report   every signed report with its study's business date and the truth label;
-                     rebuilt each run, because reports land on the day they are signed
+  gold.fact_report   every signed report with its study's business date and the truth labels
+                     (truth = pneumonia, truth_pneumothorax); rebuilt each run, because reports
+                     land on the day they are signed
 
 Reconciliation (stage gold): silver studies = gold studies; studies without a valid order and
 reports without a study are EXPLAINED (they trace back to quarantined source records).
@@ -95,6 +96,7 @@ def build_fact_report(spark, names, audit, d) -> int:
     df = spark.sql(f"""
         SELECT r.accession_no, f.business_date AS study_date, r.business_date AS report_date, r.report_ts,
                r.radiologist_id, r.finding, r.pattern, CASE WHEN r.finding = 'PNEUMONIA' THEN 1 ELSE 0 END AS truth,
+               CASE WHEN r.finding = 'PNEUMOTHORAX' THEN 1 ELSE 0 END AS truth_pneumothorax,
                r.impression, f.study_ts,
                CAST((unix_timestamp(r.report_ts) - unix_timestamp(f.study_ts)) / 60.0 AS double) AS report_wait_min
         FROM (SELECT * FROM (SELECT x.*, row_number() OVER (PARTITION BY accession_no ORDER BY report_ts DESC) AS _rn

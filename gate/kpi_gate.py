@@ -61,14 +61,18 @@ def evaluate_gate(candidate: dict, champion: dict | None, gcfg: dict, code_hash:
 def main() -> int:
     parse_args(argparse.ArgumentParser())
     cfg = load_config()
-    cand_dir = ROOT / cfg["serving"]["candidate_dir"]
-    champ_meta = ROOT / cfg["serving"]["champion_dir"] / "model_meta.json"
+    s = cfg["serving"]
+    cand_dir = ROOT / s["candidate_dir"]
     candidate = json.loads((cand_dir / "model_meta.json").read_text())
-    champion = json.loads(champ_meta.read_text()) if champ_meta.exists() else None
+    # non-regression against what serves, else against the model in silent trial
+    incumbent = next((json.loads(p.read_text()) for p in (ROOT / s["champion_dir"] / "model_meta.json",
+                                                          ROOT / s["trial_dir"] / "model_meta.json") if p.exists()),
+                     None)
 
-    checks = evaluate_gate(candidate, champion, cfg["gate"], feature_hash(cfg["features"]))
+    checks = evaluate_gate(candidate, incumbent, cfg["gate"], feature_hash(cfg["features"]))
     passed = all(c["passed"] for c in checks)
 
+    print(f"model {cfg['model']['name']} ({cfg['model']['finding']}), on pass: {cfg['model']['stage_on_pass']}\n")
     print(f"{'CHECK':50} {'VALUE':>10}  RULE")
     for c in checks:
         v = f"{c['value']:.4f}" if isinstance(c["value"], float) else str(c["value"])[:10]

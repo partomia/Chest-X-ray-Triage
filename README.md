@@ -51,7 +51,11 @@ See [Lakehouse](#lakehouse-cde-cdw-data-visualization) below.
 | `scripts/make_synthetic_cxr.py` | synthetic films in the Kermany layout (CI only) | - |
 | `scripts/fetch_dataset.py` | the Kermany films from the pinned Hugging Face mirror, original names | Job `cxr-setup-data` |
 | `ci/setup_cai.py` | project, environment, jobs, app from a laptop over API v2 (private repo: deploy key) | - |
-| `lakehouse/score_studies.py` | scores one business date of `gold.fact_study` with the champion | Job `cxr-06-score-studies` |
+| `lakehouse/score_studies.py` | scores one business date of `gold.fact_study`: worklist band, shadow band, every head | Job `cxr-06-score-studies` |
+| `serve/promote_champion.py` | silent trial -> champion on lakehouse evidence and a named approver | Job `cxr-07-promote-champion` |
+| `serve/registry.py` | a Registry version per silent trial / champion / promotion | - |
+| `features/degrade.py` | films unfit for AI triage, made from real ones | - |
+| `scripts/select_nih_subset.py`, `scripts/fetch_nih.py` | chooses (laptop) and fetches (CAI) the NIH films | Job `cxr-setup-nih` |
 | `lakehouse/publish.py`, `lakehouse/store.py` | lineage into `ref.*`; one store over Impala and Spark | - |
 
 Data (git-ignored, lives only in the CAI project):
@@ -80,11 +84,46 @@ outputs/                           # candidate, gate result, worklists, drift, f
 - **Deploy is reversible.** Job 04 archives the champion before promoting; if the
   model build or rollout fails it puts the previous champion back.
 
+## Three models, one worklist
+
+A reading room gets adults as well as children, and films a radiographer would send
+back. Three heads share the one ViT embedding (one feature hash), each with its own
+data, KPI gate, CAI job chain (`CXR_MODEL` on the job) and AI Registry entry:
+
+| Model | Finding | Intended use | Data | After a passed gate |
+|---|---|---|---|---|
+| `pneumonia` | PNEUMONIA | children 0-17 | Kermany (5,856 films) | **champion**: ranks the worklist |
+| `film_qc` | film unfit for AI triage | every film | real films of both datasets, each with one degraded copy (`features/degrade.py`: blur, under/over-exposure, noise, crop, rotation, inversion) | **champion**: an unfit film gets band NA |
+| `pneumothorax` | PNEUMOTHORAX | adults 18+ | 6,500 NIH ChestX-ray14 films (`data_refs/nih_cxr14_subset.csv`, patient-level splits) | **silent trial**: scored on every live adult film, never shown |
+
+- **Band NA, no AI triage.** A film outside every live champion's intended use, or one
+  the film check rejects, is read in arrival order with the P3 films, as without AI.
+- **Silent trial.** The lakehouse scorer runs the trial head on every live study and
+  writes `gold.model_score`; CDE builds `gold.daily_model_summary` (per date, model,
+  stage and version: confusion counts at the head's own threshold against the signed
+  report) and a *shadow* reading arm: the worklist as if the trial model were live.
+  Dashboard *CXR Models & Silent Trial* shows adult pneumothorax waits in FIFO order,
+  on today's worklist (worse: flagged children jump ahead of adults) and if live.
+- **Promotion needs evidence and a person.** Job `cxr-07-promote-champion` (manual,
+  `CXR_MODEL`, `CXR_APPROVED_BY`) sums the trial's evidence for that model version,
+  checks `models.<name>.go_live` (days, reported positives, sensitivity, specificity
+  on live films), and only then installs it as champion, rebuilds the endpoint and
+  records `PROMOTED`; otherwise `PROMOTION_REFUSED` and nothing changes.
+- **AI Registry.** Every silent trial, champion and promotion is a new version of
+  `cxr-pneumonia` / `cxr-film-qc` / `cxr-pneumothorax` (`serve/registry.py`, cmlapi
+  `create_registered_model` on the MLflow run), tagged at creation with stage, finding,
+  population, git commit, feature hash, threshold, TEST KPIs and, on promotion, the
+  approver and the trial evidence.
+- **Honest limits.** Frozen ImageNet features at 224 px see a large pneumothorax, not a
+  thin apical rim: a laptop trial gave AUROC ~0.72 (sensitivity 0.85 at specificity
+  0.42); the gate asks "worth a silent trial", the trial asks "fit to rank adults". The
+  film check learns synthetic failures only; a real one would learn from reject analysis.
+
 ## Run it locally (no CAI, no dataset, no GPU)
 
 ```bash
 python3.11 -m venv .venv && .venv/bin/pip install -r requirements-ci.txt
-.venv/bin/pytest -q                                    # 46 tests, ~35 s, includes the app and the lakehouse logic
+.venv/bin/pytest -q                                    # 62 tests, ~35 s, includes the app and the lakehouse logic
 
 export CXR_CONFIG_OVERLAY=config/ci.yaml               # synthetic films + stub embedder
 .venv/bin/python scripts/make_synthetic_cxr.py --scale 0.5
@@ -118,8 +157,13 @@ gitignored `.env` (`CXR_CAI_HOST`, `CXR_CAI_API_KEY`, `CXR_IMPALA_USER`,
 set -a; source .env; set +a
 python ci/setup_cai.py --deploy-key ~/.ssh/cai_federal_cxr_deploy   # first time: project + git bootstrap
 python ci/setup_cai.py --run cxr-setup-data                         # films + requirements, ~16 min
+python ci/setup_cai.py --run cxr-setup-nih                          # 6,500 NIH films (~13 GB of row groups read)
 python ci/setup_cai.py --run cxr-00-sync-code                       # starts the chain 01 -> 04
+python ci/setup_cai.py --run qc-01-build-features                   # film check chain, then:
+python ci/setup_cai.py --run ptx-01-build-features                  # pneumothorax chain -> silent trial
 python ci/setup_cai.py --app                                        # the worklist application
+# after enough trial days in the lakehouse:
+python ci/setup_cai.py --run cxr-07-promote-champion --env CXR_MODEL=pneumothorax,CXR_APPROVED_BY="Dr A Rao"
 ```
 
 ## Lakehouse (CDE, CDW, Data Visualization)

@@ -37,6 +37,7 @@ from sklearn.preprocessing import StandardScaler  # noqa: E402
 from common import ROOT, finish, git_sha, load_config, load_feature_table, parse_args  # noqa: E402
 from evaluate.metrics import choose_threshold, compute_metrics, priority_band  # noqa: E402
 from features.feature_logic import QUALITY_FEATURES, feature_hash, model_matrix  # noqa: E402
+from lakehouse.store import model_version  # noqa: E402
 
 
 def xy(df, model_inputs):
@@ -45,7 +46,17 @@ def xy(df, model_inputs):
     return model_matrix(emb, qual, model_inputs), df["label"].to_numpy()
 
 
-def log_to_mlflow(cfg: dict, meta: dict, model, meta_path: Path) -> str | None:
+def signature(n_inputs: int):
+    """float64 in: a model deployed from the registry receives JSON numbers, which MLflow will not
+    narrow to float32 (Spend-Analytics, federal). Out: the positive-class probability."""
+    from mlflow.models.signature import ModelSignature
+    from mlflow.types import Schema, TensorSpec
+
+    return ModelSignature(inputs=Schema([TensorSpec(np.dtype(np.float64), (-1, n_inputs))]),
+                          outputs=Schema([TensorSpec(np.dtype(np.float64), (-1, 2))]))
+
+
+def log_to_mlflow(cfg: dict, meta: dict, model, meta_path: Path, n_inputs: int) -> str | None:
     try:
         import mlflow
         import mlflow.sklearn
@@ -55,8 +66,9 @@ def log_to_mlflow(cfg: dict, meta: dict, model, meta_path: Path) -> str | None:
     t, e = cfg["training"], cfg["evaluation"]
     try:
         mlflow.set_experiment(cfg["project"]["mlflow_experiment"])
-        with mlflow.start_run(run_name=f"fv{meta['feature_version']}-{meta['git_sha'][:7]}") as run:
+        with mlflow.start_run(run_name=model_version(meta)) as run:
             mlflow.log_params({
+                "model": meta["model"], "finding": meta["finding"], "population": meta["population"],
                 "feature_version": meta["feature_version"], "feature_hash": meta["feature_hash"],
                 "backbone": meta["backbone"], "backbone_revision": meta["backbone_revision"],
                 "model_inputs": ",".join(meta["model_inputs"]), "C": t["C"], "class_weight": t["class_weight"],
@@ -66,7 +78,7 @@ def log_to_mlflow(cfg: dict, meta: dict, model, meta_path: Path) -> str | None:
             for split in ("val", "test"):
                 mlflow.log_metrics({f"{split}_{k}": float(v) for k, v in meta["metrics"][split].items()
                                     if isinstance(v, (int, float))})
-            mlflow.sklearn.log_model(model, "model")
+            mlflow.sklearn.log_model(model, "model", signature=signature(n_inputs))
             meta["mlflow_run_id"] = run.info.run_id
             meta_path.write_text(json.dumps(meta, indent=2))
             mlflow.log_artifact(str(meta_path))
@@ -110,6 +122,9 @@ def main() -> int:
     (out / "gate_result.json").unlink(missing_ok=True)   # a new candidate has not been gated yet
     joblib.dump(model, out / "model.joblib")
     meta = {
+        "model": cfg["model"]["name"],
+        "finding": cfg["model"]["finding"],
+        "population": cfg["model"]["population"],
         "model_name": cfg["serving"]["model_name"],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "git_sha": git_sha(),
@@ -128,15 +143,17 @@ def main() -> int:
     }
     meta_path = out / "model_meta.json"
     meta_path.write_text(json.dumps(meta, indent=2))
-    log_to_mlflow(cfg, meta, model, meta_path)
+    log_to_mlflow(cfg, meta, model, meta_path, X_tr.shape[1])
 
+    finding = cfg["model"]["finding"].lower()
+    print(f"[train-validate] model {meta['model']} ({finding}, {meta['population']})")
     print(json.dumps({"threshold": thr, "val": m_val, "test": m_test}, indent=2))
     bands = [priority_band(float(p), thr, ecfg["p1_probability"]) for p in p_te]
     print(f"TEST bands (P1 from p >= {max(ecfg['p1_probability'], thr):.3f}):")
     for b in ("P1", "P2", "P3"):
         idx = [i for i, x in enumerate(bands) if x == b]
-        print(f"  {b}: {len(idx):4d} films, {sum(int(y_te[i]) for i in idx):4d} pneumonia")
-    print("TEST pneumonia-probability quantiles:",
+        print(f"  {b}: {len(idx):4d} films, {sum(int(y_te[i]) for i in idx):4d} {finding}")
+    print(f"TEST {finding}-probability quantiles:",
           {q: round(float(np.quantile(p_te, q)), 3) for q in (0.1, 0.25, 0.5, 0.75, 0.9)})
     return 0
 
