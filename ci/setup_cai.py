@@ -121,7 +121,7 @@ def ensure_jobs(wb: Workbench, project: dict, dry_run: bool) -> dict:
             have_env = job_env(have)
             patch = {**({} if {k: have.get(k) for k in size} == size else size),
                      **({} if all(have_env.get(k) == v for k, v in env.items()) else
-                        {"environment": json.dumps({**have_env, **env})})}   # the API wants a JSON string
+                        {"environment": json.dumps({**have_env, **env})})}   # PATCH wants a JSON string, POST an object
             if not patch:
                 print(f"job {job['name']}: exists ({have['id']})")
             elif dry_run:
@@ -135,7 +135,7 @@ def ensure_jobs(wb: Workbench, project: dict, dry_run: bool) -> dict:
                   f"schedule {job['schedule']}, {job['cpu']} vCPU / {job['memory']} GB, env {env})")
             continue
         body = {"name": job["name"], "script": job["script"], **size, "runtime_identifier": RUNTIME,
-                "timeout": job["timeout"], "kill_on_timeout": True, "arguments": "", "environment": json.dumps(env)}
+                "timeout": job["timeout"], "kill_on_timeout": True, "arguments": "", "environment": env}
         if job["parent"]:
             body["parent_job_id"] = ids[job["parent"]]
         if job["schedule"]:
