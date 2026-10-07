@@ -23,7 +23,7 @@ JOBS = [
     {"name": "cxr-00-sync-code", "script": "ci/sync_code.py", "parent": None,
      "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},          # pip installs torch on a change
     {"name": "cxr-01-build-features", "script": "features/build_feature_table.py", "parent": "cxr-00-sync-code",
-     "cpu": 4, "memory": 8, "timeout": 7200, "schedule": None},          # 16 GB waited 25+ min on federal
+     "cpu": 2, "memory": 8, "timeout": 7200, "schedule": None},          # federal places 2 vCPU jobs only
     {"name": "cxr-02-train-validate", "script": "train/train_validate.py", "parent": "cxr-01-build-features",
      "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},
     {"name": "cxr-03-kpi-gate", "script": "gate/kpi_gate.py", "parent": "cxr-02-train-validate",
@@ -31,9 +31,9 @@ JOBS = [
     {"name": "cxr-04-deploy-champion", "script": "serve/deploy_champion.py", "parent": "cxr-03-kpi-gate",
      "cpu": 1, "memory": 2, "timeout": 5400, "schedule": None},   # model build + rollout, 30 min each at most
     {"name": "cxr-05-nightly-worklist", "script": "monitor/batch_score.py", "parent": None,
-     "cpu": 4, "memory": 8, "timeout": 3600, "schedule": "0 2 * * *"},
+     "cpu": 2, "memory": 8, "timeout": 3600, "schedule": "0 2 * * *"},
     {"name": "cxr-06-score-studies", "script": "lakehouse/score_studies.py", "parent": None,
-     "cpu": 4, "memory": 8, "timeout": 3600, "schedule": None},           # started by the lakehouse DAG
+     "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},           # started by the lakehouse DAG
 ]
 
 CHAIN = ["cxr-00-sync-code", "cxr-01-build-features", "cxr-02-train-validate", "cxr-03-kpi-gate",
