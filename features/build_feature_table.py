@@ -202,6 +202,9 @@ def main() -> int:
     }
     manifest_path.write_text(json.dumps(manifest, indent=2))
     print(f"[build-features] wrote {len(df)} rows -> {out}")
+    from lakehouse.publish import publish_training_set
+
+    publish_training_set(manifest)
     return 0
 
 

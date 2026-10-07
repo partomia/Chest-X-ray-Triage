@@ -141,12 +141,16 @@ def main() -> int:
     cfg = load_config()
     meta, archived = promote(cfg)
     register(cfg, meta)
+    from lakehouse.publish import publish_model_event
+
     try:
         deploy(cfg, meta)
     except Exception as e:
         print(f"deploy failed: {e}")
         rollback(cfg, archived)
+        publish_model_event("ROLLED_BACK", meta, detail=str(e))
         return 1
+    publish_model_event("DEPLOYED", meta)
     return 0
 
 

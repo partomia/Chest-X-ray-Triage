@@ -78,6 +78,9 @@ def main() -> int:
     result = {"passed": passed, "checks": checks, "mlflow_run_id": candidate.get("mlflow_run_id"),
               "candidate_git_sha": candidate["git_sha"]}
     (cand_dir / "gate_result.json").write_text(json.dumps(result, indent=2))
+    from lakehouse.publish import publish_model_event
+
+    publish_model_event("GATE_PASSED" if passed else "GATE_FAILED", candidate, result)
 
     if candidate.get("mlflow_run_id"):
         try:

@@ -1,0 +1,65 @@
+{
+  "_comment": "The lakehouse side of CXR triage. Read by the CDE jobs (standard library json), the CAI lakehouse jobs (lakehouse/), the semantic SQL runner and the dashboards. Times are hospital local time (Asia/Kolkata), stored as timestamp without time zone.",
+  "db_prefix": "rsingh_cxr",
+  "landing": "s3a://federal-buk-574bcea0/data/IB/rsingh_cxr/landing",
+  "impala": {"host": "coordinator-federal-impala-1.dw-federal-cdp-env.dp5i-5vkq.cloudera.site", "port": 443,
+             "http_path": "cliservice", "auth_mechanism": "LDAP", "insert_chunk": 500},
+  "dataviz_url": "https://viz-indianbank-spend-analytics.dw-federal-cdp-env.dp5i-5vkq.cloudera.site",
+  "dataviz_connection": "federal-impala-1",
+
+  "seed": 20260928,
+  "first_date": "2026-09-28",
+  "demo_dates": ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03",
+                 "2026-10-04", "2026-10-05", "2026-10-06"],
+  "film_reference": "cde/reference/test_films.csv",
+  "studies_per_day": 48,
+  "arrivals": {"first_hour": 7, "last_hour": 21,
+               "hour_weights": [3, 6, 8, 8, 7, 5, 5, 6, 6, 5, 4, 3, 2, 2]},
+  "units": {"ED": 0.35, "OPD": 0.40, "WARD": 0.20, "ICU": 0.05},
+  "reading": {"readers": 1, "shift_start_hour": 8, "minutes_per_film": 20},
+  "defects_on": "2026-10-01",
+
+  "sources": {
+    "ris": {"entity": "ris_order", "format": "psv", "file": "orders_{date}.psv"},
+    "pacs": {"entity": "pacs_study", "format": "jsonl", "file": "studies_{date}.jsonl"},
+    "reports": {"entity": "radiology_report", "format": "jsonl", "file": "reports_{date}.jsonl"},
+    "emr": {"entity": "emr_patient", "format": "csv", "file": "patients_{date}.csv"}
+  },
+  "contracts": {
+    "ris_order": {"key": "accession_no", "columns": [
+      {"name": "accession_no", "type": "string", "required": true},
+      {"name": "mrn", "type": "string", "required": true},
+      {"name": "order_ts", "type": "timestamp", "required": true},
+      {"name": "ordering_unit", "type": "string", "required": true, "values": ["ED", "OPD", "WARD", "ICU"]},
+      {"name": "clinical_priority", "type": "string", "required": true, "values": ["STAT", "URGENT", "ROUTINE"]},
+      {"name": "indication", "type": "string", "required": false},
+      {"name": "procedure_code", "type": "string", "required": true}]},
+    "pacs_study": {"key": "StudyInstanceUID", "columns": [
+      {"name": "StudyInstanceUID", "type": "string", "required": true},
+      {"name": "AccessionNumber", "type": "string", "required": true},
+      {"name": "PatientID", "type": "string", "required": true},
+      {"name": "Modality", "type": "string", "required": true, "values": ["CR", "DX"]},
+      {"name": "ViewPosition", "type": "string", "required": false, "values": ["PA", "AP", "LL"]},
+      {"name": "BodyPartExamined", "type": "string", "required": true, "values": ["CHEST"]},
+      {"name": "StationName", "type": "string", "required": false},
+      {"name": "Manufacturer", "type": "string", "required": false},
+      {"name": "StudyDate", "type": "date8", "required": true},
+      {"name": "StudyTime", "type": "time6", "required": true},
+      {"name": "ImageFile", "type": "string", "required": true},
+      {"name": "Rows", "type": "int", "required": false},
+      {"name": "Columns", "type": "int", "required": false}]},
+    "radiology_report": {"key": "accession_no", "columns": [
+      {"name": "accession_no", "type": "string", "required": true},
+      {"name": "report_ts", "type": "timestamp", "required": true},
+      {"name": "radiologist_id", "type": "string", "required": true},
+      {"name": "finding", "type": "string", "required": true, "values": ["PNEUMONIA", "NORMAL"]},
+      {"name": "pattern", "type": "string", "required": false, "values": ["bacterial", "viral"]},
+      {"name": "impression", "type": "string", "required": true}]},
+    "emr_patient": {"key": "mrn", "columns": [
+      {"name": "mrn", "type": "string", "required": true},
+      {"name": "given_name", "type": "string", "required": true},
+      {"name": "family_name", "type": "string", "required": true},
+      {"name": "birth_date", "type": "date", "required": true},
+      {"name": "sex", "type": "string", "required": true, "values": ["F", "M"]}]}
+  }
+}

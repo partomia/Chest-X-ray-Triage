@@ -32,6 +32,8 @@ JOBS = [
      "cpu": 1, "memory": 2, "timeout": 5400, "schedule": None},   # model build + rollout, 30 min each at most
     {"name": "cxr-05-nightly-worklist", "script": "monitor/batch_score.py", "parent": None,
      "cpu": 4, "memory": 8, "timeout": 3600, "schedule": "0 2 * * *"},
+    {"name": "cxr-06-score-studies", "script": "lakehouse/score_studies.py", "parent": None,
+     "cpu": 4, "memory": 8, "timeout": 3600, "schedule": None},           # started by the lakehouse DAG
 ]
 
 CHAIN = ["cxr-00-sync-code", "cxr-01-build-features", "cxr-02-train-validate", "cxr-03-kpi-gate",
