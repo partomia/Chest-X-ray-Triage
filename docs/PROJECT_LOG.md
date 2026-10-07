@@ -159,3 +159,56 @@ setup repeats. The first workbench is called the "CDP env" from here on.
   rebuilds the deployed baseline. Secrets still point at the AWC env. Open
   choice: self-hosted runner for AWC, or the secrets moved to the CDP env.
   Re-enable with `gh workflow enable cxr-triage-mlops`.
+
+## 2026-10-07: Day 2 - lakehouse on the federal environment
+
+Asked: add the lakehouse (CDE, CDW, Data Visualization) to this project and install it
+now on "federal", learning `.env`, CDE / CDW / CDV from General-DataLakehouse and the
+CAI <-> CDW / CDE / Airflow / GitHub integration from Spend-Analytics.
+
+### CAI on federal
+
+- Project `rsingh-chest-x-ray-triage` (`a9p4-a5wz-dbol-mvkr`) created over API v2 from a
+  laptop (`ci/setup_cai.py`). The repo is private and creating the project from its URL
+  failed (`creation_status: failure`; Spend's repo is public). Not made public: a
+  read-only deploy key (`~/.ssh/cai_federal_cxr_deploy`) is uploaded to a blank project
+  and job `cxr-bootstrap-git` turns it into a checkout of `origin/main`.
+- No Kaggle token: `cxr-setup-data` (`scripts/fetch_dataset.py`) takes the Kermany films
+  from the Hugging Face mirror pinned at `c1a67c1`, original file names, 5216 / 16 / 624;
+  installs requirements (sync does too, once per `requirements.txt` hash). 16 min.
+- Job sizes: 4 vCPU requests never left `ENGINE_SCHEDULING` (16 GB waited 25 min, 8 GB
+  35 min) while 2 vCPU jobs start at once. Every job is 2 vCPU / 8 GB now; `cxr-01` takes
+  12 min at that size. The per-user quota also fits only the model endpoint plus ONE 2 vCPU
+  workload: with the application running, `cxr-06` waited 16 min and started the moment
+  the application was stopped. The application is stopped while jobs run.
+- Chain 00 -> 04 green: test AUROC 0.969, sensitivity 0.990 (same as the AWC baseline),
+  model `fv1.0.0-d9501f5` deployed 05:33 UTC.
+- Bug found and fixed: local pytest runs in a shell that had sourced `.env` published ten
+  `fv1.0.0-unknown` gate events into `ref.model_event`. Deleted; lineage now publishes only
+  inside CAI jobs (`CDSW_PROJECT_ID`), and `tests/conftest.py` strips platform credentials.
+
+### Lakehouse
+
+- CDE: files resource `rsingh-cxr-pipeline` from `git archive` of a pushed commit (no
+  GitHub token in CDE), jobs `rsingh-cxr-{land-sources,ingest-bronze,build-silver,
+  build-gold,build-outcomes}`, DAG job `rsingh-cxr-orchestration` (dag `cxr_triage_lakehouse`,
+  01:30 UTC). Airflow Variables `CXR_CAI_*` set over the Airflow REST API.
+- Iceberg reserves `_file` as a metadata column: bronze's lineage column is `_source_file`.
+  `split` renamed `data_split` in `ref.training_set` (the semantic step migrates old tables).
+- Backfill 2026-09-28 .. 10-05: CDE land -> gold per date, `cxr-06` per date (60-90 s),
+  outcomes per date. 2026-10-06 by the DAG itself (unpausing runs the latest interval;
+  CDE refuses manual runs of a paused DAG): 6 tasks green in 10 min, `triggered_by`
+  `airflow:scheduled__2026-10-06T01:30:00+00:00`; 10-05's late report arrived with it.
+- Results on the real champion, 9 dates, 431 films: pneumonia median wait FIFO 143-223 min
+  vs triage 33-49 min; normal films wait longer (the cost); sensitivity 0.97-1.00 on
+  reported films, specificity 0.67-0.81. Reconciliation: 0 mismatches; the 2026-10-01
+  RIS order (25:61:00) and PACS header without accession quarantined, two re-sent headers
+  explained.
+- Drift is ALERT every day (worst PSI 0.36-1.01, sharpness and aspect ratio): the
+  Kermany test films differ from the training split in those quality features, on 48 films
+  a day. Reported, not tuned away.
+- Views: 10 in `rsingh_cxr_semantic`, KPI consistency check 0 differences. Data
+  Visualization: *CXR Triage Operations* and *CXR Model, Drift & Data Quality* (PKs 12000+)
+  imported on `federal-impala-1`; all 28 visuals verified through the Data API.
+- GitHub: secrets moved to federal (public address, reachable from GitHub runners),
+  `cxr-triage-mlops` re-enabled; CI has a lakehouse job on local Spark + Iceberg.
