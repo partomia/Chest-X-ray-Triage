@@ -58,9 +58,23 @@ class SparkEngine(SparkStore):
     pass
 
 
+RENAMED = [("ref.training_set", "split", "data_split")]     # (table, old column, new column)
+
+
+def migrate(store) -> None:
+    for key, old, new in RENAMED:
+        cols = {str(r.get("name") or r.get("col_name")).lower() for r in store.query(f"DESCRIBE {store.t(key)}")}
+        if old in cols and new not in cols:
+            typ = dict(TABLES[key][0])[new]
+            store.execute(f"ALTER TABLE {store.t(key)} CHANGE COLUMN `{old}` `{new}` {typ}" if store.engine == "impala"
+                          else f"ALTER TABLE {store.t(key)} RENAME COLUMN `{old}` TO `{new}`")
+            print(f"  {store.t(key)}: column {old} renamed to {new}")
+
+
 def create_views(store) -> int:
     for key in TABLES:
         store.ensure(key)
+    migrate(store)
     store.execute(f"CREATE DATABASE IF NOT EXISTS {store.prefix}_semantic")
     n = 0
     for path in sorted(SQL.glob("*.sql")):
