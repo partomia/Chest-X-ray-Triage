@@ -44,7 +44,7 @@ TABLES = {
         ("train_rows", "INT"), ("gate_passed", "BOOLEAN"), ("gate_checks", "STRING"),
         ("mlflow_run_id", "STRING"), ("detail", "STRING")], None),
     "ref.training_set": ([
-        ("feature_version", "STRING"), ("feature_hash", "STRING"), ("split", "STRING"), ("films", "INT"),
+        ("feature_version", "STRING"), ("feature_hash", "STRING"), ("data_split", "STRING"), ("films", "INT"),
         ("pneumonia", "INT"), ("patients", "INT"), ("backbone", "STRING"), ("git_sha", "STRING"),
         ("created_at", "TIMESTAMP")], None),
 }

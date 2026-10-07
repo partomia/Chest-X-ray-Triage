@@ -43,7 +43,7 @@ def training_set_rows(manifest: dict) -> list[dict]:
     pos = manifest.get("positives_by_split", {})
     splits = sorted(manifest["rows_by_split"].items()) + [("all", manifest["rows"])]
     return [{"feature_version": manifest["feature_version"], "feature_hash": manifest["feature_hash"],
-             "split": split, "films": n,
+             "data_split": split, "films": n,
              "pneumonia": sum(pos.values()) if split == "all" and pos else pos.get(split),
              "patients": manifest.get("patients") if split == "all" else None,
              "backbone": manifest["backbone"], "git_sha": manifest["git_sha"][:7], "created_at": created}

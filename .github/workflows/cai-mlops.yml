@@ -6,7 +6,7 @@ name: cxr-triage-mlops
 on:
   push:
     branches: [main]
-    paths: ["features/**", "train/**", "evaluate/**", "gate/**", "serve/**", "ci/**", "config/pipeline.yaml",
+    paths: ["features/**", "train/**", "evaluate/**", "gate/**", "serve/**", "ci/**", "lakehouse/**", "config/pipeline.yaml",
             "common.py", "requirements.txt", "cdsw-build.sh"]
   workflow_dispatch: {}
 

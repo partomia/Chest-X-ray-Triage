@@ -41,3 +41,32 @@ jobs:
 
       - name: KPI gate fails on cue
         run: "! CXR_CONFIG_OVERLAY=config/ci.yaml,config/ci-gate-fail.yaml python gate/kpi_gate.py"
+
+  lakehouse:
+    name: Lakehouse on local Spark + Iceberg (CDE jobs, stub scoring, semantic views)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements-ci.txt pyspark==4.0.1
+
+      - name: Four business dates (incl. the planted defects of 2026-10-01), every stage, then the views
+        run: |
+          python scripts/run_local.py land bronze silver gold score outcomes semantic \
+            --dates 2026-09-28,2026-09-29,2026-09-30,2026-10-01 \
+            --landing /tmp/cxr/landing --warehouse /tmp/cxr/warehouse
+
+      - name: Re-running a date is idempotent
+        run: |
+          python scripts/run_local.py land bronze silver gold score outcomes semantic --dates 2026-10-01 \
+            --landing /tmp/cxr/landing --warehouse /tmp/cxr/warehouse

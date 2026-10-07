@@ -59,7 +59,7 @@ DROP VIEW IF EXISTS rsingh_cxr_semantic.v_training_set;
 CREATE VIEW rsingh_cxr_semantic.v_training_set
 COMMENT 'Films, pneumonia and patients per feature version and split of the training table'
 AS
-SELECT feature_version, `split` AS data_split, films, pneumonia,
+SELECT feature_version, data_split, films, pneumonia,
        CAST(pneumonia AS DOUBLE) / NULLIF(films, 0) AS prevalence,
        patients, backbone, git_sha, created_at
 FROM rsingh_cxr_ref.training_set;
