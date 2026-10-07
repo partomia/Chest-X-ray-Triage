@@ -6,9 +6,15 @@ exactly that code. Data, features, models and outputs are git-ignored, so
 `git reset --hard` never touches them (it does discard uncommitted edits to
 tracked files: develop in Git, not in the CAI project).
 
+Then pip installs requirements.txt when it differs from the last install (hash in
+outputs/.requirements.sha256). Packages land in /home/cdsw/.local, which every
+job, the model build and the application see, so no session is needed to set up
+a project. 2 vCPU / 8 GB: pip is killed at 2 GB while it installs torch.
+
 EXPECTED_GIT_SHA (set by the trigger in the job run's environment) stops the
 chain if the branch has already moved on; the newer push runs its own chain.
 """
+import hashlib
 import os
 import subprocess
 import sys
@@ -29,6 +35,21 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
+def install_requirements(root: Path, pip=None) -> bool:
+    """pip install -r requirements.txt unless this exact file was installed last time."""
+    reqs = root / "requirements.txt"
+    digest = hashlib.sha256(reqs.read_bytes()).hexdigest()
+    marker = root / "outputs" / ".requirements.sha256"
+    if marker.exists() and marker.read_text().strip() == digest:
+        print(f"requirements.txt unchanged ({digest[:12]}): nothing to install")
+        return False
+    print(f"installing requirements.txt ({digest[:12]})", flush=True)
+    (pip or (lambda: subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "-r", str(reqs)])))()
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    marker.write_text(digest)
+    return True
+
+
 def main() -> int:
     branch = os.environ.get("GIT_BRANCH", "main")
     git("fetch", "origin", branch)
@@ -42,6 +63,7 @@ def main() -> int:
     if expected and not sha.startswith(expected):
         print(f"Expected commit {expected} but origin/{branch} is {sha} (newer push?). Stopping chain.")
         return 1
+    install_requirements(ROOT)
     return 0
 
 

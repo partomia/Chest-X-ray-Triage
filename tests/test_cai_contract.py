@@ -31,9 +31,24 @@ def test_chain_is_linked_by_parents_in_order():
     assert GATE_JOB in CHAIN and CHAIN.index(GATE_JOB) == len(CHAIN) - 2   # deploy is the only job after it
 
 
-def test_nightly_job_is_scheduled_and_outside_the_chain():
-    nightly = [j for j in JOBS if j["name"] not in CHAIN]
-    assert len(nightly) == 1 and nightly[0]["schedule"] and nightly[0]["parent"] is None
+def test_jobs_outside_the_chain_have_no_parent():
+    outside = [j for j in JOBS if j["name"] not in CHAIN]
+    assert all(j["parent"] is None for j in outside)
+    assert [j["name"] for j in outside if j["schedule"]] == ["cxr-05-nightly-worklist"]
+    names = [j["name"] for j in JOBS]
+    assert all(names.index(j["parent"]) < names.index(j["name"]) for j in JOBS if j["parent"])   # parents first
+
+
+def test_sync_installs_requirements_once(tmp_path):
+    from ci.sync_code import install_requirements
+
+    (tmp_path / "requirements.txt").write_text("numpy\n")
+    calls = []
+    assert install_requirements(tmp_path, pip=lambda: calls.append(1)) is True
+    assert install_requirements(tmp_path, pip=lambda: calls.append(1)) is False
+    (tmp_path / "requirements.txt").write_text("numpy\npandas\n")
+    assert install_requirements(tmp_path, pip=lambda: calls.append(1)) is True
+    assert len(calls) == 2
 
 
 def _main_block(tree: ast.Module):
@@ -53,7 +68,8 @@ def test_job_scripts_survive_the_cai_kernel_runtime():
                               and "__file__" in ast.unparse(n)]
         assert not top_level_file_use, f"{s}: uses __file__ at module level"
         # unknown arguments tolerated
-        assert "parse_args(ap)" in src or "parse_args(argparse.ArgumentParser())" in src or "argparse" not in src, s
+        assert ("parse_args(ap)" in src or "parse_args(argparse.ArgumentParser())" in src
+                or "parse_known_args()" in src or "argparse" not in src), s
         assert ".parse_args()" not in src, f"{s}: argparse would fail on the kernel's -f argument"
         # no unconditional SystemExit on success
         main = _main_block(tree)

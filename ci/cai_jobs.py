@@ -5,16 +5,23 @@ Pure Python, so the GitHub runner can import it without cmlapi.
 
 CHAIN runs in this order through CAI job dependencies; a dependent job starts
 only when its parent succeeds, which makes the KPI gate's exit code a hard stop.
+cxr-setup-data runs once on a new project; cxr-06-score-studies is started by the
+lakehouse DAG (cde/dags/cxr_dag.py) for one business date at a time.
 """
 from __future__ import annotations
 
 import json
 import os
 
+# The federal workbench's Python 3.11 runtime, for jobs created from a laptop (ci/setup_cai.py)
+RUNTIME = "docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-pbj-jupyterlab-python3.11-standard:2026.08.1-b5"
+
 JOBS = [
     # name, script, parent, cpu, memory GB, timeout seconds, cron schedule
+    {"name": "cxr-setup-data", "script": "scripts/fetch_dataset.py", "parent": None,
+     "cpu": 2, "memory": 8, "timeout": 7200, "schedule": None},
     {"name": "cxr-00-sync-code", "script": "ci/sync_code.py", "parent": None,
-     "cpu": 1, "memory": 2, "timeout": 600, "schedule": None},
+     "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},          # pip installs torch on a change
     {"name": "cxr-01-build-features", "script": "features/build_feature_table.py", "parent": "cxr-00-sync-code",
      "cpu": 4, "memory": 16, "timeout": 7200, "schedule": None},
     {"name": "cxr-02-train-validate", "script": "train/train_validate.py", "parent": "cxr-01-build-features",
@@ -27,8 +34,10 @@ JOBS = [
      "cpu": 4, "memory": 8, "timeout": 3600, "schedule": "0 2 * * *"},
 ]
 
-CHAIN = [j["name"] for j in JOBS if j["name"] != "cxr-05-nightly-worklist"]
+CHAIN = ["cxr-00-sync-code", "cxr-01-build-features", "cxr-02-train-validate", "cxr-03-kpi-gate",
+         "cxr-04-deploy-champion"]
 GATE_JOB = "cxr-03-kpi-gate"
+SCORE_JOB = "cxr-06-score-studies"
 
 
 def resolve_runtime(client, configured: str = "") -> str:
