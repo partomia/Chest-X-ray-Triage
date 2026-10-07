@@ -24,7 +24,8 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Secrets & local config
+# Secrets & local config (.ssh/: the CAI project's deploy key, ci/bootstrap_git.py)
+.ssh/
 .env
 .env.*
 !.env.example

@@ -57,17 +57,18 @@ def find_project(wb: Workbench, name: str = CAI_PROJECT_NAME) -> dict | None:
     return next((p for p in found.get("projects", []) if p["name"] == name), None)
 
 
-def ensure_project(wb: Workbench, dry_run: bool) -> dict | None:
+def ensure_project(wb: Workbench, dry_run: bool, deploy_key: str = "") -> dict | None:
     project = find_project(wb)
     if project:
         print(f"project {CAI_PROJECT_NAME}: exists ({project['id']})")
         return project
     if dry_run:
-        print(f"project {CAI_PROJECT_NAME}: would create from {GIT_URL}")
+        print(f"project {CAI_PROJECT_NAME}: would create {'blank' if deploy_key else 'from ' + GIT_URL}")
         return None
+    # A private repo cannot be cloned at creation: blank project, then cxr-bootstrap-git
+    source = {"template": "blank"} if deploy_key else {"template": "git", "git_url": GIT_URL}
     project = wb("POST", "/projects", body={
-        "name": CAI_PROJECT_NAME, "template": "git", "git_url": GIT_URL, "visibility": "private",
-        "default_project_engine_type": "ml_runtime",
+        "name": CAI_PROJECT_NAME, **source, "visibility": "private", "default_project_engine_type": "ml_runtime",
         "description": "Chest X-ray triage on Cloudera AI and the lakehouse (github.com/partomia/Chest-X-ray-Triage)"})
     print(f"project {CAI_PROJECT_NAME}: created ({project['id']}), cloning", end="", flush=True)
     for _ in range(60):
@@ -150,6 +151,31 @@ def ensure_app(wb: Workbench, project: dict, dry_run: bool) -> None:
         print(f"application {APP['name']}: created ({app['id']}), subdomain {APP['subdomain']}")
 
 
+def upload(wb: Workbench, pid: str, local: Path, remote: str) -> None:
+    with local.open("rb") as f:
+        r = requests.put(f"{wb.base}/projects/{pid}/files/{remote}", files={"file": (local.name, f)},
+                         headers={"Authorization": wb.h["Authorization"]}, timeout=120)
+    if r.status_code >= 400:
+        raise SystemExit(f"upload {remote}: HTTP {r.status_code} {r.text[:200]}")
+
+
+def bootstrap_git(wb: Workbench, project: dict, deploy_key: str) -> None:
+    """Private repo: the deploy key and ci/bootstrap_git.py into the blank project, then clone over SSH."""
+    pid = project["id"]
+    files = {f["path"] for f in wb("GET", f"/projects/{pid}/files", params={"path": "ci"}).get("files", [])}
+    if "ci/cai_jobs.py" in files or "cai_jobs.py" in files:
+        print("project is a clone already: no bootstrap")
+        return
+    upload(wb, pid, Path(deploy_key).expanduser(), ".ssh/cxr_deploy_key")
+    upload(wb, pid, Path(__file__).resolve().parent / "bootstrap_git.py", "ci/bootstrap_git.py")
+    jobs = job_ids(wb, pid)
+    job = jobs.get("cxr-bootstrap-git") or wb("POST", f"/projects/{pid}/jobs", body={
+        "name": "cxr-bootstrap-git", "script": "ci/bootstrap_git.py", "cpu": 1, "memory": 2,
+        "runtime_identifier": RUNTIME, "timeout": 600, "kill_on_timeout": True, "arguments": ""})
+    if run_job(wb, pid, job["id"], "cxr-bootstrap-git", poll=10) != "succeeded":
+        raise SystemExit("cxr-bootstrap-git failed: is the public key a deploy key on the repository?")
+
+
 def run_job(wb: Workbench, pid: str, job_id: str, name: str, env: dict | None = None, poll: int = 30) -> str:
     run = wb("POST", f"/projects/{pid}/jobs/{job_id}/runs", body={"environment": env or {}})
     print(f"{name}: run {run['id']} started", flush=True)
@@ -171,11 +197,14 @@ def main() -> int:
     p.add_argument("--app", action="store_true", help="also create the application (needs a champion)")
     p.add_argument("--run", default="", help="start this job by name and follow it to the end")
     p.add_argument("--env", default="", help="with --run: KEY=VALUE,... for the job run's environment")
+    p.add_argument("--deploy-key", default="", help="private key of a read-only deploy key: a private repo")
     args, _ = p.parse_known_args()
     wb = Workbench(os.environ["CXR_CAI_HOST"], os.environ["CXR_CAI_API_KEY"])
-    project = ensure_project(wb, args.dry_run)
+    project = ensure_project(wb, args.dry_run, args.deploy_key)
     if project is None:
         return 0
+    if args.deploy_key and not args.dry_run:
+        bootstrap_git(wb, project, args.deploy_key)
     if args.run:
         job = job_ids(wb, project["id"]).get(args.run)
         if not job:
