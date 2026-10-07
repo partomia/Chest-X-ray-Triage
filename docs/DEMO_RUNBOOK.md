@@ -295,6 +295,21 @@ self-hosted runner is registered there or the secrets are moved to the CDP env
 Say it plainly: pediatric, single-source dataset; decision support, not
 diagnosis; the heatmap is indicative (48-pixel patches), not lesion localisation.
 
+### Lakehouse extension (federal environment, +5 minutes)
+
+| Min | Beat | Show |
+|---|---|---|
+| 7-8 | The hospital day | CDE Airflow UI: DAG `cxr_triage_lakehouse`, one run per business date: land, bronze, silver, gold, `cai_score_studies`, outcomes |
+| 8-9 | CAI inside the pipeline | CAI Jobs: `cxr-06-score-studies` started by Airflow with `CXR_BUSINESS_DATE`; Hue: `ref.triage_run` shows the gold snapshot it read |
+| 9-10 | The benefit | Dashboard *CXR Triage Operations*: pneumonia median wait FIFO ~3 h vs triage under 1 h; the worklist in triage order; normal films wait longer (the cost) |
+| 10-11 | Trust in the data | *CXR Model, Drift & Data Quality* / Data quality: 2026-10-01's quarantined order and PACS header, the two re-sent headers EXPLAINED, zero mismatches |
+| 11-12 | Trust in the model | Same dashboard / Model: gate decision and deployment rows written by jobs 03 / 04, PSI per scored day |
+
+Setup and re-run commands: README, section *Lakehouse*. Trigger one date by hand:
+`cde job run --name rsingh-cxr-orchestration --config-json '{"business_date": "2026-10-06"}'`.
+The DAG is paused on creation; `cde job update --name rsingh-cxr-orchestration --schedule-enabled=true`
+(or unpause in the Airflow UI) starts the daily 01:30 UTC schedule.
+
 ## Part 3: failure path, VERIFY, troubleshooting
 
 ### Rehearse the gate rejecting

@@ -5,7 +5,8 @@ Model lineage into the lakehouse, written by the CAI pipeline jobs:
   ref.model_event    GATE_PASSED / GATE_FAILED (cxr-03), DEPLOYED / ROLLED_BACK (cxr-04),
                      with the candidate's metrics, threshold and gate checks
 
-Best-effort: without CXR_IMPALA_USER (CI, laptops) or when CDW is unreachable it prints why
+Only inside a CAI job (CDSW_PROJECT_ID), so a laptop or CI run of the same scripts never writes
+to the platform's tables. Best-effort: without CXR_IMPALA_USER or when CDW is unreachable it prints why
 and returns; a lineage record never changes a pipeline stage's result.
 """
 from __future__ import annotations
@@ -17,6 +18,9 @@ from datetime import datetime
 
 
 def _store():
+    if not os.environ.get("CDSW_PROJECT_ID"):
+        print("[lakehouse] not a CAI job - lineage not published")
+        return None
     if not os.environ.get("CXR_IMPALA_USER"):
         print("[lakehouse] CXR_IMPALA_USER not set - lineage not published")
         return None
