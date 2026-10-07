@@ -1,0 +1,833 @@
+{
+ "segments": [],
+ "staticasset": [],
+ "dashboards": [
+  {
+   "model": "reports.report",
+   "pk": 12000,
+   "fields": {
+    "report_name": "CXR Triage Operations",
+    "report_description": "dataviz/build_dashboard.py",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "dashboard",
+    "report_mode": null,
+    "dashboard_url_name": "",
+    "report_data": "{\"report_title\": \"CXR Triage Operations\", \"numColumns\": 64, \"report_subtitle\": \"Chest X-ray worklist in triage order, and how long pneumonia films wait under FIFO vs triage\", \"dashboard_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-1-widget-12201\"}, {\"col\": 14, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-2-widget-12202\"}, {\"col\": 27, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-3-widget-12203\"}, {\"col\": 40, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-4-widget-12204\"}, {\"col\": 53, \"row\": 1, \"size_x\": 12, \"size_y\": 10, \"id\": \"uri-5-widget-12205\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12206\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-7-widget-12207\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 30, \"id\": \"uri-8-widget-12208\"}], \"dashboard_sheets\": [{\"sheet_id\": 1, \"order\": 1, \"sheet_handle_title\": \"Latest day\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-1-widget-12201\"}, {\"col\": 14, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-2-widget-12202\"}, {\"col\": 27, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-3-widget-12203\"}, {\"col\": 40, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-4-widget-12204\"}, {\"col\": 53, \"row\": 1, \"size_x\": 12, \"size_y\": 10, \"id\": \"uri-5-widget-12205\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12206\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-7-widget-12207\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 30, \"id\": \"uri-8-widget-12208\"}], \"control_widgets\": []}, {\"sheet_id\": 2, \"order\": 2, \"sheet_handle_title\": \"Trend\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-1-widget-12209\"}, {\"col\": 33, \"row\": 1, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-2-widget-12210\"}, {\"col\": 1, \"row\": 23, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-3-widget-12211\"}, {\"col\": 33, \"row\": 23, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-4-widget-12212\"}, {\"col\": 1, \"row\": 45, \"size_x\": 64, \"size_y\": 22, \"id\": \"uri-5-widget-12213\"}], \"control_widgets\": []}], \"user_settings\": {\"dashboard_width\": \"1280\", \"display_filters\": \"true\", \"permit_csv_download_dashboard\": \"true\"}, \"global_control_widgets\": [], \"control_widgets\": [], \"click_behavior\": {}}",
+    "shared_visual_dashboards": "[]",
+    "parent_report": null,
+    "uuid": "ae070718-fb58-5f92-a70b-5c33985570ee",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": null
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12001,
+   "fields": {
+    "report_name": "CXR Model, Drift & Data Quality",
+    "report_description": "dataviz/build_dashboard.py",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "dashboard",
+    "report_mode": null,
+    "dashboard_url_name": "",
+    "report_data": "{\"report_title\": \"CXR Model, Drift & Data Quality\", \"numColumns\": 64, \"report_subtitle\": \"Gate decisions, deployments, scoring runs and PSI drift; pipeline reconciliation\", \"dashboard_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-1-widget-12301\"}, {\"col\": 17, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-2-widget-12302\"}, {\"col\": 33, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-3-widget-12303\"}, {\"col\": 49, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-4-widget-12304\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-5-widget-12305\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12306\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 18, \"id\": \"uri-7-widget-12307\"}, {\"col\": 1, \"row\": 51, \"size_x\": 64, \"size_y\": 22, \"id\": \"uri-8-widget-12308\"}], \"dashboard_sheets\": [{\"sheet_id\": 1, \"order\": 1, \"sheet_handle_title\": \"Model and drift\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-1-widget-12301\"}, {\"col\": 17, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-2-widget-12302\"}, {\"col\": 33, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-3-widget-12303\"}, {\"col\": 49, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-4-widget-12304\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-5-widget-12305\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12306\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 18, \"id\": \"uri-7-widget-12307\"}, {\"col\": 1, \"row\": 51, \"size_x\": 64, \"size_y\": 22, \"id\": \"uri-8-widget-12308\"}], \"control_widgets\": []}, {\"sheet_id\": 2, \"order\": 2, \"sheet_handle_title\": \"Data quality\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-1-widget-12309\"}, {\"col\": 17, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-2-widget-12310\"}, {\"col\": 33, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-3-widget-12311\"}, {\"col\": 49, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-4-widget-12312\"}, {\"col\": 1, \"row\": 11, \"size_x\": 64, \"size_y\": 20, \"id\": \"uri-5-widget-12313\"}, {\"col\": 1, \"row\": 31, \"size_x\": 64, \"size_y\": 22, \"id\": \"uri-6-widget-12314\"}, {\"col\": 1, \"row\": 53, \"size_x\": 64, \"size_y\": 18, \"id\": \"uri-7-widget-12315\"}], \"control_widgets\": []}], \"user_settings\": {\"dashboard_width\": \"1280\", \"display_filters\": \"true\", \"permit_csv_download_dashboard\": \"true\"}, \"global_control_widgets\": [], \"control_widgets\": [], \"click_behavior\": {}}",
+    "shared_visual_dashboards": "[]",
+    "parent_report": null,
+    "uuid": "12b55d70-cdc0-5a90-8d48-db1ee4f822fa",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": null
+   }
+  }
+ ],
+ "appgroupmembership": [],
+ "reportannotation": [],
+ "events": [],
+ "customcss": [],
+ "reportimage": [],
+ "dateranges": [],
+ "visuals": [
+  {
+   "model": "reports.report",
+   "pk": 12201,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Films\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([studies])\", \"expression_for_trigger\": \"sum([studies])\", \"expr_hasagg\": true, \"col_alias\": \"Films\", \"dataset_colname\": \"Films\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([studies]) as 'sub:Films'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "72fc72dc-a8cd-5e2a-8335-4707e018cbf0",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12202,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"P1 - read first\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([p1])\", \"expression_for_trigger\": \"sum([p1])\", \"expr_hasagg\": true, \"col_alias\": \"P1\", \"dataset_colname\": \"P1\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([p1]) as 'sub:P1'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "48a548bb-e9bd-50d0-83e7-c084a4a0870c",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12203,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia: median wait, FIFO (min)\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([pneumonia_fifo_median_min])\", \"expression_for_trigger\": \"max([pneumonia_fifo_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"FIFO min\", \"dataset_colname\": \"FIFO min\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([pneumonia_fifo_median_min]) as 'sub:FIFO min'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "1e5d830a-c30c-5b67-bfc7-06f4676a7a65",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12204,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia: median wait, triage (min)\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([pneumonia_triage_median_min])\", \"expression_for_trigger\": \"max([pneumonia_triage_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"Triage min\", \"dataset_colname\": \"Triage min\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([pneumonia_triage_median_min]) as 'sub:Triage min'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "d138b331-dfb7-5f20-a4e5-9f8270e7b835",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12205,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Sensitivity % (reported films)\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity %\", \"dataset_colname\": \"Sensitivity %\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"round(100 * max([sensitivity]), 1) as 'sub:Sensitivity %'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "0bb7071c-f3fd-5252-ac8f-e8535a6d63f1",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12206,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12102,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Films and pneumonia per band (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"priority\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[priority]\", \"col_alias\": \"Band\", \"order\": {\"priority\": 1, \"ascending\": true}}], \"y_shelf\": [{\"custom_expr\": \"sum([films])\", \"expression_for_trigger\": \"sum([films])\", \"expr_hasagg\": true, \"col_alias\": \"Films\", \"dataset_colname\": \"Films\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([pneumonia])\", \"expression_for_trigger\": \"sum([pneumonia])\", \"expr_hasagg\": true, \"col_alias\": \"Pneumonia\", \"dataset_colname\": \"Pneumonia\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[priority] as 'sub:Band'\": \"x_shelf\", \"sum([films]) as 'sub:Films'\": \"y_shelf\", \"sum([pneumonia]) as 'sub:Pneumonia'\": \"y_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "7bb7c4ad-0bdf-55b2-a367-4467077e0dc8",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12207,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12103,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia: average wait (min) per ordering unit, FIFO vs triage\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"ordering_unit\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[ordering_unit]\", \"col_alias\": \"Unit\", \"order\": {\"priority\": 1, \"ascending\": true}}], \"y_shelf\": [{\"custom_expr\": \"round(max([pneumonia_avg_fifo_wait_min]), 1)\", \"expression_for_trigger\": \"round(max([pneumonia_avg_fifo_wait_min]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"FIFO\", \"dataset_colname\": \"FIFO\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(max([pneumonia_avg_triage_wait_min]), 1)\", \"expression_for_trigger\": \"round(max([pneumonia_avg_triage_wait_min]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Triage\", \"dataset_colname\": \"Triage\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[ordering_unit] as 'sub:Unit'\": \"x_shelf\", \"round(max([pneumonia_avg_fifo_wait_min]), 1) as 'sub:FIFO'\": \"y_shelf\", \"round(max([pneumonia_avg_triage_wait_min]), 1) as 'sub:Triage'\": \"y_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "319af122-278c-5d46-a4c9-b547f3f6168d",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12208,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Latest day",
+    "dataset": 12101,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Worklist in triage order (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"triage_seq\", \"dataset_coltype\": \"INT\", \"expression_for_trigger\": \"[triage_seq]\", \"col_alias\": \"Triage #\", \"order\": {\"priority\": 1, \"ascending\": true}}, {\"dataset_colname\": \"fifo_seq\", \"dataset_coltype\": \"INT\", \"expression_for_trigger\": \"[fifo_seq]\", \"col_alias\": \"FIFO #\"}, {\"dataset_colname\": \"accession_no\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[accession_no]\", \"col_alias\": \"Accession\"}, {\"dataset_colname\": \"ordering_unit\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[ordering_unit]\", \"col_alias\": \"Unit\"}, {\"dataset_colname\": \"clinical_priority\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[clinical_priority]\", \"col_alias\": \"Clinical\"}, {\"dataset_colname\": \"priority\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[priority]\", \"col_alias\": \"Band\"}, {\"dataset_colname\": \"outcome\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[outcome]\", \"col_alias\": \"Outcome\"}, {\"dataset_colname\": \"finding\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[finding]\", \"col_alias\": \"Report\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([probability])\", \"expression_for_trigger\": \"max([probability])\", \"expr_hasagg\": true, \"col_alias\": \"P(pneumonia)\", \"dataset_colname\": \"P(pneumonia)\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([triage_wait_min])\", \"expression_for_trigger\": \"max([triage_wait_min])\", \"expr_hasagg\": true, \"col_alias\": \"Triage wait\", \"dataset_colname\": \"Triage wait\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([fifo_wait_min])\", \"expression_for_trigger\": \"max([fifo_wait_min])\", \"expr_hasagg\": true, \"col_alias\": \"FIFO wait\", \"dataset_colname\": \"FIFO wait\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[triage_seq] as 'sub:Triage #'\": \"dimensions_shelf\", \"[fifo_seq] as 'sub:FIFO #'\": \"dimensions_shelf\", \"[accession_no] as 'sub:Accession'\": \"dimensions_shelf\", \"[ordering_unit] as 'sub:Unit'\": \"dimensions_shelf\", \"[clinical_priority] as 'sub:Clinical'\": \"dimensions_shelf\", \"[priority] as 'sub:Band'\": \"dimensions_shelf\", \"[outcome] as 'sub:Outcome'\": \"dimensions_shelf\", \"[finding] as 'sub:Report'\": \"dimensions_shelf\", \"max([probability]) as 'sub:P(pneumonia)'\": \"aggregates_shelf\", \"max([triage_wait_min]) as 'sub:Triage wait'\": \"aggregates_shelf\", \"max([fifo_wait_min]) as 'sub:FIFO wait'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "2f8ea79c-f5c6-5898-b68c-b420f4c552a9",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12209,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Trend",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia median wait (min): FIFO vs triage\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"max([pneumonia_fifo_median_min])\", \"expression_for_trigger\": \"max([pneumonia_fifo_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"FIFO\", \"dataset_colname\": \"FIFO\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([pneumonia_triage_median_min])\", \"expression_for_trigger\": \"max([pneumonia_triage_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"Triage\", \"dataset_colname\": \"Triage\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"max([pneumonia_fifo_median_min]) as 'sub:FIFO'\": \"y_shelf\", \"max([pneumonia_triage_median_min]) as 'sub:Triage'\": \"y_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "f22d6fea-d471-537d-8d46-1964eeb37b51",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12210,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Trend",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Normal films: median wait (min), the cost of triage\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"max([normal_fifo_median_min])\", \"expression_for_trigger\": \"max([normal_fifo_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"FIFO\", \"dataset_colname\": \"FIFO\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([normal_triage_median_min])\", \"expression_for_trigger\": \"max([normal_triage_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"Triage\", \"dataset_colname\": \"Triage\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"max([normal_fifo_median_min]) as 'sub:FIFO'\": \"y_shelf\", \"max([normal_triage_median_min]) as 'sub:Triage'\": \"y_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "ef259898-1027-527e-ae5b-d59d4a4f5343",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12211,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Trend",
+    "dataset": 12102,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Films per band per day\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"sum([films])\", \"expression_for_trigger\": \"sum([films])\", \"expr_hasagg\": true, \"col_alias\": \"Films\", \"dataset_colname\": \"Films\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [{\"dataset_colname\": \"priority\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[priority]\", \"col_alias\": \"Band\"}], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"sum([films]) as 'sub:Films'\": \"y_shelf\", \"[priority] as 'sub:Band'\": \"color_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "0935a767-e850-5b05-9734-94effd3a4bd6",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12212,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Trend",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Sensitivity and specificity % on reported films\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity %\", \"dataset_colname\": \"Sensitivity %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Specificity %\", \"dataset_colname\": \"Specificity %\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"round(100 * max([sensitivity]), 1) as 'sub:Sensitivity %'\": \"y_shelf\", \"round(100 * max([specificity]), 1) as 'sub:Specificity %'\": \"y_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "c304b01b-1492-5c71-81de-b4acab5fae5e",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12213,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Triage Operations / Trend",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Daily triage KPIs\", \"report_subtitle\": \"\", \"dashboard_id\": 12000, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\", \"order\": {\"priority\": 1, \"ascending\": false}}], \"aggregates_shelf\": [{\"custom_expr\": \"sum([studies])\", \"expression_for_trigger\": \"sum([studies])\", \"expr_hasagg\": true, \"col_alias\": \"Films\", \"dataset_colname\": \"Films\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([reported])\", \"expression_for_trigger\": \"sum([reported])\", \"expr_hasagg\": true, \"col_alias\": \"Reported\", \"dataset_colname\": \"Reported\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([pneumonia])\", \"expression_for_trigger\": \"sum([pneumonia])\", \"expr_hasagg\": true, \"col_alias\": \"Pneumonia\", \"dataset_colname\": \"Pneumonia\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([p1])\", \"expression_for_trigger\": \"sum([p1])\", \"expr_hasagg\": true, \"col_alias\": \"P1\", \"dataset_colname\": \"P1\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([p2])\", \"expression_for_trigger\": \"sum([p2])\", \"expr_hasagg\": true, \"col_alias\": \"P2\", \"dataset_colname\": \"P2\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([p3])\", \"expression_for_trigger\": \"sum([p3])\", \"expr_hasagg\": true, \"col_alias\": \"P3\", \"dataset_colname\": \"P3\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([fn])\", \"expression_for_trigger\": \"sum([fn])\", \"expr_hasagg\": true, \"col_alias\": \"Missed (FN)\", \"dataset_colname\": \"Missed (FN)\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sens %\", \"dataset_colname\": \"Sens %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Spec %\", \"dataset_colname\": \"Spec %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([pneumonia_median_minutes_saved])\", \"expression_for_trigger\": \"max([pneumonia_median_minutes_saved])\", \"expr_hasagg\": true, \"col_alias\": \"Median min saved\", \"dataset_colname\": \"Median min saved\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([truth_completeness]), 1)\", \"expression_for_trigger\": \"round(100 * max([truth_completeness]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Truth %\", \"dataset_colname\": \"Truth %\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"dimensions_shelf\", \"sum([studies]) as 'sub:Films'\": \"aggregates_shelf\", \"sum([reported]) as 'sub:Reported'\": \"aggregates_shelf\", \"sum([pneumonia]) as 'sub:Pneumonia'\": \"aggregates_shelf\", \"sum([p1]) as 'sub:P1'\": \"aggregates_shelf\", \"sum([p2]) as 'sub:P2'\": \"aggregates_shelf\", \"sum([p3]) as 'sub:P3'\": \"aggregates_shelf\", \"sum([fn]) as 'sub:Missed (FN)'\": \"aggregates_shelf\", \"round(100 * max([sensitivity]), 1) as 'sub:Sens %'\": \"aggregates_shelf\", \"round(100 * max([specificity]), 1) as 'sub:Spec %'\": \"aggregates_shelf\", \"max([pneumonia_median_minutes_saved]) as 'sub:Median min saved'\": \"aggregates_shelf\", \"round(100 * max([truth_completeness]), 1) as 'sub:Truth %'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "5f7c3af2-632c-5a5b-bc2e-a4306a0f34d8",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12301,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12104,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Deployed model: test AUROC\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"AUROC\", \"dataset_colname\": \"AUROC\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model_event] = 'DEPLOYED'\", \"expression_for_trigger\": \"[model_event] = 'DEPLOYED'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_auroc]) as 'sub:AUROC'\": \"aggregates_shelf\", \"[model_event] = 'DEPLOYED'\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "dd0b63cc-0dcf-518a-a798-79ebbc52374d",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12302,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12104,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Deployed model: test sensitivity\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity\", \"dataset_colname\": \"Sensitivity\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model_event] = 'DEPLOYED'\", \"expression_for_trigger\": \"[model_event] = 'DEPLOYED'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_sensitivity]) as 'sub:Sensitivity'\": \"aggregates_shelf\", \"[model_event] = 'DEPLOYED'\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "7c24df61-9304-5baf-886b-03770b820769",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12303,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Films scored (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([scored])\", \"expression_for_trigger\": \"sum([scored])\", \"expr_hasagg\": true, \"col_alias\": \"Scored\", \"dataset_colname\": \"Scored\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_final] = 1\", \"expression_for_trigger\": \"[is_final] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([scored]) as 'sub:Scored'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\", \"[is_final] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "71479619-306c-51cd-a074-9753970606fd",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12304,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Worst feature PSI (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([psi_max])\", \"expression_for_trigger\": \"max([psi_max])\", \"expr_hasagg\": true, \"col_alias\": \"PSI\", \"dataset_colname\": \"PSI\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_final] = 1\", \"expression_for_trigger\": \"[is_final] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([psi_max]) as 'sub:PSI'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\", \"[is_final] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "39a17239-0de6-5ce1-b17d-bef1cf19857e",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12305,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Worst quality-feature PSI per scored day (warn 0.10, alert 0.25)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"max([psi_max])\", \"expression_for_trigger\": \"max([psi_max])\", \"expr_hasagg\": true, \"col_alias\": \"PSI\", \"dataset_colname\": \"PSI\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_final] = 1\", \"expression_for_trigger\": \"[is_final] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"max([psi_max]) as 'sub:PSI'\": \"y_shelf\", \"[is_final] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "33f50bba-41dd-5450-8dc0-b65f0bfe2489",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12306,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Bands assigned per scored day\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"sum([p1])\", \"expression_for_trigger\": \"sum([p1])\", \"expr_hasagg\": true, \"col_alias\": \"P1\", \"dataset_colname\": \"P1\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([p2])\", \"expression_for_trigger\": \"sum([p2])\", \"expr_hasagg\": true, \"col_alias\": \"P2\", \"dataset_colname\": \"P2\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([p3])\", \"expression_for_trigger\": \"sum([p3])\", \"expr_hasagg\": true, \"col_alias\": \"P3\", \"dataset_colname\": \"P3\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_final] = 1\", \"expression_for_trigger\": \"[is_final] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"sum([p1]) as 'sub:P1'\": \"y_shelf\", \"sum([p2]) as 'sub:P2'\": \"y_shelf\", \"sum([p3]) as 'sub:P3'\": \"y_shelf\", \"[is_final] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "767e42e9-44bc-5900-ac8d-6087931866e3",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12307,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12104,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Gate decisions and deployments\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"recorded_at\", \"dataset_coltype\": \"TIMESTAMP\", \"expression_for_trigger\": \"[recorded_at]\", \"col_alias\": \"When\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"model_event\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_event]\", \"col_alias\": \"Event\"}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Model\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"Test AUROC\", \"dataset_colname\": \"Test AUROC\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Test sens\", \"dataset_colname\": \"Test sens\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_specificity])\", \"expression_for_trigger\": \"max([test_specificity])\", \"expr_hasagg\": true, \"col_alias\": \"Test spec\", \"dataset_colname\": \"Test spec\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([threshold])\", \"expression_for_trigger\": \"max([threshold])\", \"expr_hasagg\": true, \"col_alias\": \"Threshold\", \"dataset_colname\": \"Threshold\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([train_rows])\", \"expression_for_trigger\": \"max([train_rows])\", \"expr_hasagg\": true, \"col_alias\": \"Train films\", \"dataset_colname\": \"Train films\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[recorded_at] as 'sub:When'\": \"dimensions_shelf\", \"[model_event] as 'sub:Event'\": \"dimensions_shelf\", \"[model_version] as 'sub:Model'\": \"dimensions_shelf\", \"max([test_auroc]) as 'sub:Test AUROC'\": \"aggregates_shelf\", \"max([test_sensitivity]) as 'sub:Test sens'\": \"aggregates_shelf\", \"max([test_specificity]) as 'sub:Test spec'\": \"aggregates_shelf\", \"max([threshold]) as 'sub:Threshold'\": \"aggregates_shelf\", \"max([train_rows]) as 'sub:Train films'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "b2ebb539-3ef5-54a5-b21f-7ca4c63fa4e0",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12308,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Model and drift",
+    "dataset": 12105,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Scoring runs (CAI job cxr-06 per business date)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"run_id\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[run_id]\", \"col_alias\": \"Run\"}, {\"dataset_colname\": \"status\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[status]\", \"col_alias\": \"Status\"}, {\"dataset_colname\": \"drift_level\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[drift_level]\", \"col_alias\": \"Drift\"}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Model\"}, {\"dataset_colname\": \"triggered_by\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[triggered_by]\", \"col_alias\": \"Triggered by\"}], \"aggregates_shelf\": [{\"custom_expr\": \"sum([studies])\", \"expression_for_trigger\": \"sum([studies])\", \"expr_hasagg\": true, \"col_alias\": \"Studies\", \"dataset_colname\": \"Studies\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([scored])\", \"expression_for_trigger\": \"sum([scored])\", \"expr_hasagg\": true, \"col_alias\": \"Scored\", \"dataset_colname\": \"Scored\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([missing_films])\", \"expression_for_trigger\": \"sum([missing_films])\", \"expr_hasagg\": true, \"col_alias\": \"Missing films\", \"dataset_colname\": \"Missing films\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([psi_max])\", \"expression_for_trigger\": \"max([psi_max])\", \"expr_hasagg\": true, \"col_alias\": \"PSI\", \"dataset_colname\": \"PSI\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"dimensions_shelf\", \"[run_id] as 'sub:Run'\": \"dimensions_shelf\", \"[status] as 'sub:Status'\": \"dimensions_shelf\", \"[drift_level] as 'sub:Drift'\": \"dimensions_shelf\", \"[model_version] as 'sub:Model'\": \"dimensions_shelf\", \"[triggered_by] as 'sub:Triggered by'\": \"dimensions_shelf\", \"sum([studies]) as 'sub:Studies'\": \"aggregates_shelf\", \"sum([scored]) as 'sub:Scored'\": \"aggregates_shelf\", \"sum([missing_films]) as 'sub:Missing films'\": \"aggregates_shelf\", \"max([psi_max]) as 'sub:PSI'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "556f7df3-178e-5a6a-9f40-b79c0f49576e",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12309,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Checks (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum(1)\", \"expression_for_trigger\": \"sum(1)\", \"expr_hasagg\": true, \"col_alias\": \"Checks\", \"dataset_colname\": \"Checks\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum(1) as 'sub:Checks'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "cc07560d-dd94-521d-95ed-d6be73bb20b7",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12310,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Matched\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([is_matched])\", \"expression_for_trigger\": \"sum([is_matched])\", \"expr_hasagg\": true, \"col_alias\": \"Matched\", \"dataset_colname\": \"Matched\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([is_matched]) as 'sub:Matched'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "3099bb9e-b237-5b75-9d9e-3315032a9164",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12311,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Explained (a known cause)\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([is_explained])\", \"expression_for_trigger\": \"sum([is_explained])\", \"expr_hasagg\": true, \"col_alias\": \"Explained\", \"dataset_colname\": \"Explained\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([is_explained]) as 'sub:Explained'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "882b6a2c-e780-56d6-836c-ad4df223bdbc",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12312,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Mismatches\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([is_mismatch])\", \"expression_for_trigger\": \"sum([is_mismatch])\", \"expr_hasagg\": true, \"col_alias\": \"Mismatches\", \"dataset_colname\": \"Mismatches\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([is_mismatch]) as 'sub:Mismatches'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "12275db3-5698-5676-bf55-76f27c339f07",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12313,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Checks per business date\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"sum([is_matched])\", \"expression_for_trigger\": \"sum([is_matched])\", \"expr_hasagg\": true, \"col_alias\": \"Matched\", \"dataset_colname\": \"Matched\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([is_explained])\", \"expression_for_trigger\": \"sum([is_explained])\", \"expr_hasagg\": true, \"col_alias\": \"Explained\", \"dataset_colname\": \"Explained\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([is_mismatch])\", \"expression_for_trigger\": \"sum([is_mismatch])\", \"expr_hasagg\": true, \"col_alias\": \"Mismatch\", \"dataset_colname\": \"Mismatch\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"sum([is_matched]) as 'sub:Matched'\": \"y_shelf\", \"sum([is_explained]) as 'sub:Explained'\": \"y_shelf\", \"sum([is_mismatch]) as 'sub:Mismatch'\": \"y_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "95c1ed5a-4c22-5edf-b074-114180b3902f",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12314,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12106,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Explained and mismatched checks, with the reason\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"stage\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[stage]\", \"col_alias\": \"Stage\"}, {\"dataset_colname\": \"entity\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[entity]\", \"col_alias\": \"Entity\"}, {\"dataset_colname\": \"check_name\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[check_name]\", \"col_alias\": \"Check\"}, {\"dataset_colname\": \"status\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[status]\", \"col_alias\": \"Status\"}, {\"dataset_colname\": \"detail\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[detail]\", \"col_alias\": \"Detail\"}], \"aggregates_shelf\": [{\"custom_expr\": \"sum([expected])\", \"expression_for_trigger\": \"sum([expected])\", \"expr_hasagg\": true, \"col_alias\": \"Expected\", \"dataset_colname\": \"Expected\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([actual])\", \"expression_for_trigger\": \"sum([actual])\", \"expr_hasagg\": true, \"col_alias\": \"Actual\", \"dataset_colname\": \"Actual\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [{\"custom_expr\": \"[status] <> 'MATCHED'\", \"expression_for_trigger\": \"[status] <> 'MATCHED'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"dimensions_shelf\", \"[stage] as 'sub:Stage'\": \"dimensions_shelf\", \"[entity] as 'sub:Entity'\": \"dimensions_shelf\", \"[check_name] as 'sub:Check'\": \"dimensions_shelf\", \"[status] as 'sub:Status'\": \"dimensions_shelf\", \"[detail] as 'sub:Detail'\": \"dimensions_shelf\", \"sum([expected]) as 'sub:Expected'\": \"aggregates_shelf\", \"sum([actual]) as 'sub:Actual'\": \"aggregates_shelf\", \"[status] <> 'MATCHED'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "fb9abd17-ac0c-5b30-8e05-87bf5a09b9dc",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12315,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Model, Drift & Data Quality / Data quality",
+    "dataset": 12107,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Quarantined source records\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"source_system\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[source_system]\", \"col_alias\": \"Source\"}, {\"dataset_colname\": \"file_name\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[file_name]\", \"col_alias\": \"File\"}, {\"dataset_colname\": \"reasons\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[reasons]\", \"col_alias\": \"Reasons\"}, {\"dataset_colname\": \"source_record\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[source_record]\", \"col_alias\": \"Record\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([line_no])\", \"expression_for_trigger\": \"max([line_no])\", \"expr_hasagg\": true, \"col_alias\": \"Line\", \"dataset_colname\": \"Line\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"dimensions_shelf\", \"[source_system] as 'sub:Source'\": \"dimensions_shelf\", \"[file_name] as 'sub:File'\": \"dimensions_shelf\", \"[reasons] as 'sub:Reasons'\": \"dimensions_shelf\", \"[source_record] as 'sub:Record'\": \"dimensions_shelf\", \"max([line_no]) as 'sub:Line'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "9d13ef57-2088-504e-b883-8312c3b35877",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  }
+ ],
+ "colorpalette": [],
+ "appgroups": [],
+ "datasets": [
+  {
+   "model": "datasets.dataset",
+   "pk": 12100,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Daily triage KPIs",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_daily_kpi",
+    "dataset_description": "rsingh_cxr_semantic.v_daily_kpi (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_daily_kpi\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"INT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"truth_completeness\", \"type\": \"DOUBLE\", \"name\": \"truth_completeness\", \"isdim\": false}, {\"alias\": \"pneumonia\", \"type\": \"INT\", \"name\": \"pneumonia\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"unscored\", \"type\": \"INT\", \"name\": \"unscored\", \"isdim\": false}, {\"alias\": \"tp\", \"type\": \"INT\", \"name\": \"tp\", \"isdim\": false}, {\"alias\": \"fn\", \"type\": \"INT\", \"name\": \"fn\", \"isdim\": false}, {\"alias\": \"fp\", \"type\": \"INT\", \"name\": \"fp\", \"isdim\": false}, {\"alias\": \"tn\", \"type\": \"INT\", \"name\": \"tn\", \"isdim\": false}, {\"alias\": \"sensitivity\", \"type\": \"DOUBLE\", \"name\": \"sensitivity\", \"isdim\": false}, {\"alias\": \"specificity\", \"type\": \"DOUBLE\", \"name\": \"specificity\", \"isdim\": false}, {\"alias\": \"ppv\", \"type\": \"DOUBLE\", \"name\": \"ppv\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_median_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_median_minutes_saved\", \"isdim\": false}, {\"alias\": \"pneumonia_wait_reduction\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_wait_reduction\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_p90_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_p90_min\", \"isdim\": false}, {\"alias\": \"normal_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_fifo_median_min\", \"isdim\": false}, {\"alias\": \"normal_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_triage_median_min\", \"isdim\": false}, {\"alias\": \"normal_median_minutes_added\", \"type\": \"DOUBLE\", \"name\": \"normal_median_minutes_added\", \"isdim\": false}, {\"alias\": \"pneumonia_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_minutes_saved\", \"isdim\": false}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"refreshed_at\", \"type\": \"TIMESTAMP\", \"name\": \"refreshed_at\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_daily_kpi\"]",
+    "uuid": "e0cd2be7-d4e5-53dd-ad70-e12933504385",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12000
+    ],
+    "version_id": 12100,
+    "version_group_id": 12100,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12101,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Triage outcome per film",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_triage_outcome",
+    "dataset_description": "rsingh_cxr_semantic.v_triage_outcome (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_triage_outcome\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"accession_no\", \"type\": \"STRING\", \"name\": \"accession_no\", \"isdim\": true}, {\"alias\": \"study_ts\", \"type\": \"TIMESTAMP\", \"name\": \"study_ts\", \"isdim\": true}, {\"alias\": \"ordering_unit\", \"type\": \"STRING\", \"name\": \"ordering_unit\", \"isdim\": true}, {\"alias\": \"clinical_priority\", \"type\": \"STRING\", \"name\": \"clinical_priority\", \"isdim\": true}, {\"alias\": \"modality\", \"type\": \"STRING\", \"name\": \"modality\", \"isdim\": true}, {\"alias\": \"view_position\", \"type\": \"STRING\", \"name\": \"view_position\", \"isdim\": true}, {\"alias\": \"station\", \"type\": \"STRING\", \"name\": \"station\", \"isdim\": true}, {\"alias\": \"age_years\", \"type\": \"INT\", \"name\": \"age_years\", \"isdim\": true}, {\"alias\": \"age_band\", \"type\": \"STRING\", \"name\": \"age_band\", \"isdim\": true}, {\"alias\": \"sex\", \"type\": \"STRING\", \"name\": \"sex\", \"isdim\": true}, {\"alias\": \"fifo_seq\", \"type\": \"INT\", \"name\": \"fifo_seq\", \"isdim\": true}, {\"alias\": \"triage_seq\", \"type\": \"INT\", \"name\": \"triage_seq\", \"isdim\": true}, {\"alias\": \"probability\", \"type\": \"DOUBLE\", \"name\": \"probability\", \"isdim\": false}, {\"alias\": \"priority\", \"type\": \"STRING\", \"name\": \"priority\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"truth_known\", \"type\": \"BOOLEAN\", \"name\": \"truth_known\", \"isdim\": true}, {\"alias\": \"finding\", \"type\": \"STRING\", \"name\": \"finding\", \"isdim\": true}, {\"alias\": \"outcome\", \"type\": \"STRING\", \"name\": \"outcome\", \"isdim\": true}, {\"alias\": \"fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"fifo_wait_min\", \"isdim\": false}, {\"alias\": \"triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"triage_wait_min\", \"isdim\": false}, {\"alias\": \"wait_saved_min\", \"type\": \"DOUBLE\", \"name\": \"wait_saved_min\", \"isdim\": false}, {\"alias\": \"is_pneumonia\", \"type\": \"TINYINT\", \"name\": \"is_pneumonia\", \"isdim\": true}, {\"alias\": \"is_p1\", \"type\": \"TINYINT\", \"name\": \"is_p1\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_triage_outcome\"]",
+    "uuid": "68662c41-1979-5246-bca3-3ddd96cd8b0f",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12000
+    ],
+    "version_id": 12101,
+    "version_group_id": 12101,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12102,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Bands per day",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_band_daily",
+    "dataset_description": "rsingh_cxr_semantic.v_band_daily (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_band_daily\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"priority\", \"type\": \"STRING\", \"name\": \"priority\", \"isdim\": true}, {\"alias\": \"films\", \"type\": \"BIGINT\", \"name\": \"films\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"BIGINT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"pneumonia\", \"type\": \"BIGINT\", \"name\": \"pneumonia\", \"isdim\": false}, {\"alias\": \"pneumonia_rate\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_rate\", \"isdim\": false}, {\"alias\": \"avg_probability\", \"type\": \"DOUBLE\", \"name\": \"avg_probability\", \"isdim\": false}, {\"alias\": \"avg_triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"avg_triage_wait_min\", \"isdim\": false}, {\"alias\": \"avg_fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"avg_fifo_wait_min\", \"isdim\": false}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_band_daily\"]",
+    "uuid": "f060845f-f57e-55b2-9d03-67ed8f815ff3",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12000
+    ],
+    "version_id": 12102,
+    "version_group_id": 12102,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12103,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Ordering units per day",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_unit_daily",
+    "dataset_description": "rsingh_cxr_semantic.v_unit_daily (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_unit_daily\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"ordering_unit\", \"type\": \"STRING\", \"name\": \"ordering_unit\", \"isdim\": true}, {\"alias\": \"films\", \"type\": \"BIGINT\", \"name\": \"films\", \"isdim\": false}, {\"alias\": \"p1_films\", \"type\": \"BIGINT\", \"name\": \"p1_films\", \"isdim\": false}, {\"alias\": \"pneumonia\", \"type\": \"BIGINT\", \"name\": \"pneumonia\", \"isdim\": false}, {\"alias\": \"avg_fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"avg_fifo_wait_min\", \"isdim\": false}, {\"alias\": \"avg_triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"avg_triage_wait_min\", \"isdim\": false}, {\"alias\": \"pneumonia_avg_fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_avg_fifo_wait_min\", \"isdim\": false}, {\"alias\": \"pneumonia_avg_triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_avg_triage_wait_min\", \"isdim\": false}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_unit_daily\"]",
+    "uuid": "cb97218c-5563-5158-a5fe-e8b0289e9fa8",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12000
+    ],
+    "version_id": 12103,
+    "version_group_id": 12103,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12104,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Model events",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_model_event",
+    "dataset_description": "rsingh_cxr_semantic.v_model_event (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_model_event\", \"columns\": [{\"alias\": \"model_event\", \"type\": \"STRING\", \"name\": \"model_event\", \"isdim\": true}, {\"alias\": \"recorded_at\", \"type\": \"TIMESTAMP\", \"name\": \"recorded_at\", \"isdim\": true}, {\"alias\": \"event_date\", \"type\": \"DATE\", \"name\": \"event_date\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"git_sha\", \"type\": \"STRING\", \"name\": \"git_sha\", \"isdim\": true}, {\"alias\": \"feature_version\", \"type\": \"STRING\", \"name\": \"feature_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"val_auroc\", \"type\": \"DOUBLE\", \"name\": \"val_auroc\", \"isdim\": false}, {\"alias\": \"test_auroc\", \"type\": \"DOUBLE\", \"name\": \"test_auroc\", \"isdim\": false}, {\"alias\": \"test_sensitivity\", \"type\": \"DOUBLE\", \"name\": \"test_sensitivity\", \"isdim\": false}, {\"alias\": \"test_specificity\", \"type\": \"DOUBLE\", \"name\": \"test_specificity\", \"isdim\": false}, {\"alias\": \"test_brier\", \"type\": \"DOUBLE\", \"name\": \"test_brier\", \"isdim\": false}, {\"alias\": \"train_rows\", \"type\": \"INT\", \"name\": \"train_rows\", \"isdim\": true}, {\"alias\": \"gate_passed\", \"type\": \"BOOLEAN\", \"name\": \"gate_passed\", \"isdim\": true}, {\"alias\": \"mlflow_run_id\", \"type\": \"STRING\", \"name\": \"mlflow_run_id\", \"isdim\": true}, {\"alias\": \"detail\", \"type\": \"STRING\", \"name\": \"detail\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_model_event\"]",
+    "uuid": "ed936ffe-0fb8-5cfa-9f6d-d4e8cc2cd687",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12001
+    ],
+    "version_id": 12104,
+    "version_group_id": 12104,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12105,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Scoring runs",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_scoring_run",
+    "dataset_description": "rsingh_cxr_semantic.v_scoring_run (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_scoring_run\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"run_id\", \"type\": \"STRING\", \"name\": \"run_id\", \"isdim\": true}, {\"alias\": \"triggered_by\", \"type\": \"STRING\", \"name\": \"triggered_by\", \"isdim\": true}, {\"alias\": \"status\", \"type\": \"STRING\", \"name\": \"status\", \"isdim\": true}, {\"alias\": \"source_snapshot_id\", \"type\": \"BIGINT\", \"name\": \"source_snapshot_id\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"missing_films\", \"type\": \"INT\", \"name\": \"missing_films\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"psi_max\", \"type\": \"DOUBLE\", \"name\": \"psi_max\", \"isdim\": false}, {\"alias\": \"drift_level\", \"type\": \"STRING\", \"name\": \"drift_level\", \"isdim\": true}, {\"alias\": \"psi_json\", \"type\": \"STRING\", \"name\": \"psi_json\", \"isdim\": true}, {\"alias\": \"started_at\", \"type\": \"TIMESTAMP\", \"name\": \"started_at\", \"isdim\": true}, {\"alias\": \"ended_at\", \"type\": \"TIMESTAMP\", \"name\": \"ended_at\", \"isdim\": true}, {\"alias\": \"message\", \"type\": \"STRING\", \"name\": \"message\", \"isdim\": true}, {\"alias\": \"is_final\", \"type\": \"TINYINT\", \"name\": \"is_final\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_scoring_run\"]",
+    "uuid": "a3395680-728d-52ad-bced-b3974c2cb3ae",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12001
+    ],
+    "version_id": 12105,
+    "version_group_id": 12105,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12106,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Data quality checks",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_data_quality",
+    "dataset_description": "rsingh_cxr_semantic.v_data_quality (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_data_quality\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"stage\", \"type\": \"STRING\", \"name\": \"stage\", \"isdim\": true}, {\"alias\": \"entity\", \"type\": \"STRING\", \"name\": \"entity\", \"isdim\": true}, {\"alias\": \"check_name\", \"type\": \"STRING\", \"name\": \"check_name\", \"isdim\": true}, {\"alias\": \"expected\", \"type\": \"DOUBLE\", \"name\": \"expected\", \"isdim\": false}, {\"alias\": \"actual\", \"type\": \"DOUBLE\", \"name\": \"actual\", \"isdim\": false}, {\"alias\": \"difference\", \"type\": \"DOUBLE\", \"name\": \"difference\", \"isdim\": false}, {\"alias\": \"status\", \"type\": \"STRING\", \"name\": \"status\", \"isdim\": true}, {\"alias\": \"is_mismatch\", \"type\": \"TINYINT\", \"name\": \"is_mismatch\", \"isdim\": false}, {\"alias\": \"is_explained\", \"type\": \"TINYINT\", \"name\": \"is_explained\", \"isdim\": false}, {\"alias\": \"is_matched\", \"type\": \"TINYINT\", \"name\": \"is_matched\", \"isdim\": false}, {\"alias\": \"detail\", \"type\": \"STRING\", \"name\": \"detail\", \"isdim\": true}, {\"alias\": \"logged_at\", \"type\": \"TIMESTAMP\", \"name\": \"logged_at\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_data_quality\"]",
+    "uuid": "5fc1a81b-6ef3-5682-9159-0ee455b9043e",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12001
+    ],
+    "version_id": 12106,
+    "version_group_id": 12106,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12107,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Quarantined source records",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_quarantine",
+    "dataset_description": "rsingh_cxr_semantic.v_quarantine (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_quarantine\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"source_system\", \"type\": \"STRING\", \"name\": \"source_system\", \"isdim\": true}, {\"alias\": \"entity\", \"type\": \"STRING\", \"name\": \"entity\", \"isdim\": true}, {\"alias\": \"file_name\", \"type\": \"STRING\", \"name\": \"file_name\", \"isdim\": true}, {\"alias\": \"line_no\", \"type\": \"INT\", \"name\": \"line_no\", \"isdim\": true}, {\"alias\": \"reasons\", \"type\": \"STRING\", \"name\": \"reasons\", \"isdim\": true}, {\"alias\": \"source_record\", \"type\": \"STRING\", \"name\": \"source_record\", \"isdim\": true}, {\"alias\": \"ingested_at\", \"type\": \"TIMESTAMP\", \"name\": \"ingested_at\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_quarantine\"]",
+    "uuid": "a7134412-1708-516f-85db-35a6ba0aaff6",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12001
+    ],
+    "version_id": 12107,
+    "version_group_id": 12107,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  }
+ ],
+ "version": {
+  "Arcviz Version": "8.1.4.1000",
+  "Raw Timestamp of last commit": "1789380895",
+  "Timestamp of last commit": "Mon Sep 14 12:14:55 2026 +0200",
+  "SHA of last commit": "f57d558a7dcd7cda432e8fffd9d3c1fc60cdfad9",
+  "Description": "8.1.4.1000-4"
+ }
+}
