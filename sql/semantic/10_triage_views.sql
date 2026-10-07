@@ -31,7 +31,8 @@ SELECT
     o.triage_wait_min,
     o.wait_saved_min,
     CASE WHEN o.truth = 1 THEN 1 ELSE 0 END              AS is_pneumonia,
-    CASE WHEN o.priority = 'P1' THEN 1 ELSE 0 END        AS is_p1
+    CASE WHEN o.priority = 'P1' THEN 1 ELSE 0 END        AS is_p1,
+    CASE WHEN o.business_date = MAX(o.business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_gold.fact_triage_outcome o
 JOIN rsingh_cxr_gold.fact_study f
   ON f.business_date = o.business_date AND f.accession_no = o.accession_no
@@ -73,7 +74,8 @@ SELECT
     s.normal_triage_median_min - s.normal_fifo_median_min AS normal_median_minutes_added,
     s.pneumonia_minutes_saved,
     s.model_version,
-    s.refreshed_at
+    s.refreshed_at,
+    CASE WHEN s.business_date = MAX(s.business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_gold.daily_triage_summary s;
 
 DROP VIEW IF EXISTS rsingh_cxr_semantic.v_band_daily;
@@ -91,7 +93,8 @@ SELECT
         / NULLIF(SUM(CASE WHEN truth_known THEN 1 ELSE 0 END), 0)       AS pneumonia_rate,
     AVG(probability)                                                    AS avg_probability,
     AVG(triage_wait_min)                                                AS avg_triage_wait_min,
-    AVG(fifo_wait_min)                                                  AS avg_fifo_wait_min
+    AVG(fifo_wait_min)                                                  AS avg_fifo_wait_min,
+    CASE WHEN business_date = MAX(business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_gold.fact_triage_outcome
 GROUP BY business_date, COALESCE(priority, 'UNSCORED');
 
@@ -109,6 +112,7 @@ SELECT
     AVG(fifo_wait_min)                                      AS avg_fifo_wait_min,
     AVG(triage_wait_min)                                    AS avg_triage_wait_min,
     AVG(CASE WHEN truth = 1 THEN fifo_wait_min END)         AS pneumonia_avg_fifo_wait_min,
-    AVG(CASE WHEN truth = 1 THEN triage_wait_min END)       AS pneumonia_avg_triage_wait_min
+    AVG(CASE WHEN truth = 1 THEN triage_wait_min END)       AS pneumonia_avg_triage_wait_min,
+    CASE WHEN business_date = MAX(business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_gold.fact_triage_outcome
 GROUP BY business_date, ordering_unit;

@@ -16,8 +16,10 @@ SELECT
     status,
     CASE WHEN status = 'MISMATCH' THEN 1 ELSE 0 END      AS is_mismatch,
     CASE WHEN status = 'EXPLAINED' THEN 1 ELSE 0 END     AS is_explained,
+    CASE WHEN status = 'MATCHED' THEN 1 ELSE 0 END      AS is_matched,
     detail,
-    logged_at
+    logged_at,
+    CASE WHEN business_date = MAX(business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_ref.recon_results;
 
 DROP VIEW IF EXISTS rsingh_cxr_semantic.v_stage_status;

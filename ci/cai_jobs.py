@@ -23,7 +23,7 @@ JOBS = [
     {"name": "cxr-00-sync-code", "script": "ci/sync_code.py", "parent": None,
      "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},          # pip installs torch on a change
     {"name": "cxr-01-build-features", "script": "features/build_feature_table.py", "parent": "cxr-00-sync-code",
-     "cpu": 4, "memory": 16, "timeout": 7200, "schedule": None},
+     "cpu": 4, "memory": 8, "timeout": 7200, "schedule": None},          # 16 GB waited 25+ min on federal
     {"name": "cxr-02-train-validate", "script": "train/train_validate.py", "parent": "cxr-01-build-features",
      "cpu": 2, "memory": 8, "timeout": 3600, "schedule": None},
     {"name": "cxr-03-kpi-gate", "script": "gate/kpi_gate.py", "parent": "cxr-02-train-validate",

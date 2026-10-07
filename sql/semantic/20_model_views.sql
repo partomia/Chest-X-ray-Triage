@@ -21,7 +21,8 @@ SELECT
     train_rows,
     gate_passed,
     mlflow_run_id,
-    detail
+    detail,
+    CASE WHEN ROW_NUMBER() OVER (PARTITION BY `event` ORDER BY recorded_at DESC) = 1 THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_ref.model_event;
 
 DROP VIEW IF EXISTS rsingh_cxr_semantic.v_scoring_run;
@@ -48,7 +49,9 @@ SELECT
     psi_json,
     started_at,
     ended_at,
-    message
+    message,
+    CASE WHEN ROW_NUMBER() OVER (PARTITION BY business_date ORDER BY ended_at DESC) = 1 THEN 1 ELSE 0 END AS is_final,
+    CASE WHEN business_date = MAX(business_date) OVER () THEN 1 ELSE 0 END AS is_latest
 FROM rsingh_cxr_ref.triage_run;
 
 DROP VIEW IF EXISTS rsingh_cxr_semantic.v_training_set;
