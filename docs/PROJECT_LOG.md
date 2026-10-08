@@ -248,8 +248,10 @@ CAI <-> CDW / CDE / Airflow / GitHub integration from Spend-Analytics.
 - Silent trial evidence (10 days, 159 reported adult films): 37 pneumothorax, sensitivity
   0.946 (35/37), specificity 0.590; go-live criteria (7 days, 20 positives, 0.80 / 0.35)
   met. Adult pneumothorax median wait: today (no AI triage for adults, behind pediatric
-  P1/P2) 324-404 min, FIFO 174-248 min, shadow band if live 30-115 min. film_qc caught the
-  planted unfit films (2026-10-01, 10-04, 10-06) with no real film rejected.
+  P1/P2) 324-404 min, FIFO 174-248 min, shadow band if live 30-115 min. film_qc caught both
+  planted unfit films (2026-10-01) and rejected 2 of 477 real films (NIH `00009745_001.jpg`
+  on 10-04, p 0.99; `00005090_001.jpg` on 10-06, p 0.88; threshold 0.686): they lost their
+  AI triage and were read in arrival order (band NA).
 - Promoted with `cxr-07-promote-champion` (`CXR_MODEL=pneumothorax`,
   `CXR_APPROVED_BY=rsingh (demo clinical sign-off)`): endpoint rebuilt, event `PROMOTED`,
   registry v3. Application restarted.
