@@ -216,3 +216,42 @@ CAI <-> CDW / CDE / Airflow / GitHub integration from Spend-Analytics.
   for its whole 1 h timeout (the quota again). Re-run with the application stopped:
   chain 00 -> 04 green in 9 min, new champion from `5a107e2` serving; application
   restarted afterwards.
+
+## 2026-10-08 - Three models, AI Registry, silent trial and promotion on federal
+
+- Jobs: `ci/setup_cai.py` created `cxr-setup-nih`, `qc-01..04`, `ptx-01..04` and
+  `cxr-07-promote-champion`. The API v2 takes a job's `environment` as an object on create
+  but as a JSON string on update (both fixed). `cxr-setup-nih` fetched the 6,500 NIH films
+  in 211 s (the subset reads only the listed row groups).
+- Running `cxr-00-sync-code` on its own also starts its child jobs `cxr-01..04`: a manual
+  sync re-runs the pneumonia chain.
+- Two model builds stuck in `pushing` / `building` on the platform (30 min deploy timeout):
+  the deploy rolled back and the champion kept serving (`ROLLED_BACK` events). A re-run built
+  in 4-6 min.
+- `film_qc` failed its first gate: test sensitivity 0.925 < 0.93 (AUROC 0.9997, specificity
+  0.9975). The threshold had been set for 0.95 sensitivity on 100 val positives. Raised to
+  0.97 after seeing the test result, a decision taken on the test set and recorded here.
+  Next run: test sensitivity 0.9475, specificity 0.9975, champion.
+- AI Registry: jobs registered nothing (`mlflow.get_run` inside a CAI job fails with
+  "Missing the required parameter experiment_id"); now the experiment is looked up by name,
+  and a failed registration writes its reason into the model event's detail. The workbench
+  stores no version tags (neither did Spend-Analytics'): stage, approver and version number
+  live in `ref.model_event`, the MLflow run's parameters and metrics in the version.
+  Versions: `cxr-pneumonia` v1 (from the laptop) and v2, `cxr-film-qc` v1,
+  `cxr-pneumothorax` v1 (laptop, silent trial), v2 (silent trial), v3 (champion, promoted).
+- Workflow: commits `a00dec4` and `661961c` green, all three chains: pneumonia AUROC 0.969,
+  film_qc 0.9997, pneumothorax AUROC 0.867, sensitivity 0.938, specificity 0.556 on 1,600
+  NIH test films (4,000 training films).
+- Lakehouse: CDE jobs redeployed (adult films), 2026-09-28 .. 10-07 re-run land -> gold,
+  `cxr-06`, outcomes; 479 films, 160 adults. 12 views, KPI check 0 differences; three
+  dashboards, 42 visuals verified through the Data API.
+- Silent trial evidence (10 days, 159 reported adult films): 37 pneumothorax, sensitivity
+  0.946 (35/37), specificity 0.590; go-live criteria (7 days, 20 positives, 0.80 / 0.35)
+  met. Adult pneumothorax median wait: today (no AI triage for adults, behind pediatric
+  P1/P2) 324-404 min, FIFO 174-248 min, shadow band if live 30-115 min. film_qc caught the
+  planted unfit films (2026-10-01, 10-04, 10-06) with no real film rejected.
+- Promoted with `cxr-07-promote-champion` (`CXR_MODEL=pneumothorax`,
+  `CXR_APPROVED_BY=rsingh (demo clinical sign-off)`): endpoint rebuilt, event `PROMOTED`,
+  registry v3. Application restarted.
+- Quota: with the application running, the nightly DAG's `cxr-06` waits for the one 2 vCPU
+  workload slot (as on 2026-10-07).

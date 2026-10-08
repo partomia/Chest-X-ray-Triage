@@ -41,6 +41,26 @@
     "has_css_styles": false,
     "report_search_text": null
    }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12002,
+   "fields": {
+    "report_name": "CXR Models & Silent Trial",
+    "report_description": "dataviz/build_dashboard.py",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "dashboard",
+    "report_mode": null,
+    "dashboard_url_name": "",
+    "report_data": "{\"report_title\": \"CXR Models & Silent Trial\", \"numColumns\": 64, \"report_subtitle\": \"Pneumothorax in silent trial: its evidence, and what going live would change; the film check and every model head\", \"dashboard_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-1-widget-12401\"}, {\"col\": 14, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-2-widget-12402\"}, {\"col\": 27, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-3-widget-12403\"}, {\"col\": 40, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-4-widget-12404\"}, {\"col\": 53, \"row\": 1, \"size_x\": 12, \"size_y\": 10, \"id\": \"uri-5-widget-12405\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12406\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-7-widget-12407\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 16, \"id\": \"uri-8-widget-12408\"}], \"dashboard_sheets\": [{\"sheet_id\": 1, \"order\": 1, \"sheet_handle_title\": \"Silent trial\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-1-widget-12401\"}, {\"col\": 14, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-2-widget-12402\"}, {\"col\": 27, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-3-widget-12403\"}, {\"col\": 40, \"row\": 1, \"size_x\": 13, \"size_y\": 10, \"id\": \"uri-4-widget-12404\"}, {\"col\": 53, \"row\": 1, \"size_x\": 12, \"size_y\": 10, \"id\": \"uri-5-widget-12405\"}, {\"col\": 1, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-6-widget-12406\"}, {\"col\": 33, \"row\": 11, \"size_x\": 32, \"size_y\": 22, \"id\": \"uri-7-widget-12407\"}, {\"col\": 1, \"row\": 33, \"size_x\": 64, \"size_y\": 16, \"id\": \"uri-8-widget-12408\"}], \"control_widgets\": []}, {\"sheet_id\": 2, \"order\": 2, \"sheet_handle_title\": \"Every model\", \"behaviors\": {}, \"visual_widgets\": [{\"col\": 1, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-1-widget-12409\"}, {\"col\": 17, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-2-widget-12410\"}, {\"col\": 33, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-3-widget-12411\"}, {\"col\": 49, \"row\": 1, \"size_x\": 16, \"size_y\": 10, \"id\": \"uri-4-widget-12412\"}, {\"col\": 1, \"row\": 11, \"size_x\": 64, \"size_y\": 20, \"id\": \"uri-5-widget-12413\"}, {\"col\": 1, \"row\": 31, \"size_x\": 64, \"size_y\": 16, \"id\": \"uri-6-widget-12414\"}], \"control_widgets\": []}], \"user_settings\": {\"dashboard_width\": \"1280\", \"display_filters\": \"true\", \"permit_csv_download_dashboard\": \"true\"}, \"global_control_widgets\": [], \"control_widgets\": [], \"click_behavior\": {}}",
+    "shared_visual_dashboards": "[]",
+    "parent_report": null,
+    "uuid": "9945544d-cd93-5307-974d-8ac9590adf76",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": null
+   }
   }
  ],
  "appgroupmembership": [],
@@ -321,10 +341,10 @@
     "report_type": "kpi",
     "report_mode": "",
     "dashboard_url_name": "",
-    "report_data": "{\"report_data\": {\"report_title\": \"Deployed model: test AUROC\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"AUROC\", \"dataset_colname\": \"AUROC\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model_event] = 'DEPLOYED'\", \"expression_for_trigger\": \"[model_event] = 'DEPLOYED'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_auroc]) as 'sub:AUROC'\": \"aggregates_shelf\", \"[model_event] = 'DEPLOYED'\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia champion: test AUROC\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"AUROC\", \"dataset_colname\": \"AUROC\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumonia'\", \"expression_for_trigger\": \"[model] = 'pneumonia'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[model_event] IN ('DEPLOYED', 'PROMOTED')\", \"expression_for_trigger\": \"[model_event] IN ('DEPLOYED', 'PROMOTED')\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_auroc]) as 'sub:AUROC'\": \"aggregates_shelf\", \"[model] = 'pneumonia'\": \"filters_shelf\", \"[model_event] IN ('DEPLOYED', 'PROMOTED')\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
     "shared_visual_dashboards": null,
     "parent_report": null,
-    "uuid": "dd0b63cc-0dcf-518a-a798-79ebbc52374d",
+    "uuid": "6cffa511-abe1-5919-a650-0aee6a2952e0",
     "imported_uuid": null,
     "has_css_styles": false,
     "report_search_text": ""
@@ -341,10 +361,10 @@
     "report_type": "kpi",
     "report_mode": "",
     "dashboard_url_name": "",
-    "report_data": "{\"report_data\": {\"report_title\": \"Deployed model: test sensitivity\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity\", \"dataset_colname\": \"Sensitivity\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model_event] = 'DEPLOYED'\", \"expression_for_trigger\": \"[model_event] = 'DEPLOYED'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_sensitivity]) as 'sub:Sensitivity'\": \"aggregates_shelf\", \"[model_event] = 'DEPLOYED'\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumonia champion: test sensitivity\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity\", \"dataset_colname\": \"Sensitivity\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumonia'\", \"expression_for_trigger\": \"[model] = 'pneumonia'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[model_event] IN ('DEPLOYED', 'PROMOTED')\", \"expression_for_trigger\": \"[model_event] IN ('DEPLOYED', 'PROMOTED')\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([test_sensitivity]) as 'sub:Sensitivity'\": \"aggregates_shelf\", \"[model] = 'pneumonia'\": \"filters_shelf\", \"[model_event] IN ('DEPLOYED', 'PROMOTED')\": \"filters_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
     "shared_visual_dashboards": null,
     "parent_report": null,
-    "uuid": "7c24df61-9304-5baf-886b-03770b820769",
+    "uuid": "df78dd3f-a1ab-55fe-8f2e-47dbf4330dbd",
     "imported_uuid": null,
     "has_css_styles": false,
     "report_search_text": ""
@@ -441,10 +461,10 @@
     "report_type": "table",
     "report_mode": "",
     "dashboard_url_name": "",
-    "report_data": "{\"report_data\": {\"report_title\": \"Gate decisions and deployments\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"recorded_at\", \"dataset_coltype\": \"TIMESTAMP\", \"expression_for_trigger\": \"[recorded_at]\", \"col_alias\": \"When\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"model_event\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_event]\", \"col_alias\": \"Event\"}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Model\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"Test AUROC\", \"dataset_colname\": \"Test AUROC\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Test sens\", \"dataset_colname\": \"Test sens\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_specificity])\", \"expression_for_trigger\": \"max([test_specificity])\", \"expr_hasagg\": true, \"col_alias\": \"Test spec\", \"dataset_colname\": \"Test spec\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([threshold])\", \"expression_for_trigger\": \"max([threshold])\", \"expr_hasagg\": true, \"col_alias\": \"Threshold\", \"dataset_colname\": \"Threshold\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([train_rows])\", \"expression_for_trigger\": \"max([train_rows])\", \"expr_hasagg\": true, \"col_alias\": \"Train films\", \"dataset_colname\": \"Train films\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[recorded_at] as 'sub:When'\": \"dimensions_shelf\", \"[model_event] as 'sub:Event'\": \"dimensions_shelf\", \"[model_version] as 'sub:Model'\": \"dimensions_shelf\", \"max([test_auroc]) as 'sub:Test AUROC'\": \"aggregates_shelf\", \"max([test_sensitivity]) as 'sub:Test sens'\": \"aggregates_shelf\", \"max([test_specificity]) as 'sub:Test spec'\": \"aggregates_shelf\", \"max([threshold]) as 'sub:Threshold'\": \"aggregates_shelf\", \"max([train_rows]) as 'sub:Train films'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "report_data": "{\"report_data\": {\"report_title\": \"Gate decisions, silent trials, deployments and promotions\", \"report_subtitle\": \"\", \"dashboard_id\": 12001, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"recorded_at\", \"dataset_coltype\": \"TIMESTAMP\", \"expression_for_trigger\": \"[recorded_at]\", \"col_alias\": \"When\", \"order\": {\"priority\": 1, \"ascending\": false}}, {\"dataset_colname\": \"model\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model]\", \"col_alias\": \"Model\"}, {\"dataset_colname\": \"stage\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[stage]\", \"col_alias\": \"Stage\"}, {\"dataset_colname\": \"model_event\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_event]\", \"col_alias\": \"Event\"}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Version\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([test_auroc])\", \"expression_for_trigger\": \"max([test_auroc])\", \"expr_hasagg\": true, \"col_alias\": \"Test AUROC\", \"dataset_colname\": \"Test AUROC\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_sensitivity])\", \"expression_for_trigger\": \"max([test_sensitivity])\", \"expr_hasagg\": true, \"col_alias\": \"Test sens\", \"dataset_colname\": \"Test sens\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([test_specificity])\", \"expression_for_trigger\": \"max([test_specificity])\", \"expr_hasagg\": true, \"col_alias\": \"Test spec\", \"dataset_colname\": \"Test spec\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([threshold])\", \"expression_for_trigger\": \"max([threshold])\", \"expr_hasagg\": true, \"col_alias\": \"Threshold\", \"dataset_colname\": \"Threshold\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([train_rows])\", \"expression_for_trigger\": \"max([train_rows])\", \"expr_hasagg\": true, \"col_alias\": \"Train films\", \"dataset_colname\": \"Train films\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[recorded_at] as 'sub:When'\": \"dimensions_shelf\", \"[model] as 'sub:Model'\": \"dimensions_shelf\", \"[stage] as 'sub:Stage'\": \"dimensions_shelf\", \"[model_event] as 'sub:Event'\": \"dimensions_shelf\", \"[model_version] as 'sub:Version'\": \"dimensions_shelf\", \"max([test_auroc]) as 'sub:Test AUROC'\": \"aggregates_shelf\", \"max([test_sensitivity]) as 'sub:Test sens'\": \"aggregates_shelf\", \"max([test_specificity]) as 'sub:Test spec'\": \"aggregates_shelf\", \"max([threshold]) as 'sub:Threshold'\": \"aggregates_shelf\", \"max([train_rows]) as 'sub:Train films'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
     "shared_visual_dashboards": null,
     "parent_report": null,
-    "uuid": "b2ebb539-3ef5-54a5-b21f-7ca4c63fa4e0",
+    "uuid": "e305c580-a647-5f0c-b147-154129cbd346",
     "imported_uuid": null,
     "has_css_styles": false,
     "report_search_text": ""
@@ -609,6 +629,286 @@
     "has_css_styles": false,
     "report_search_text": ""
    }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12401,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumothorax: days in silent trial\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([trial_days])\", \"expression_for_trigger\": \"max([trial_days])\", \"expr_hasagg\": true, \"col_alias\": \"Days\", \"dataset_colname\": \"Days\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumothorax'\", \"expression_for_trigger\": \"[model] = 'pneumothorax'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([trial_days]) as 'sub:Days'\": \"aggregates_shelf\", \"[model] = 'pneumothorax'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "1515cf40-f0b9-5bbb-9dcd-52c7d2fd83fb",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12402,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Reported pneumothorax (live films)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([positives])\", \"expression_for_trigger\": \"sum([positives])\", \"expr_hasagg\": true, \"col_alias\": \"Positives\", \"dataset_colname\": \"Positives\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumothorax'\", \"expression_for_trigger\": \"[model] = 'pneumothorax'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([positives]) as 'sub:Positives'\": \"aggregates_shelf\", \"[model] = 'pneumothorax'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "a984010e-9447-553b-962a-d781fc973842",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12403,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Trial sensitivity %\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity %\", \"dataset_colname\": \"Sensitivity %\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumothorax'\", \"expression_for_trigger\": \"[model] = 'pneumothorax'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"round(100 * max([sensitivity]), 1) as 'sub:Sensitivity %'\": \"aggregates_shelf\", \"[model] = 'pneumothorax'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "cb034d83-1a29-5013-ac4f-0883812e677d",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12404,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Trial specificity %\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Specificity %\", \"dataset_colname\": \"Specificity %\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumothorax'\", \"expression_for_trigger\": \"[model] = 'pneumothorax'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"round(100 * max([specificity]), 1) as 'sub:Specificity %'\": \"aggregates_shelf\", \"[model] = 'pneumothorax'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "37c912c6-c1ab-59f3-8e2d-aa79701dd9c8",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12405,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumothorax: median wait if live (min)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"max([pneumothorax_shadow_median_min])\", \"expression_for_trigger\": \"max([pneumothorax_shadow_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"If live\", \"dataset_colname\": \"If live\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"max([pneumothorax_shadow_median_min]) as 'sub:If live'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "d04bfa02-fb0e-54a6-8a0c-268231e36626",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12406,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumothorax median wait (min): FIFO, today's worklist, if the trial were live\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"max([pneumothorax_fifo_median_min])\", \"expression_for_trigger\": \"max([pneumothorax_fifo_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"FIFO\", \"dataset_colname\": \"FIFO\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([pneumothorax_triage_median_min])\", \"expression_for_trigger\": \"max([pneumothorax_triage_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"Worklist today\", \"dataset_colname\": \"Worklist today\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"max([pneumothorax_shadow_median_min])\", \"expression_for_trigger\": \"max([pneumothorax_shadow_median_min])\", \"expr_hasagg\": true, \"col_alias\": \"If live\", \"dataset_colname\": \"If live\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"max([pneumothorax_fifo_median_min]) as 'sub:FIFO'\": \"y_shelf\", \"max([pneumothorax_triage_median_min]) as 'sub:Worklist today'\": \"y_shelf\", \"max([pneumothorax_shadow_median_min]) as 'sub:If live'\": \"y_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "0f41eeb9-6a59-519f-a273-8647b736a581",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12407,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12108,
+    "workspace": 1,
+    "report_type": "trellis-lines",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumothorax trial: sensitivity and specificity % per day\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sensitivity %\", \"dataset_colname\": \"Sensitivity %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Specificity %\", \"dataset_colname\": \"Specificity %\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [], \"tooltip_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[model] = 'pneumothorax'\", \"expression_for_trigger\": \"[model] = 'pneumothorax'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}, {\"custom_expr\": \"[stage] = 'silent_trial'\", \"expression_for_trigger\": \"[stage] = 'silent_trial'\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"trellis-lines\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"round(100 * max([sensitivity]), 1) as 'sub:Sensitivity %'\": \"y_shelf\", \"round(100 * max([specificity]), 1) as 'sub:Specificity %'\": \"y_shelf\", \"[model] = 'pneumothorax'\": \"filters_shelf\", \"[stage] = 'silent_trial'\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-lines\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "6424080a-9b8f-5917-bf26-749c8eb18714",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12408,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Silent trial",
+    "dataset": 12109,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Silent-trial evidence per model version (go-live: cxr-07-promote-champion)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"model\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model]\", \"col_alias\": \"Model\", \"order\": {\"priority\": 1, \"ascending\": true}}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Version\"}, {\"dataset_colname\": \"first_day\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[first_day]\", \"col_alias\": \"From\"}, {\"dataset_colname\": \"last_day\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[last_day]\", \"col_alias\": \"To\"}], \"aggregates_shelf\": [{\"custom_expr\": \"max([trial_days])\", \"expression_for_trigger\": \"max([trial_days])\", \"expr_hasagg\": true, \"col_alias\": \"Days\", \"dataset_colname\": \"Days\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([in_scope])\", \"expression_for_trigger\": \"sum([in_scope])\", \"expr_hasagg\": true, \"col_alias\": \"In scope\", \"dataset_colname\": \"In scope\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([positives])\", \"expression_for_trigger\": \"sum([positives])\", \"expr_hasagg\": true, \"col_alias\": \"Positives\", \"dataset_colname\": \"Positives\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([tp])\", \"expression_for_trigger\": \"sum([tp])\", \"expr_hasagg\": true, \"col_alias\": \"TP\", \"dataset_colname\": \"TP\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([fn])\", \"expression_for_trigger\": \"sum([fn])\", \"expr_hasagg\": true, \"col_alias\": \"FN\", \"dataset_colname\": \"FN\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([fp])\", \"expression_for_trigger\": \"sum([fp])\", \"expr_hasagg\": true, \"col_alias\": \"FP\", \"dataset_colname\": \"FP\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([tn])\", \"expression_for_trigger\": \"sum([tn])\", \"expr_hasagg\": true, \"col_alias\": \"TN\", \"dataset_colname\": \"TN\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sens %\", \"dataset_colname\": \"Sens %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Spec %\", \"dataset_colname\": \"Spec %\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[model] as 'sub:Model'\": \"dimensions_shelf\", \"[model_version] as 'sub:Version'\": \"dimensions_shelf\", \"[first_day] as 'sub:From'\": \"dimensions_shelf\", \"[last_day] as 'sub:To'\": \"dimensions_shelf\", \"max([trial_days]) as 'sub:Days'\": \"aggregates_shelf\", \"sum([in_scope]) as 'sub:In scope'\": \"aggregates_shelf\", \"sum([positives]) as 'sub:Positives'\": \"aggregates_shelf\", \"sum([tp]) as 'sub:TP'\": \"aggregates_shelf\", \"sum([fn]) as 'sub:FN'\": \"aggregates_shelf\", \"sum([fp]) as 'sub:FP'\": \"aggregates_shelf\", \"sum([tn]) as 'sub:TN'\": \"aggregates_shelf\", \"round(100 * max([sensitivity]), 1) as 'sub:Sens %'\": \"aggregates_shelf\", \"round(100 * max([specificity]), 1) as 'sub:Spec %'\": \"aggregates_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "ce1ee054-c470-5d17-83ec-eb0bcb4dbe27",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12409,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Adult films (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([adults])\", \"expression_for_trigger\": \"sum([adults])\", \"expr_hasagg\": true, \"col_alias\": \"Adults\", \"dataset_colname\": \"Adults\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([adults]) as 'sub:Adults'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "bab1482c-e111-5d77-a12b-91daba9fab91",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12410,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"No AI triage - NA (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([not_triaged])\", \"expression_for_trigger\": \"sum([not_triaged])\", \"expr_hasagg\": true, \"col_alias\": \"NA\", \"dataset_colname\": \"NA\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([not_triaged]) as 'sub:NA'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "f596214f-e900-5ddf-a438-68df5ccbf2f5",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12411,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Films unfit for AI triage (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([film_unsuitable])\", \"expression_for_trigger\": \"sum([film_unsuitable])\", \"expr_hasagg\": true, \"col_alias\": \"Unfit\", \"dataset_colname\": \"Unfit\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([film_unsuitable]) as 'sub:Unfit'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "a49d1787-7ace-57a5-9d18-aa11c88a89eb",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12412,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12100,
+    "workspace": 1,
+    "report_type": "kpi",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Pneumothorax films (latest day)\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [], \"aggregates_shelf\": [{\"custom_expr\": \"sum([pneumothorax])\", \"expression_for_trigger\": \"sum([pneumothorax])\", \"expr_hasagg\": true, \"col_alias\": \"Pneumothorax\", \"dataset_colname\": \"Pneumothorax\", \"dataset_coltype\": \"DOUBLE\"}], \"compare_shelf\": [], \"label_shelf\": [], \"tooltip_shelf\": [], \"x_shelf\": [], \"y_shelf\": [], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"kpi\", \"saved_shelf_sources\": {\"sum([pneumothorax]) as 'sub:Pneumothorax'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"compare_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"kpi\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "9e4dba7c-5213-5e38-baaa-e94ae633dce2",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12413,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12108,
+    "workspace": 1,
+    "report_type": "trellis-bars",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"In-scope films per model head per day\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"x_shelf\": [{\"dataset_colname\": \"business_date\", \"dataset_coltype\": \"DATE\", \"expression_for_trigger\": \"[business_date]\", \"col_alias\": \"Business date\"}], \"y_shelf\": [{\"custom_expr\": \"sum([in_scope])\", \"expression_for_trigger\": \"sum([in_scope])\", \"expr_hasagg\": true, \"col_alias\": \"In scope\", \"dataset_colname\": \"In scope\", \"dataset_coltype\": \"DOUBLE\"}], \"color_shelf\": [{\"dataset_colname\": \"model\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model]\", \"col_alias\": \"Model\"}], \"tooltip_shelf\": [], \"drill_shelf\": [], \"label_shelf\": [], \"filters_shelf\": [], \"core\": {\"viz_type\": \"trellis-bars\", \"saved_shelf_sources\": {\"[business_date] as 'sub:Business date'\": \"x_shelf\", \"sum([in_scope]) as 'sub:In scope'\": \"y_shelf\", \"[model] as 'sub:Model'\": \"color_shelf\"}, \"shelves\": [{\"name\": \"x_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"y_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"color_shelf\", \"shelf_type\": 1, \"column_type\": 3}, {\"name\": \"tooltip_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"drill_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"label_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"trellis-bars\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "881571f7-6442-5666-a729-025b8740d4a3",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
+  },
+  {
+   "model": "reports.report",
+   "pk": 12414,
+   "fields": {
+    "report_name": "",
+    "report_description": "CXR Models & Silent Trial / Every model",
+    "dataset": 12108,
+    "workspace": 1,
+    "report_type": "table",
+    "report_mode": "",
+    "dashboard_url_name": "",
+    "report_data": "{\"report_data\": {\"report_title\": \"Every model head on the latest day, at its own threshold\", \"report_subtitle\": \"\", \"dashboard_id\": 12002, \"limit\": 1000, \"sample_pct\": \"Off\", \"selected_segments\": [], \"report_derived_data\": [], \"click_behaviors\": {}, \"sort_orders_asc\": {}, \"user_settings\": {}, \"dimensions_shelf\": [{\"dataset_colname\": \"model\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model]\", \"col_alias\": \"Model\", \"order\": {\"priority\": 1, \"ascending\": true}}, {\"dataset_colname\": \"stage\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[stage]\", \"col_alias\": \"Stage\"}, {\"dataset_colname\": \"model_version\", \"dataset_coltype\": \"STRING\", \"expression_for_trigger\": \"[model_version]\", \"col_alias\": \"Version\"}], \"aggregates_shelf\": [{\"custom_expr\": \"sum([scored])\", \"expression_for_trigger\": \"sum([scored])\", \"expr_hasagg\": true, \"col_alias\": \"Scored\", \"dataset_colname\": \"Scored\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([in_scope])\", \"expression_for_trigger\": \"sum([in_scope])\", \"expr_hasagg\": true, \"col_alias\": \"In scope\", \"dataset_colname\": \"In scope\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([reported])\", \"expression_for_trigger\": \"sum([reported])\", \"expr_hasagg\": true, \"col_alias\": \"Reported\", \"dataset_colname\": \"Reported\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([positives])\", \"expression_for_trigger\": \"sum([positives])\", \"expr_hasagg\": true, \"col_alias\": \"Positives\", \"dataset_colname\": \"Positives\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([tp])\", \"expression_for_trigger\": \"sum([tp])\", \"expr_hasagg\": true, \"col_alias\": \"TP\", \"dataset_colname\": \"TP\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"sum([fn])\", \"expression_for_trigger\": \"sum([fn])\", \"expr_hasagg\": true, \"col_alias\": \"FN\", \"dataset_colname\": \"FN\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([sensitivity]), 1)\", \"expression_for_trigger\": \"round(100 * max([sensitivity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Sens %\", \"dataset_colname\": \"Sens %\", \"dataset_coltype\": \"DOUBLE\"}, {\"custom_expr\": \"round(100 * max([specificity]), 1)\", \"expression_for_trigger\": \"round(100 * max([specificity]), 1)\", \"expr_hasagg\": true, \"col_alias\": \"Spec %\", \"dataset_colname\": \"Spec %\", \"dataset_coltype\": \"DOUBLE\"}], \"filters_shelf\": [{\"custom_expr\": \"[is_latest] = 1\", \"expression_for_trigger\": \"[is_latest] = 1\", \"filter_input\": {}, \"filter_data\": [], \"dataset_colname\": \"\", \"dataset_coltype\": \"STRING\", \"filter_column\": \"\"}], \"core\": {\"viz_type\": \"table\", \"saved_shelf_sources\": {\"[model] as 'sub:Model'\": \"dimensions_shelf\", \"[stage] as 'sub:Stage'\": \"dimensions_shelf\", \"[model_version] as 'sub:Version'\": \"dimensions_shelf\", \"sum([scored]) as 'sub:Scored'\": \"aggregates_shelf\", \"sum([in_scope]) as 'sub:In scope'\": \"aggregates_shelf\", \"sum([reported]) as 'sub:Reported'\": \"aggregates_shelf\", \"sum([positives]) as 'sub:Positives'\": \"aggregates_shelf\", \"sum([tp]) as 'sub:TP'\": \"aggregates_shelf\", \"sum([fn]) as 'sub:FN'\": \"aggregates_shelf\", \"round(100 * max([sensitivity]), 1) as 'sub:Sens %'\": \"aggregates_shelf\", \"round(100 * max([specificity]), 1) as 'sub:Spec %'\": \"aggregates_shelf\", \"[is_latest] = 1\": \"filters_shelf\"}, \"shelves\": [{\"name\": \"dimensions_shelf\", \"shelf_type\": 1, \"column_type\": 1}, {\"name\": \"aggregates_shelf\", \"shelf_type\": 1, \"column_type\": 2}, {\"name\": \"filters_shelf\", \"shelf_type\": 2, \"column_type\": 3}]}}, \"report_type\": \"table\"}",
+    "shared_visual_dashboards": null,
+    "parent_report": null,
+    "uuid": "23be7bb7-2b8b-5ea2-8bb0-3d9475e4c601",
+    "imported_uuid": null,
+    "has_css_styles": false,
+    "report_search_text": ""
+   }
   }
  ],
  "colorpalette": [],
@@ -623,7 +923,7 @@
     "dataset_type": "singletable",
     "dataset_detail": "rsingh_cxr_semantic.v_daily_kpi",
     "dataset_description": "rsingh_cxr_semantic.v_daily_kpi (sql/semantic)",
-    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_daily_kpi\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"INT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"truth_completeness\", \"type\": \"DOUBLE\", \"name\": \"truth_completeness\", \"isdim\": false}, {\"alias\": \"pneumonia\", \"type\": \"INT\", \"name\": \"pneumonia\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"unscored\", \"type\": \"INT\", \"name\": \"unscored\", \"isdim\": false}, {\"alias\": \"tp\", \"type\": \"INT\", \"name\": \"tp\", \"isdim\": false}, {\"alias\": \"fn\", \"type\": \"INT\", \"name\": \"fn\", \"isdim\": false}, {\"alias\": \"fp\", \"type\": \"INT\", \"name\": \"fp\", \"isdim\": false}, {\"alias\": \"tn\", \"type\": \"INT\", \"name\": \"tn\", \"isdim\": false}, {\"alias\": \"sensitivity\", \"type\": \"DOUBLE\", \"name\": \"sensitivity\", \"isdim\": false}, {\"alias\": \"specificity\", \"type\": \"DOUBLE\", \"name\": \"specificity\", \"isdim\": false}, {\"alias\": \"ppv\", \"type\": \"DOUBLE\", \"name\": \"ppv\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_median_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_median_minutes_saved\", \"isdim\": false}, {\"alias\": \"pneumonia_wait_reduction\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_wait_reduction\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_p90_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_p90_min\", \"isdim\": false}, {\"alias\": \"normal_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_fifo_median_min\", \"isdim\": false}, {\"alias\": \"normal_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_triage_median_min\", \"isdim\": false}, {\"alias\": \"normal_median_minutes_added\", \"type\": \"DOUBLE\", \"name\": \"normal_median_minutes_added\", \"isdim\": false}, {\"alias\": \"pneumonia_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_minutes_saved\", \"isdim\": false}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"refreshed_at\", \"type\": \"TIMESTAMP\", \"name\": \"refreshed_at\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_daily_kpi\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"INT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"truth_completeness\", \"type\": \"DOUBLE\", \"name\": \"truth_completeness\", \"isdim\": false}, {\"alias\": \"pneumonia\", \"type\": \"INT\", \"name\": \"pneumonia\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"unscored\", \"type\": \"INT\", \"name\": \"unscored\", \"isdim\": false}, {\"alias\": \"tp\", \"type\": \"INT\", \"name\": \"tp\", \"isdim\": false}, {\"alias\": \"fn\", \"type\": \"INT\", \"name\": \"fn\", \"isdim\": false}, {\"alias\": \"fp\", \"type\": \"INT\", \"name\": \"fp\", \"isdim\": false}, {\"alias\": \"tn\", \"type\": \"INT\", \"name\": \"tn\", \"isdim\": false}, {\"alias\": \"sensitivity\", \"type\": \"DOUBLE\", \"name\": \"sensitivity\", \"isdim\": false}, {\"alias\": \"specificity\", \"type\": \"DOUBLE\", \"name\": \"specificity\", \"isdim\": false}, {\"alias\": \"ppv\", \"type\": \"DOUBLE\", \"name\": \"ppv\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_median_min\", \"isdim\": false}, {\"alias\": \"pneumonia_median_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_median_minutes_saved\", \"isdim\": false}, {\"alias\": \"pneumonia_wait_reduction\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_wait_reduction\", \"isdim\": false}, {\"alias\": \"pneumonia_fifo_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_fifo_p90_min\", \"isdim\": false}, {\"alias\": \"pneumonia_triage_p90_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_triage_p90_min\", \"isdim\": false}, {\"alias\": \"normal_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_fifo_median_min\", \"isdim\": false}, {\"alias\": \"normal_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"normal_triage_median_min\", \"isdim\": false}, {\"alias\": \"normal_median_minutes_added\", \"type\": \"DOUBLE\", \"name\": \"normal_median_minutes_added\", \"isdim\": false}, {\"alias\": \"pneumonia_minutes_saved\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_minutes_saved\", \"isdim\": false}, {\"alias\": \"adults\", \"type\": \"INT\", \"name\": \"adults\", \"isdim\": false}, {\"alias\": \"not_triaged\", \"type\": \"INT\", \"name\": \"not_triaged\", \"isdim\": false}, {\"alias\": \"film_unsuitable\", \"type\": \"INT\", \"name\": \"film_unsuitable\", \"isdim\": false}, {\"alias\": \"pneumothorax\", \"type\": \"INT\", \"name\": \"pneumothorax\", \"isdim\": false}, {\"alias\": \"pneumothorax_fifo_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumothorax_fifo_median_min\", \"isdim\": false}, {\"alias\": \"pneumothorax_triage_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumothorax_triage_median_min\", \"isdim\": false}, {\"alias\": \"pneumothorax_shadow_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumothorax_shadow_median_min\", \"isdim\": false}, {\"alias\": \"pneumothorax_minutes_go_live_saves\", \"type\": \"DOUBLE\", \"name\": \"pneumothorax_minutes_go_live_saves\", \"isdim\": false}, {\"alias\": \"pneumonia_shadow_median_min\", \"type\": \"DOUBLE\", \"name\": \"pneumonia_shadow_median_min\", \"isdim\": false}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"refreshed_at\", \"type\": \"TIMESTAMP\", \"name\": \"refreshed_at\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
     "dataset_tablenames": "[\"rsingh_cxr_semantic.v_daily_kpi\"]",
     "uuid": "e0cd2be7-d4e5-53dd-ad70-e12933504385",
     "imported_uuid": null,
@@ -631,7 +931,8 @@
     "dataset_settings": "{}",
     "search_enabled": false,
     "dashboards": [
-     12000
+     12000,
+     12002
     ],
     "version_id": 12100,
     "version_group_id": 12100,
@@ -649,7 +950,7 @@
     "dataset_type": "singletable",
     "dataset_detail": "rsingh_cxr_semantic.v_triage_outcome",
     "dataset_description": "rsingh_cxr_semantic.v_triage_outcome (sql/semantic)",
-    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_triage_outcome\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"accession_no\", \"type\": \"STRING\", \"name\": \"accession_no\", \"isdim\": true}, {\"alias\": \"study_ts\", \"type\": \"TIMESTAMP\", \"name\": \"study_ts\", \"isdim\": true}, {\"alias\": \"ordering_unit\", \"type\": \"STRING\", \"name\": \"ordering_unit\", \"isdim\": true}, {\"alias\": \"clinical_priority\", \"type\": \"STRING\", \"name\": \"clinical_priority\", \"isdim\": true}, {\"alias\": \"modality\", \"type\": \"STRING\", \"name\": \"modality\", \"isdim\": true}, {\"alias\": \"view_position\", \"type\": \"STRING\", \"name\": \"view_position\", \"isdim\": true}, {\"alias\": \"station\", \"type\": \"STRING\", \"name\": \"station\", \"isdim\": true}, {\"alias\": \"age_years\", \"type\": \"INT\", \"name\": \"age_years\", \"isdim\": true}, {\"alias\": \"age_band\", \"type\": \"STRING\", \"name\": \"age_band\", \"isdim\": true}, {\"alias\": \"sex\", \"type\": \"STRING\", \"name\": \"sex\", \"isdim\": true}, {\"alias\": \"fifo_seq\", \"type\": \"INT\", \"name\": \"fifo_seq\", \"isdim\": true}, {\"alias\": \"triage_seq\", \"type\": \"INT\", \"name\": \"triage_seq\", \"isdim\": true}, {\"alias\": \"probability\", \"type\": \"DOUBLE\", \"name\": \"probability\", \"isdim\": false}, {\"alias\": \"priority\", \"type\": \"STRING\", \"name\": \"priority\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"truth_known\", \"type\": \"BOOLEAN\", \"name\": \"truth_known\", \"isdim\": true}, {\"alias\": \"finding\", \"type\": \"STRING\", \"name\": \"finding\", \"isdim\": true}, {\"alias\": \"outcome\", \"type\": \"STRING\", \"name\": \"outcome\", \"isdim\": true}, {\"alias\": \"fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"fifo_wait_min\", \"isdim\": false}, {\"alias\": \"triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"triage_wait_min\", \"isdim\": false}, {\"alias\": \"wait_saved_min\", \"type\": \"DOUBLE\", \"name\": \"wait_saved_min\", \"isdim\": false}, {\"alias\": \"is_pneumonia\", \"type\": \"TINYINT\", \"name\": \"is_pneumonia\", \"isdim\": true}, {\"alias\": \"is_p1\", \"type\": \"TINYINT\", \"name\": \"is_p1\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_triage_outcome\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"accession_no\", \"type\": \"STRING\", \"name\": \"accession_no\", \"isdim\": true}, {\"alias\": \"study_ts\", \"type\": \"TIMESTAMP\", \"name\": \"study_ts\", \"isdim\": true}, {\"alias\": \"ordering_unit\", \"type\": \"STRING\", \"name\": \"ordering_unit\", \"isdim\": true}, {\"alias\": \"clinical_priority\", \"type\": \"STRING\", \"name\": \"clinical_priority\", \"isdim\": true}, {\"alias\": \"modality\", \"type\": \"STRING\", \"name\": \"modality\", \"isdim\": true}, {\"alias\": \"view_position\", \"type\": \"STRING\", \"name\": \"view_position\", \"isdim\": true}, {\"alias\": \"station\", \"type\": \"STRING\", \"name\": \"station\", \"isdim\": true}, {\"alias\": \"age_years\", \"type\": \"INT\", \"name\": \"age_years\", \"isdim\": true}, {\"alias\": \"age_band\", \"type\": \"STRING\", \"name\": \"age_band\", \"isdim\": true}, {\"alias\": \"population\", \"type\": \"STRING\", \"name\": \"population\", \"isdim\": true}, {\"alias\": \"triage_model\", \"type\": \"STRING\", \"name\": \"triage_model\", \"isdim\": true}, {\"alias\": \"film_qc\", \"type\": \"STRING\", \"name\": \"film_qc\", \"isdim\": true}, {\"alias\": \"shadow_priority\", \"type\": \"STRING\", \"name\": \"shadow_priority\", \"isdim\": true}, {\"alias\": \"shadow_model\", \"type\": \"STRING\", \"name\": \"shadow_model\", \"isdim\": true}, {\"alias\": \"shadow_wait_min\", \"type\": \"DOUBLE\", \"name\": \"shadow_wait_min\", \"isdim\": false}, {\"alias\": \"sex\", \"type\": \"STRING\", \"name\": \"sex\", \"isdim\": true}, {\"alias\": \"fifo_seq\", \"type\": \"INT\", \"name\": \"fifo_seq\", \"isdim\": true}, {\"alias\": \"triage_seq\", \"type\": \"INT\", \"name\": \"triage_seq\", \"isdim\": true}, {\"alias\": \"probability\", \"type\": \"DOUBLE\", \"name\": \"probability\", \"isdim\": false}, {\"alias\": \"priority\", \"type\": \"STRING\", \"name\": \"priority\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"truth_known\", \"type\": \"BOOLEAN\", \"name\": \"truth_known\", \"isdim\": true}, {\"alias\": \"finding\", \"type\": \"STRING\", \"name\": \"finding\", \"isdim\": true}, {\"alias\": \"outcome\", \"type\": \"STRING\", \"name\": \"outcome\", \"isdim\": true}, {\"alias\": \"fifo_wait_min\", \"type\": \"DOUBLE\", \"name\": \"fifo_wait_min\", \"isdim\": false}, {\"alias\": \"triage_wait_min\", \"type\": \"DOUBLE\", \"name\": \"triage_wait_min\", \"isdim\": false}, {\"alias\": \"wait_saved_min\", \"type\": \"DOUBLE\", \"name\": \"wait_saved_min\", \"isdim\": false}, {\"alias\": \"is_pneumonia\", \"type\": \"TINYINT\", \"name\": \"is_pneumonia\", \"isdim\": true}, {\"alias\": \"is_pneumothorax\", \"type\": \"TINYINT\", \"name\": \"is_pneumothorax\", \"isdim\": false}, {\"alias\": \"is_p1\", \"type\": \"TINYINT\", \"name\": \"is_p1\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
     "dataset_tablenames": "[\"rsingh_cxr_semantic.v_triage_outcome\"]",
     "uuid": "68662c41-1979-5246-bca3-3ddd96cd8b0f",
     "imported_uuid": null,
@@ -727,7 +1028,7 @@
     "dataset_type": "singletable",
     "dataset_detail": "rsingh_cxr_semantic.v_model_event",
     "dataset_description": "rsingh_cxr_semantic.v_model_event (sql/semantic)",
-    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_model_event\", \"columns\": [{\"alias\": \"model_event\", \"type\": \"STRING\", \"name\": \"model_event\", \"isdim\": true}, {\"alias\": \"recorded_at\", \"type\": \"TIMESTAMP\", \"name\": \"recorded_at\", \"isdim\": true}, {\"alias\": \"event_date\", \"type\": \"DATE\", \"name\": \"event_date\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"git_sha\", \"type\": \"STRING\", \"name\": \"git_sha\", \"isdim\": true}, {\"alias\": \"feature_version\", \"type\": \"STRING\", \"name\": \"feature_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"val_auroc\", \"type\": \"DOUBLE\", \"name\": \"val_auroc\", \"isdim\": false}, {\"alias\": \"test_auroc\", \"type\": \"DOUBLE\", \"name\": \"test_auroc\", \"isdim\": false}, {\"alias\": \"test_sensitivity\", \"type\": \"DOUBLE\", \"name\": \"test_sensitivity\", \"isdim\": false}, {\"alias\": \"test_specificity\", \"type\": \"DOUBLE\", \"name\": \"test_specificity\", \"isdim\": false}, {\"alias\": \"test_brier\", \"type\": \"DOUBLE\", \"name\": \"test_brier\", \"isdim\": false}, {\"alias\": \"train_rows\", \"type\": \"INT\", \"name\": \"train_rows\", \"isdim\": true}, {\"alias\": \"gate_passed\", \"type\": \"BOOLEAN\", \"name\": \"gate_passed\", \"isdim\": true}, {\"alias\": \"mlflow_run_id\", \"type\": \"STRING\", \"name\": \"mlflow_run_id\", \"isdim\": true}, {\"alias\": \"detail\", \"type\": \"STRING\", \"name\": \"detail\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_model_event\", \"columns\": [{\"alias\": \"model_event\", \"type\": \"STRING\", \"name\": \"model_event\", \"isdim\": true}, {\"alias\": \"model\", \"type\": \"STRING\", \"name\": \"model\", \"isdim\": true}, {\"alias\": \"stage\", \"type\": \"STRING\", \"name\": \"stage\", \"isdim\": true}, {\"alias\": \"registry_version\", \"type\": \"INT\", \"name\": \"registry_version\", \"isdim\": false}, {\"alias\": \"recorded_at\", \"type\": \"TIMESTAMP\", \"name\": \"recorded_at\", \"isdim\": true}, {\"alias\": \"event_date\", \"type\": \"DATE\", \"name\": \"event_date\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"git_sha\", \"type\": \"STRING\", \"name\": \"git_sha\", \"isdim\": true}, {\"alias\": \"feature_version\", \"type\": \"STRING\", \"name\": \"feature_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"val_auroc\", \"type\": \"DOUBLE\", \"name\": \"val_auroc\", \"isdim\": false}, {\"alias\": \"test_auroc\", \"type\": \"DOUBLE\", \"name\": \"test_auroc\", \"isdim\": false}, {\"alias\": \"test_sensitivity\", \"type\": \"DOUBLE\", \"name\": \"test_sensitivity\", \"isdim\": false}, {\"alias\": \"test_specificity\", \"type\": \"DOUBLE\", \"name\": \"test_specificity\", \"isdim\": false}, {\"alias\": \"test_brier\", \"type\": \"DOUBLE\", \"name\": \"test_brier\", \"isdim\": false}, {\"alias\": \"train_rows\", \"type\": \"INT\", \"name\": \"train_rows\", \"isdim\": true}, {\"alias\": \"gate_passed\", \"type\": \"BOOLEAN\", \"name\": \"gate_passed\", \"isdim\": true}, {\"alias\": \"mlflow_run_id\", \"type\": \"STRING\", \"name\": \"mlflow_run_id\", \"isdim\": true}, {\"alias\": \"detail\", \"type\": \"STRING\", \"name\": \"detail\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
     "dataset_tablenames": "[\"rsingh_cxr_semantic.v_model_event\"]",
     "uuid": "ed936ffe-0fb8-5cfa-9f6d-d4e8cc2cd687",
     "imported_uuid": null,
@@ -753,7 +1054,7 @@
     "dataset_type": "singletable",
     "dataset_detail": "rsingh_cxr_semantic.v_scoring_run",
     "dataset_description": "rsingh_cxr_semantic.v_scoring_run (sql/semantic)",
-    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_scoring_run\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"run_id\", \"type\": \"STRING\", \"name\": \"run_id\", \"isdim\": true}, {\"alias\": \"triggered_by\", \"type\": \"STRING\", \"name\": \"triggered_by\", \"isdim\": true}, {\"alias\": \"status\", \"type\": \"STRING\", \"name\": \"status\", \"isdim\": true}, {\"alias\": \"source_snapshot_id\", \"type\": \"BIGINT\", \"name\": \"source_snapshot_id\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"missing_films\", \"type\": \"INT\", \"name\": \"missing_films\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"psi_max\", \"type\": \"DOUBLE\", \"name\": \"psi_max\", \"isdim\": false}, {\"alias\": \"drift_level\", \"type\": \"STRING\", \"name\": \"drift_level\", \"isdim\": true}, {\"alias\": \"psi_json\", \"type\": \"STRING\", \"name\": \"psi_json\", \"isdim\": true}, {\"alias\": \"started_at\", \"type\": \"TIMESTAMP\", \"name\": \"started_at\", \"isdim\": true}, {\"alias\": \"ended_at\", \"type\": \"TIMESTAMP\", \"name\": \"ended_at\", \"isdim\": true}, {\"alias\": \"message\", \"type\": \"STRING\", \"name\": \"message\", \"isdim\": true}, {\"alias\": \"is_final\", \"type\": \"TINYINT\", \"name\": \"is_final\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_scoring_run\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"run_id\", \"type\": \"STRING\", \"name\": \"run_id\", \"isdim\": true}, {\"alias\": \"triggered_by\", \"type\": \"STRING\", \"name\": \"triggered_by\", \"isdim\": true}, {\"alias\": \"status\", \"type\": \"STRING\", \"name\": \"status\", \"isdim\": true}, {\"alias\": \"source_snapshot_id\", \"type\": \"BIGINT\", \"name\": \"source_snapshot_id\", \"isdim\": true}, {\"alias\": \"studies\", \"type\": \"INT\", \"name\": \"studies\", \"isdim\": false}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"missing_films\", \"type\": \"INT\", \"name\": \"missing_films\", \"isdim\": false}, {\"alias\": \"p1\", \"type\": \"INT\", \"name\": \"p1\", \"isdim\": false}, {\"alias\": \"p2\", \"type\": \"INT\", \"name\": \"p2\", \"isdim\": false}, {\"alias\": \"p3\", \"type\": \"INT\", \"name\": \"p3\", \"isdim\": false}, {\"alias\": \"not_triaged\", \"type\": \"INT\", \"name\": \"not_triaged\", \"isdim\": false}, {\"alias\": \"film_unsuitable\", \"type\": \"INT\", \"name\": \"film_unsuitable\", \"isdim\": false}, {\"alias\": \"heads_json\", \"type\": \"STRING\", \"name\": \"heads_json\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"threshold\", \"type\": \"DOUBLE\", \"name\": \"threshold\", \"isdim\": false}, {\"alias\": \"psi_max\", \"type\": \"DOUBLE\", \"name\": \"psi_max\", \"isdim\": false}, {\"alias\": \"drift_level\", \"type\": \"STRING\", \"name\": \"drift_level\", \"isdim\": true}, {\"alias\": \"psi_json\", \"type\": \"STRING\", \"name\": \"psi_json\", \"isdim\": true}, {\"alias\": \"started_at\", \"type\": \"TIMESTAMP\", \"name\": \"started_at\", \"isdim\": true}, {\"alias\": \"ended_at\", \"type\": \"TIMESTAMP\", \"name\": \"ended_at\", \"isdim\": true}, {\"alias\": \"message\", \"type\": \"STRING\", \"name\": \"message\", \"isdim\": true}, {\"alias\": \"is_final\", \"type\": \"TINYINT\", \"name\": \"is_final\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
     "dataset_tablenames": "[\"rsingh_cxr_semantic.v_scoring_run\"]",
     "uuid": "a3395680-728d-52ad-bced-b3974c2cb3ae",
     "imported_uuid": null,
@@ -817,6 +1118,58 @@
     ],
     "version_id": 12107,
     "version_group_id": 12107,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12108,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Model heads per day",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_model_daily",
+    "dataset_description": "rsingh_cxr_semantic.v_model_daily (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_model_daily\", \"columns\": [{\"alias\": \"business_date\", \"type\": \"DATE\", \"name\": \"business_date\", \"isdim\": true}, {\"alias\": \"model\", \"type\": \"STRING\", \"name\": \"model\", \"isdim\": true}, {\"alias\": \"stage\", \"type\": \"STRING\", \"name\": \"stage\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"scored\", \"type\": \"INT\", \"name\": \"scored\", \"isdim\": false}, {\"alias\": \"in_scope\", \"type\": \"INT\", \"name\": \"in_scope\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"INT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"positives\", \"type\": \"INT\", \"name\": \"positives\", \"isdim\": false}, {\"alias\": \"tp\", \"type\": \"INT\", \"name\": \"tp\", \"isdim\": false}, {\"alias\": \"fn\", \"type\": \"INT\", \"name\": \"fn\", \"isdim\": false}, {\"alias\": \"fp\", \"type\": \"INT\", \"name\": \"fp\", \"isdim\": false}, {\"alias\": \"tn\", \"type\": \"INT\", \"name\": \"tn\", \"isdim\": false}, {\"alias\": \"sensitivity\", \"type\": \"DOUBLE\", \"name\": \"sensitivity\", \"isdim\": false}, {\"alias\": \"specificity\", \"type\": \"DOUBLE\", \"name\": \"specificity\", \"isdim\": false}, {\"alias\": \"ppv\", \"type\": \"DOUBLE\", \"name\": \"ppv\", \"isdim\": false}, {\"alias\": \"refreshed_at\", \"type\": \"TIMESTAMP\", \"name\": \"refreshed_at\", \"isdim\": true}, {\"alias\": \"is_latest\", \"type\": \"TINYINT\", \"name\": \"is_latest\", \"isdim\": true}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_model_daily\"]",
+    "uuid": "2e750e56-431b-5958-a699-ab5ff8970b60",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12002
+    ],
+    "version_id": 12108,
+    "version_group_id": 12108,
+    "is_active_version": true,
+    "version_name": "chest-x-ray-triage",
+    "is_named_version": false
+   }
+  },
+  {
+   "model": "datasets.dataset",
+   "pk": 12109,
+   "fields": {
+    "dataconnection": 2,
+    "dataset_name": "CXR - Silent trial evidence",
+    "dataset_type": "singletable",
+    "dataset_detail": "rsingh_cxr_semantic.v_silent_trial",
+    "dataset_description": "rsingh_cxr_semantic.v_silent_trial (sql/semantic)",
+    "dataset_info": "[{\"tablename\": \"rsingh_cxr_semantic.v_silent_trial\", \"columns\": [{\"alias\": \"model\", \"type\": \"STRING\", \"name\": \"model\", \"isdim\": true}, {\"alias\": \"model_version\", \"type\": \"STRING\", \"name\": \"model_version\", \"isdim\": true}, {\"alias\": \"trial_days\", \"type\": \"BIGINT\", \"name\": \"trial_days\", \"isdim\": false}, {\"alias\": \"first_day\", \"type\": \"DATE\", \"name\": \"first_day\", \"isdim\": true}, {\"alias\": \"last_day\", \"type\": \"DATE\", \"name\": \"last_day\", \"isdim\": true}, {\"alias\": \"in_scope\", \"type\": \"BIGINT\", \"name\": \"in_scope\", \"isdim\": false}, {\"alias\": \"reported\", \"type\": \"BIGINT\", \"name\": \"reported\", \"isdim\": false}, {\"alias\": \"positives\", \"type\": \"BIGINT\", \"name\": \"positives\", \"isdim\": false}, {\"alias\": \"tp\", \"type\": \"BIGINT\", \"name\": \"tp\", \"isdim\": false}, {\"alias\": \"fn\", \"type\": \"BIGINT\", \"name\": \"fn\", \"isdim\": false}, {\"alias\": \"fp\", \"type\": \"BIGINT\", \"name\": \"fp\", \"isdim\": false}, {\"alias\": \"tn\", \"type\": \"BIGINT\", \"name\": \"tn\", \"isdim\": false}, {\"alias\": \"sensitivity\", \"type\": \"DOUBLE\", \"name\": \"sensitivity\", \"isdim\": false}, {\"alias\": \"specificity\", \"type\": \"DOUBLE\", \"name\": \"specificity\", \"isdim\": false}]}]",
+    "dataset_tablenames": "[\"rsingh_cxr_semantic.v_silent_trial\"]",
+    "uuid": "cfc7024e-2efb-59bb-8a13-30ff3e225364",
+    "imported_uuid": null,
+    "cache_sequence": 0,
+    "dataset_settings": "{}",
+    "search_enabled": false,
+    "dashboards": [
+     12002
+    ],
+    "version_id": 12109,
+    "version_group_id": 12109,
     "is_active_version": true,
     "version_name": "chest-x-ray-triage",
     "is_named_version": false
