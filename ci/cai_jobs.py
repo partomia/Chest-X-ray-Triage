@@ -10,7 +10,8 @@ job's environment CXR_MODEL picks the model (config/pipeline.yaml, models):
   cxr-*  pneumonia, paediatric, champion: the served model; cxr-00 syncs the code first
   qc-*   film_qc, every film, champion: a film unfit for AI triage gets no AI priority
   ptx-*  pneumothorax, adult, silent trial: scored in the lakehouse, not on the worklist,
-         until cxr-07-promote-champion (manual, named approver) makes it champion
+         until cxr-07-promote-champion (manual, named approver) makes it champion; once a
+         champion serves, a new passing candidate is a challenger in silent trial
 ci/trigger_cai_pipeline.py runs the chains one after the other (the federal quota fits one
 2 vCPU workload beside the endpoint); a rejected candidate stops its own chain only.
 cxr-setup-data and cxr-setup-nih run once on a new project; cxr-06-score-studies is started

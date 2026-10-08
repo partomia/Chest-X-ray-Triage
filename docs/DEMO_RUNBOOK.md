@@ -9,10 +9,10 @@ demo. Part 3 is the failure-path rehearsal, the VERIFY list and troubleshooting.
 
 | Need | Detail |
 |---|---|
-| Workbench | Cloudera AI Workbench with Jobs, Models, Applications and Experiments; AI Registry optional |
+| Workbench | Cloudera AI Workbench with Jobs, Models, Applications and Experiments; AI Registry for the model versions (without it a deploy still works and only warns) |
 | Runtime | JupyterLab, Python 3.11, Standard edition. GPU optional (feature build only) |
-| Resources | 4 vCPU / 16 GB for the feature build; ~8 GB project storage |
-| Outbound | pypi.org, download.pytorch.org, huggingface.co (or internal mirrors), github.com, kaggle.com |
+| Resources | 2 vCPU / 8 GB per job (the federal quota: the endpoint plus one such workload); ~8 GB project storage plus the NIH films |
+| Outbound | pypi.org, download.pytorch.org, huggingface.co (or internal mirrors; the NIH films come from `timm/nih-chest-xray-14`), github.com, kaggle.com |
 | Accounts | GitHub repo `partomia/Chest-X-ray-Triage`; a Kaggle account for the dataset |
 
 ### 1.2 Project, packages, environment
@@ -161,9 +161,20 @@ reads every page and warns when there is no exact match.
 
 ![create_cai_jobs --dry-run: the six jobs and the GitHub secrets](images/runbook/09-create-jobs-dry-run.png)
 
+That was the first setup (pneumonia only). `ci/cai_jobs.py` now defines 18 jobs: the
+setup jobs `cxr-setup-data` and `cxr-setup-nih`, `cxr-00-sync-code`, one chain per model
+(`cxr-01..04` pneumonia, `qc-01..04` film_qc, `ptx-01..04` pneumothorax; the job
+environment `CXR_MODEL` picks the model), `cxr-05-nightly-worklist`,
+`cxr-06-score-studies` (started by the lakehouse DAG) and `cxr-07-promote-champion`
+(manual). From a laptop, `python ci/setup_cai.py` creates the missing ones and gives
+existing ones their size and `CXR_MODEL`; a job's script must already be in the project,
+so sync the code first. Then `python ci/setup_cai.py --run cxr-setup-nih` fetches the
+6,500 NIH films (about 4 minutes on federal).
+
 Start `cxr-00-sync-code` from the Jobs page. The chain should end with a
-deployed model `cxr-triage` (Model Deployments). Record the run times in
-`docs/PROJECT_LOG.md`.
+deployed model `cxr-triage` (Model Deployments). Then start `qc-01-build-features` and
+`ptx-01-build-features` (or run all three chains with `gh workflow run cxr-triage-mlops`).
+Record the run times in `docs/PROJECT_LOG.md`.
 
 ![Chain started from cxr-00: jobs being scheduled](images/runbook/10-jobs-chain-running.png)
 
@@ -219,6 +230,12 @@ fields, not the film edges or markers. A pneumonia film at p = 0.95 lands in P2
 (above the 0.581 threshold, below the 0.99 P1 cut-off).
 
 ![Worklist after triage, heatmap of a P1 film, radiologist read](images/runbook/16-app-worklist-heatmap.png)
+
+With three models the app shows four counts (P1, P2, P3 and NA: no AI triage), orders
+NA films in arrival order with P3, draws the heatmap of the model that set the band
+(pneumonia for a child, pneumothorax for an adult), offers PNEUMOTHORAX as a read, and
+records the deciding model with every saved read. A film the film check rejects is NA,
+labelled "film unfit for AI triage". (The screenshot above is from the pneumonia-only first setup.)
 
 ### 1.8 GitHub
 
@@ -276,10 +293,13 @@ gh workflow enable  cxr-triage-mlops -R $R
 gh workflow list -R $R --all
 ```
 
-Status on 2026-09-29: the secrets point at the AWC env, which is on a private
-network (10.80.180.97), so the trigger is **disabled** until either a
-self-hosted runner is registered there or the secrets are moved to the CDP env
-(public address).
+Status on 2026-10-08: the secrets point at the federal CDP env (public address,
+reachable from GitHub-hosted runners) and `cxr-triage-mlops` is enabled. A push to a
+pipeline path (or `gh workflow run`) runs the pneumonia, film_qc and pneumothorax chains
+one after another, about 20 minutes when only the code changed; a rejected candidate
+stops its own chain and turns the run red, the other chains still run. Stop the
+application first (the quota fits one job beside the endpoint). Pushes that touch only
+docs or `dataviz/` do not trigger it; `[skip ci]` in the message skips it.
 
 ## Part 2: seven-minute demo
 
@@ -309,13 +329,20 @@ diagnosis; the heatmap is indicative (48-pixel patches), not lesion localisation
 
 | Min | Beat | Show |
 |---|---|---|
-| 12-13 | Adults arrive | *CXR Models & Silent Trial* / Every model: 16 adult films a day get band NA (no live adult model) and 2026-10-01's two unfit films are rejected by the film check |
-| 13-14 | The trial | Same dashboard / Silent trial: pneumothorax median wait FIFO vs today's worklist (worse: flagged children jump ahead) vs *if live*; trial days, positives, sensitivity, specificity |
-| 14-15 | Governance | CAI **Model Registry**: `cxr-pneumothorax` version (stage silent_trial, population adult, TEST KPIs as tags); `cxr-pneumonia` and `cxr-film-qc` champions |
-| 15-16 | Go live | Run `cxr-07-promote-champion` with `CXR_MODEL=pneumothorax`, `CXR_APPROVED_BY=<name>`: criteria printed PASS/FAIL; on PASS a new registry version (stage champion, approver, trial evidence) and `PROMOTED` in *Gate decisions* |
+| 12-13 | Adults arrive | *CXR Models & Silent Trial* / Every model: 16 adult films a day; during the trial they had band NA (no live adult model); 2026-10-01's two planted unfit films rejected by the film check |
+| 13-14 | The trial | Same dashboard / Silent trial: adult pneumothorax median wait on the pediatric-only worklist 324-404 min (flagged children jump ahead), FIFO 174-248 min, *if live* 30-115 min; 10 trial days, 37 positives, sensitivity 0.946, specificity 0.590 against the go-live criteria |
+| 14-15 | Governance | CAI **AI Registry**: `cxr-pneumothorax` v1-v2 (silent trial) and v3 (champion), each holding its MLflow run (KPIs, git commit, feature hash); `cxr-pneumonia`, `cxr-film-qc`. *CXR Model, Drift & Data Quality* / Gate decisions: stage and registry version per event |
+| 15-16 | Go live | The `PROMOTED` event of 2026-10-08 (approver, evidence, registry v3), and the endpoint now ranking adults. To show it live, re-run `cxr-07-promote-champion` on a challenger in trial: criteria printed PASS / FAIL, `PROMOTION_REFUSED` when the evidence is short |
 
-Say it plainly: the pneumothorax head is a frozen ImageNet backbone at 224 px (AUROC ~0.75):
-the point is the governance - it earns its place on live films, or it stays silent.
+Say it plainly: the pneumothorax head is a frozen ImageNet backbone at 224 px (TEST
+AUROC 0.867; on live films specificity 0.59, so about four normal adult films in ten
+move up too). The point is the governance: it earned its place on live films and a
+person signed it off; the demo approver is `rsingh (demo clinical sign-off)`, a real
+deployment names the clinical lead.
+
+To start the trial story again from scratch: retrain (`ptx-01`) so a challenger enters
+silent trial, re-run the dates (README, *Lakehouse*: land -> gold, `cxr-06`, outcomes),
+then promote. The trial's evidence counts only the dates scored by that model version.
 
 Setup and re-run commands: README, section *Lakehouse*. Trigger one date by hand:
 `cde job run --name rsingh-cxr-orchestration --config-json '{"business_date": "2026-10-06"}'`.
@@ -350,8 +377,9 @@ champion, promotes the old one and rebuilds the endpoint.
 | Runtime detection | `ci/cai_jobs.py` `resolve_runtime()` | `ML_RUNTIME_KERNEL/EDITION/EDITOR` exist in the session, else set `cai.runtime_identifier` |
 | Build-time install | `cdsw-build.sh` | model builds run it on this runtime |
 | Job-run list | `ci/trigger_cai_pipeline.py` | `sort=-created_at`, `page_size`, `job_runs` key (documented; confirm once) |
-| Registry | `cai.register_in_model_registry` | only if the AI Registry is configured |
-| Dataset licence | Kaggle / Mendeley listing | CC BY 4.0 attribution text |
+| Registry | `serve/registry.py`, `registry.enabled` | confirmed on federal 2026-10-08: versions created from jobs; no version tags are stored |
+| Job environment | `ci/setup_cai.py` | confirmed on federal: an object on create, a JSON string on update |
+| Dataset licences | Kaggle / Mendeley listing; NIH Clinical Center | Kermany CC BY 4.0 attribution text; NIH ChestX-ray14 terms and citation (Wang et al. 2017) |
 
 Already confirmed on the live workbench by the sibling projects: job-run status
 values (`ENGINE_SUCCEEDED`, `..._FAILED`, `..._TIMEDOUT`), `environment` applied
@@ -372,3 +400,11 @@ in job kernels, `sys.exit(0)` reported as a failure, the Streamlit launcher.
 | GitHub: `CAI jobs not found` | run `python ci/create_cai_jobs.py`; names must match `ci/cai_jobs.py` |
 | Job 04: `deploy failed: (500) ... deploy-model: context deadline exceeded` | the API gateway gave up after 30 s while the workbench kept deploying; job 04 now finds that deployment and waits for it. With an older copy of the code, check Model Deployments (it usually reaches Deployed) and re-run the chain from cxr-00 so `models/champion/` matches the endpoint |
 | Job run `timedout` | raise the job's timeout (`ci/cai_jobs.py`, then edit the job) or check GPU / node availability |
+| A job sits in `ENGINE_SCHEDULING` | the quota (endpoint + one 2 vCPU workload): stop the application, or wait for the running job |
+| Job 04: `ROLLED_BACK`, detail `build timed out after 1800 s` | the model build stalled in `pushing` / `building` in the platform; the old champion kept serving. Re-run the deploy job (`python ci/setup_cai.py --run cxr-04-deploy-champion`; `qc-04-deploy` / `ptx-04-deploy` for the others) |
+| Event detail `not registered: ...` | the reason the registry call failed; the deploy stands. Register by hand from a laptop with `serve.registry.register_version` and `cmlapi` (`pip install <workbench>/api/v2/python.tar.gz`) |
+| `setup_cai.py`: `script '...' not found` on create | the code is not synced yet: run `cxr-00-sync-code`, then `setup_cai.py` again |
+| `setup_cai.py`: `cannot unmarshal ... string` | an older copy: the job environment is an object on create and a JSON string on update |
+| The pneumonia chain ran after a manual sync | `cxr-01..04` are children of `cxr-00`: expected |
+| Promotion: `PROMOTION_REFUSED` | the trial's evidence (dates scored by this model version) is short of `models.<name>.go_live`: more dates, or re-run them after a retrain |
+| Nightly DAG fails at `cai_score_studies` | `cxr-06` could not get the workload slot or a model was missing; re-run that date by hand (README, *Lakehouse*) |
