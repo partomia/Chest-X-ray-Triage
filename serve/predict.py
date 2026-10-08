@@ -130,7 +130,7 @@ def score_images(images, ages=None, include_trial: bool = False) -> list[dict]:
             (findings if stage == "champion" else trials)[name] = rows[i]
         qc_row = findings.pop(QC_MODEL, None)
         qc = {"unsuitable": qc_row["positive"], "probability": qc_row["probability"],
-              "model_version": qc_row["model_version"]} if qc_row else None
+              "threshold": qc_row.get("threshold"), "model_version": qc_row["model_version"]} if qc_row else None
         band, by = triage(findings, qc)
         pneu = findings[DEFAULT_MODEL]
         out.append({

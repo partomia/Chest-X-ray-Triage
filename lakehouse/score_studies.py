@@ -123,7 +123,7 @@ def head_rows(d: date, accession: str, r: dict, run_id: str, now: datetime) -> l
     if qc:
         groups.append({"film_qc": {"probability": qc["probability"], "positive": qc["unsuitable"],
                                    "stage": "champion", "in_scope": True, "model_version": qc["model_version"],
-                                   "threshold": None, "priority": None}})
+                                   "threshold": qc.get("threshold"), "priority": None}})
     for heads in groups:
         for name, h in heads.items():
             rows.append({"business_date": d, "accession_no": accession, "model": name, "stage": h["stage"],
