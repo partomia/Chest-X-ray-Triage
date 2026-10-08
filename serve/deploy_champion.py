@@ -146,6 +146,7 @@ def go_live(cfg, meta, archived: Path | None, stage: str, extra_tags: dict | Non
             event: str | None = None) -> int:
     """Rebuild the endpoint for a new champion (rolling back on failure), register, record."""
     from lakehouse.publish import publish_model_event
+    from serve import registry
     from serve.registry import registrar
 
     if stage == "champion":
@@ -157,7 +158,8 @@ def go_live(cfg, meta, archived: Path | None, stage: str, extra_tags: dict | Non
             publish_model_event("ROLLED_BACK", meta, detail=str(e), stage=stage)
             return 1
     reg = registrar(cfg, meta, stage, extra_tags)
-    detail = f"registry {cfg['model']['registry_name']} v{reg['number']}" if reg else "not registered"
+    detail = (f"registry {cfg['model']['registry_name']} v{reg['number']}" if reg else
+              f"not registered: {registry.LAST_ERROR}")
     publish_model_event(event or ("DEPLOYED" if stage == "champion" else "SILENT_TRIAL"), meta, detail=detail,
                         stage=stage, registry_version=reg["number"] if reg else None)
     return 0
