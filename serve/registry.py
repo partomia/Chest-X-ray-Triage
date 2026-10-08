@@ -88,7 +88,9 @@ def registrar(cfg: dict, meta: dict, stage: str, extra: dict | None = None) -> d
         import cmlapi
         import mlflow
 
-        experiment_id = mlflow.get_run(meta["mlflow_run_id"]).info.experiment_id
+        # the CAI MLflow plugin cannot get_run without an experiment set: look the experiment up by name
+        name = cfg["project"]["mlflow_experiment"]
+        experiment_id = (mlflow.set_experiment(name) or mlflow.get_experiment_by_name(name)).experiment_id
         return register_version(cmlapi.default_client(), meta, cfg["model"]["registry_name"], stage,
                                 experiment_id, extra=extra, description=cfg["model"].get("description", ""))
     except Exception as e:  # the promotion stands; the registry is its record
